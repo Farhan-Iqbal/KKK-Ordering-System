@@ -1,0 +1,74 @@
+@import url('om.css');
+
+.admin-navbar {
+    height: 64px;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 32px;
+}
+
+.admin-container {
+    display: flex;
+    min-height: calc(100vh - 64px);
+}
+
+.admin-sidebar {
+    width: 240px;
+    background: #ffffff;
+    border-right: 1px solid var(--border-color);
+    padding: 24px 16px;
+}
+
+.admin-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-radius: var(--radius-md);
+}
+
+.admin-nav a.active, .admin-nav a:hover {
+    background: #eef2ff;
+    color: var(--primary);
+}
+
+.admin-body {
+    flex: 1;
+    padding: 32px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+}
+
+.card-title {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.admin-badge {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}

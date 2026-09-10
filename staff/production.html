@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Production Unit - KingKadKahwin Staff</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../design/production.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="brand">
+        <i class="fa-solid fa-print brand-logo"></i>
+        <div class="brand-text">
+          <h1>KING KAD KAHWIN</h1>
+          <span class="sub-brand">Staff Workspace</span>
+        </div>
+      </div>
+
+      <!-- Staff Department Navigation -->
+      <nav class="nav-menu">
+        <div class="menu-section-label">Staff Departments</div>
+        <a href="designer.html" class="nav-item">
+          <i class="fa-solid fa-layer-group"></i>
+          <span>Design Unit</span>
+        </a>
+        <a href="production.html" class="nav-item active">
+          <i class="fa-solid fa-print"></i>
+          <span>Production Unit</span>
+        </a>
+        <a href="om.html" class="nav-item">
+          <i class="fa-solid fa-building-user"></i>
+          <span>Office Operations</span>
+        </a>
+      </nav>
+
+      <div class="user-profile">
+        <img src="https://ui-avatars.com/api/?name=Razak+Printer&background=2E7D32&color=fff" alt="Production Supervisor Profile">
+        <div class="user-info">
+          <p class="user-name">Razak Ahmad</p>
+          <p class="user-role">Floor Supervisor</p>
+        </div>
+        <a href="../index.html" class="logout-btn" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-header">
+        <div class="search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Search batch job or card stock type...">
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+        </div>
+      </header>
+
+      <section class="view-header">
+        <h2>Print Floor & Assembly Queue</h2>
+        <p class="subtitle">Monitor machine outputs, paper stock levels, and quality assurance processes.</p>
+      </section>
+
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-print"></i></div>
+          <div class="stat-details">
+            <h3>Active Print Runs</h3>
+            <p class="stat-value">6 Batches</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-square-check"></i></div>
+          <div class="stat-details">
+            <h3>Completed Today</h3>
+            <p class="stat-value text-gold">2,400 Cards</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div class="stat-details">
+            <h3>Low Stock Alerts</h3>
+            <p class="stat-value">Gold Foil Foil-102</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h3>Jobs Ready for Production</h3>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Material / Stock</th>
+              <th>Quantity</th>
+              <th>Progress</th>
+              <th>Status</th>
+              <th>Update Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#KKK-88212</td>
+              <td>350gsm Linen + Gold Foil</td>
+              <td>1,000 Pcs</td>
+              <td>
+                <div class="progress-bar"><div class="progress-fill" style="width: 75%;"></div></div>
+              </td>
+              <td><span class="badge-info">Foil Stamping</span></td>
+              <td><button class="btn-gold">Advance Stage</button></td>
+            </tr>
+            <tr>
+              <td>#KKK-88210</td>
+              <td>300gsm Matte Velvet</td>
+              <td>500 Pcs</td>
+              <td>
+                <div class="progress-bar"><div class="progress-fill" style="width: 100%;"></div></div>
+              </td>
+              <td><span class="badge-success">Ready for QC</span></td>
+              <td><button class="btn-gold">Send to Packing</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

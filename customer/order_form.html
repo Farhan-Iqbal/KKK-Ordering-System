@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Wedding Card Details - KingKadKahwin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .form-card { max-width: 750px; margin: 40px auto; background: #fff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
+        .header-brand { text-align: center; margin-bottom: 25px; }
+        .section-title { font-size: 1.1rem; font-weight: 700; color: #0d6efd; border-bottom: 2px solid #e9ecef; padding-bottom: 8px; margin-bottom: 18px; }
+        .qr-box { background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 10px; padding: 20px; text-align: center; }
+        .qr-img { max-width: 220px; height: auto; border-radius: 8px; border: 1px solid #ddd; }
+        .confirmation-box { background-color: #fff8e6; border: 1px solid #ffeba8; border-radius: 8px; padding: 18px; }
+        .side-details-box { background-color: #f8f9fa; border-radius: 8px; padding: 15px; border-left: 4px solid #0d6efd; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="form-card">
+        <div class="header-brand">
+            <h2 class="fw-bold"><i class="bi bi-card-heading text-primary me-2"></i>KingKadKahwin</h2>
+            <p class="text-muted">Please fill in your wedding details to proceed with card design rendering.</p>
+        </div>
+
+        <form id="customerForm" enctype="multipart/form-data">
+            <!-- Customer Contact -->
+            <div class="section-title"><i class="bi bi-person-lines-fill me-2"></i>Contact Information</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Your Full Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="customer_name" required placeholder="e.g. Aiman Kamil">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">WhatsApp / Phone Number <span class="text-danger">*</span></label>
+                    <input type="tel" class="form-control" name="customer_phone" required placeholder="e.g. 01123456789">
+                </div>
+            </div>
+
+            <!-- Order Type Selection -->
+            <div class="section-title"><i class="bi bi-people-fill me-2"></i>Order Type / Pihak Tempahan</div>
+            <div class="row g-3 mb-4">
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Tempahan Untuk Pihak Mana? <span class="text-danger">*</span></label>
+                    <select class="form-select" name="order_side" id="orderSideSelect" required>
+                        <option value="groom">Pihak Lelaki sahaja</option>
+                        <option value="bride">Pihak Perempuan sahaja</option>
+                        <option value="both">Kedua-dua Pihak (Lelaki & Perempuan)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Event & Couple Details -->
+            <div class="section-title"><i class="bi bi-heart-fill me-2"></i>Wedding & Couple Details</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Groom's Name (Nama Pengantin Lelaki) <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="groom_name" required placeholder="e.g. Ahmad Farhan">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Bride's Name (Nama Pengantin Perempuan) <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="bride_name" required placeholder="e.g. Siti Nurhaliza">
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Design Code Choice</label>
+                    <select class="form-select" name="design_code">
+                        <option value="CARD-FLORAL-01">CARD-FLORAL-01 (Classic Floral)</option>
+                        <option value="CARD-GOLD-02">CARD-GOLD-02 (Modern Gold)</option>
+                        <option value="CARD-MINIMAL-03">CARD-MINIMAL-03 (Minimalist White)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Single Event Details (Default View for Groom or Bride) -->
+            <div id="singleSideSection" class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Event Date <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" name="groom_event_date" id="singleEventDate" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Event Venue / Address <span class="text-danger">*</span></label>
+                    <textarea class="form-control" name="groom_venue" id="singleVenue" rows="2" required placeholder="e.g. Dewan Perdana, Shah Alam"></textarea>
+                </div>
+            </div>
+
+            <!-- Both Sides Event Details (Hidden by Default) -->
+            <div id="bothSidesSection" class="mb-4 d-none">
+                <div class="side-details-box mb-3">
+                    <h6 class="fw-bold text-primary mb-3"><i class="bi bi-gender-male me-2"></i>Majlis Pihak Lelaki</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Tarikh Majlis Lelaki <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" name="groom_side_date" id="groomSideDate">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Lokasi / Alamat Majlis Lelaki <span class="text-danger">*</span></label>
+                            <textarea class="form-control" name="groom_side_venue" id="groomSideVenue" rows="2" placeholder="e.g. Dewan Utama, Petaling Jaya"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="side-details-box">
+                    <h6 class="fw-bold text-primary mb-3"><i class="bi bi-gender-female me-2"></i>Majlis Pihak Perempuan</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Tarikh Majlis Perempuan <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" name="bride_side_date" id="brideSideDate">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Lokasi / Alamat Majlis Perempuan <span class="text-danger">*</span></label>
+                            <textarea class="form-control" name="bride_side_venue" id="brideSideVenue" rows="2" placeholder="e.g. Dewan Gemilang, Bangi"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery Info -->
+            <div class="section-title"><i class="bi bi-truck me-2"></i>Shipping & Delivery Info</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Recipient Name</label>
+                    <input type="text" class="form-control" name="shipping_recipient" placeholder="Recipient Name">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Recipient Phone</label>
+                    <input type="tel" class="form-control" name="shipping_phone" placeholder="Recipient Phone Number">
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Delivery Address</label>
+                    <textarea class="form-control" name="shipping_address" rows="2" placeholder="Full mailing address for printed card delivery"></textarea>
+                </div>
+            </div>
+
+            <!-- Payment & Receipt Verification -->
+            <div class="section-title"><i class="bi bi-qr-code-scan me-2"></i>Payment & Receipt Verification</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="qr-box">
+                        <p class="fw-bold mb-2 text-secondary"><i class="bi bi-wallet2 me-1"></i> Scan QR to Pay</p>
+                        <img src="assets/img/payment_qr.jpg" alt="Payment QR Code" class="qr-img mb-2">
+                        <p class="text-muted small mb-0">Scan using any Banking / e-Wallet App</p>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex flex-column justify-content-center">
+                    <label class="form-label fw-semibold">Upload Payment Receipt / Proof <span class="text-danger">*</span></label>
+                    <input type="file" class="form-control mb-2" name="payment_receipt" id="paymentReceipt" accept="image/*,.pdf" required>
+                    <div class="form-text text-muted">Please attach your transfer screenshot or PDF transaction receipt.</div>
+                    
+                    <!-- File Preview Container -->
+                    <div id="receiptPreviewContainer" class="mt-2 d-none">
+                        <span class="badge bg-secondary"><i class="bi bi-paperclip me-1"></i> Selected: <span id="fileName"></span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confirmation Checkboxes Section -->
+            <div class="section-title"><i class="bi bi-shield-check me-2"></i>Pengesahan Maklumat</div>
+            <div class="confirmation-box mb-4">
+                <div class="form-check mb-3">
+                    <input class="form-check-input confirm-check" type="checkbox" id="confirmCheck1" required>
+                    <label class="form-check-label text-dark fw-semibold" for="confirmCheck1">
+                        Saya telah menyemak maklumat diatas dan mengesahkan bahawa ianya betul. Pihak KingKadKahwin tidak akan bertanggungjawab atas apa-apa kesilapan selepas ini. <span class="text-danger">*</span>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input confirm-check" type="checkbox" id="confirmCheck2" required>
+                    <label class="form-check-label text-dark fw-semibold" for="confirmCheck2">
+                        Semua maklumat diatas adalah benar dan tepat. Sebarang kesilapan yang terjadi selepas ini adalah daripada diri saya sendiri. <span class="text-danger">*</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg" id="submitBtn" disabled>
+                    <i class="bi bi-send-check me-2"></i> Submit Order Details & Receipt
+                </button>
+            </div>
+        </form>
+
+        <!-- Success Alert Area -->
+        <div class="alert alert-success mt-4 d-none text-center" id="successAlert">
+            <h4 class="alert-heading fw-bold"><i class="bi bi-check-circle-fill me-2"></i>Submission Successful!</h4>
+            <p class="mb-2">Thank you! Your order reference is <strong id="resOrderId"></strong>.</p>
+            <p class="text-muted small mb-3">Our staff will review your payment receipt and initiate design rendering shortly.</p>
+            
+            <hr>
+            
+            <!-- WhatsApp Staff Direct Contact Button -->
+            <div class="d-grid gap-2 col-md-8 mx-auto mt-3">
+                <a href="#" id="whatsappBtn" target="_blank" class="btn btn-success btn-lg fw-semibold">
+                    <i class="bi bi-whatsapp me-2"></i> Notify Staff on WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Staff WhatsApp phone number (with country code without '+' or spaces)
+    const STAFF_WHATSAPP_NUMBER = "60123456789"; 
+
+    const orderSideSelect = document.getElementById('orderSideSelect');
+    const singleSideSection = document.getElementById('singleSideSection');
+    const bothSidesSection = document.getElementById('bothSidesSection');
+
+    const singleEventDate = document.getElementById('singleEventDate');
+    const singleVenue = document.getElementById('singleVenue');
+    const groomSideDate = document.getElementById('groomSideDate');
+    const groomSideVenue = document.getElementById('groomSideVenue');
+    const brideSideDate = document.getElementById('brideSideDate');
+    const brideSideVenue = document.getElementById('brideSideVenue');
+
+    // Handle dropdown switching between single side & both sides
+    orderSideSelect.addEventListener('change', function() {
+        if (this.value === 'both') {
+            singleSideSection.classList.add('d-none');
+            bothSidesSection.classList.remove('d-none');
+
+            // Toggle HTML validation rules
+            singleEventDate.required = false;
+            singleVenue.required = false;
+
+            groomSideDate.required = true;
+            groomSideVenue.required = true;
+            brideSideDate.required = true;
+            brideSideVenue.required = true;
+        } else {
+            bothSidesSection.classList.add('d-none');
+            singleSideSection.classList.remove('d-none');
+
+            singleEventDate.required = true;
+            singleVenue.required = true;
+
+            groomSideDate.required = false;
+            groomSideVenue.required = false;
+            brideSideDate.required = false;
+            brideSideVenue.required = false;
+        }
+    });
+
+    const check1 = document.getElementById('confirmCheck1');
+    const check2 = document.getElementById('confirmCheck2');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // Enable button only when both confirmation checkboxes are checked
+    function toggleSubmitButton() {
+        submitBtn.disabled = !(check1.checked && check2.checked);
+    }
+
+    check1.addEventListener('change', toggleSubmitButton);
+    check2.addEventListener('change', toggleSubmitButton);
+
+    // Show filename preview when user selects receipt
+    document.getElementById('paymentReceipt').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            document.getElementById('fileName').innerText = file.name;
+            document.getElementById('receiptPreviewContainer').classList.remove('d-none');
+        } else {
+            document.getElementById('receiptPreviewContainer').classList.add('d-none');
+        }
+    });
+
+    document.getElementById('customerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Submitting Order & Uploading...';
+
+        const formData = new FormData(this);
+
+        try {
+            const res = await fetch('../api/submit_order_details.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+                this.classList.add('d-none');
+                document.getElementById('resOrderId').innerText = result.order_id;
+                document.getElementById('successAlert').classList.remove('d-none');
+
+                const customerName = formData.get('customer_name') || '';
+                const groomName = (formData.get('groom_name') || '').trim();
+                const brideName = (formData.get('bride_name') || '').trim();
+                const coupleStr = brideName ? `${groomName} & ${brideName}` : groomName;
+                
+                let sideLabel = "Pihak Lelaki";
+                if (orderSideSelect.value === 'bride') sideLabel = "Pihak Perempuan";
+                if (orderSideSelect.value === 'both') sideLabel = "Kedua-dua Pihak";
+
+                const rawMessage = `Hello KingKadKahwin Team!\n` +
+                                   `I have just submitted my wedding card details and payment receipt.\n\n` +
+                                   `Order ID: ${result.order_id}\n` +
+                                   `Name: ${customerName}\n` +
+                                   `Couple: ${coupleStr}\n` +
+                                   `Side: ${sideLabel}\n\n` +
+                                   `Please confirm my payment and order. Thank you!`;
+
+                const waUrl = `https://wa.me/${STAFF_WHATSAPP_NUMBER}?text=${encodeURIComponent(rawMessage)}`;
+                document.getElementById('whatsappBtn').setAttribute('href', waUrl);
+
+            } else {
+                alert('Submission Error: ' + result.message);
+                toggleSubmitButton();
+                submitBtn.innerHTML = '<i class="bi bi-send-check me-2"></i> Submit Order Details & Receipt';
+            }
+        } catch (err) {
+            alert('Failed to connect to backend.');
+            toggleSubmitButton();
+            submitBtn.innerHTML = '<i class="bi bi-send-check me-2"></i> Submit Order Details & Receipt';
+        }
+    });
+</script>
+
+</body>
+</html>

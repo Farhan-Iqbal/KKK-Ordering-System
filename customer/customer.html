@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Order Portal | KKK Ordering System</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../design/customer.css">
+</head>
+<body>
+
+    <div class="portal-container">
+        <!-- Header Banner -->
+        <header class="portal-header">
+            <div class="logo-area">
+                <i class="fa-solid fa-gem logo-icon"></i>
+                <h2>KingKadKahwin</h2>
+            </div>
+            <h1>Customer Order Portal</h1>
+            <p>Please fill out the details below to complete your order request.</p>
+        </header>
+
+        <!-- Main Form Card -->
+        <main class="form-card">
+            <form id="customerOrderForm" action="../api/customer_submit.php" method="POST" enctype="multipart/form-data">
+                
+                <!-- FALLBACK ORDER ID INPUTS -->
+                <input type="hidden" id="orderId" name="order_id" value="ORD-TEMPORARY">
+                <input type="hidden" id="orderNo" name="order_no" value="ORD-TEMPORARY">
+
+                <!-- Section 1: Personal Details -->
+                <section class="form-section">
+                    <div class="section-title">
+                        <i class="fa-solid fa-user-check"></i>
+                        <h3>Customer Information</h3>
+                    </div>
+                    <div class="form-grid col-2">
+                        <div class="input-group">
+                            <label for="fullName">Full Name <span class="required">*</span></label>
+                            <input type="text" id="fullName" name="full_name" placeholder="e.g. Ahmad Razak" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="phone">Phone Number (WhatsApp) <span class="required">*</span></label>
+                            <input type="tel" id="phone" name="phone" placeholder="e.g. 0123456789" required>
+                        </div>
+                        <div class="input-group col-span-2">
+                            <label for="email">Email Address <span class="required">*</span></label>
+                            <input type="email" id="email" name="email" placeholder="e.g. ahmad@example.com" required>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 2: Event & Bride/Groom Details -->
+                <section class="form-section">
+                    <div class="section-title">
+                        <i class="fa-solid fa-heart"></i>
+                        <h3>Event & Couple Details</h3>
+                    </div>
+                    <div class="form-grid col-2">
+                        <div class="input-group">
+                            <label for="groomName">Groom's Name / Name 1 <span class="required">*</span></label>
+                            <input type="text" id="groomName" name="groom_name" placeholder="Groom's name for card" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="brideName">Bride's Name / Name 2 <span class="required">*</span></label>
+                            <input type="text" id="brideName" name="bride_name" placeholder="Bride's name for card" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="eventDate">Event Date <span class="required">*</span></label>
+                            <input type="date" id="eventDate" name="event_date" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="eventTime">Event Time <span class="required">*</span></label>
+                            <input type="text" id="eventTime" name="event_time" placeholder="e.g. 11:00 AM - 4:00 PM" required>
+                        </div>
+                        <div class="input-group col-span-2">
+                            <label for="venue">Event Venue / Address <span class="required">*</span></label>
+                            <textarea id="venue" name="venue" rows="3" placeholder="Enter complete venue location" required></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 3: Order Specifications & File Upload -->
+                <section class="form-section">
+                    <div class="section-title">
+                        <i class="fa-solid fa-sliders"></i>
+                        <h3>Order & Package Preferences</h3>
+                    </div>
+                    <div class="form-grid col-2">
+                        <div class="input-group">
+                            <label for="packageSelect">Select Package <span class="required">*</span></label>
+                            <select id="packageSelect" name="package_type" required>
+                                <option value="" disabled selected>-- Choose Package --</option>
+                                <option value="Digital Invitation Only">Digital Invitation Only</option>
+                                <option value="Printed Card - Basic (100 pcs)">Printed Card - Basic (100 pcs)</option>
+                                <option value="Printed Card - Premium (500 pcs)">Printed Card - Premium (500 pcs)</option>
+                                <option value="Luxury VIP Package">Luxury VIP Package</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" id="quantity" name="quantity" placeholder="e.g. 100" min="1">
+                        </div>
+                        <div class="input-group col-span-2">
+                            <label for="specialNotes">Special Requests / Remarks</label>
+                            <textarea id="specialNotes" name="notes" rows="3" placeholder="Any specific design preferences or extra details..."></textarea>
+                        </div>
+                        <div class="input-group col-span-2">
+                            <label>Attachment / Proofing Reference (Optional)</label>
+                            <div class="file-upload-box">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                                <p id="fileNameDisplay">Click to upload or drag & drop files here</p>
+                                <span>PNG, JPG, PDF up to 10MB</span>
+                                <input type="file" id="attachment" name="attachment" accept=".png,.jpg,.jpeg,.pdf">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Submit Button -->
+                <div class="form-actions">
+                    <button type="reset" class="btn-secondary">Reset Form</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-paper-plane"></i> Submit Order
+                    </button>
+                </div>
+
+            </form>
+        </main>
+    </div>
+
+    <script src="../js/customer-dashboard.js"></script>
+</body>
+</html>

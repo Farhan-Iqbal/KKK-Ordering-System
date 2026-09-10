@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Office Operations - KingKadKahwin Staff</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../design/om.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="brand">
+        <i class="fa-solid fa-building-user brand-logo"></i>
+        <div class="brand-text">
+          <h1>KING KAD KAHWIN</h1>
+          <span class="sub-brand">Staff Workspace</span>
+        </div>
+      </div>
+
+      <!-- Staff Department Navigation -->
+      <nav class="nav-menu">
+        <div class="menu-section-label">Staff Departments</div>
+        <a href="designer.html" class="nav-item">
+          <i class="fa-solid fa-layer-group"></i>
+          <span>Design Unit</span>
+        </a>
+        <a href="production.html" class="nav-item">
+          <i class="fa-solid fa-print"></i>
+          <span>Production Unit</span>
+        </a>
+        <a href="om.html" class="nav-item active">
+          <i class="fa-solid fa-building-user"></i>
+          <span>Office Operations</span>
+          <span class="badge">3</span>
+        </a>
+      </nav>
+
+      <div class="user-profile">
+        <img src="https://ui-avatars.com/api/?name=Nadia+Admin&background=0288D1&color=fff" alt="OM Profile">
+        <div class="user-info">
+          <p class="user-name">Nadia Osman</p>
+          <p class="user-role">Operations Lead</p>
+        </div>
+        <a href="../index.html" class="logout-btn" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-header">
+        <div class="search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Search payment slip, invoice #, customer...">
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+        </div>
+      </header>
+
+      <section class="view-header">
+        <h2>Office Management & Logistics</h2>
+        <p class="subtitle">Verify customer payment receipts, schedule courier pick-ups, and issue invoices.</p>
+      </section>
+
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-file-circle-check"></i></div>
+          <div class="stat-details">
+            <h3>Pending Proof of Payment</h3>
+            <p class="stat-value">3 Slip Transfers</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-truck-loading"></i></div>
+          <div class="stat-details">
+            <h3>Pending Shipment</h3>
+            <p class="stat-value">8 Orders</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+          <div class="stat-details">
+            <h3>Today's Collection</h3>
+            <p class="stat-value text-gold">RM 4,250.00</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h3>Payment Verification Queue</h3>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Amount</th>
+              <th>Method</th>
+              <th>Receipt</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#KKK-88219</td>
+              <td>Aiman Hafiz</td>
+              <td>RM 350.00 (Deposit)</td>
+              <td>DuitNow Instant Transfer</td>
+              <td><a href="#" class="text-gold">View_Slip.pdf</a></td>
+              <td>
+                <button class="btn-small">Verify</button>
+                <button class="btn-small-outline">Reject</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#KKK-88214</td>
+              <td>Siti Maya</td>
+              <td>RM 780.00 (Balance)</td>
+              <td>Online Banking (FPX)</td>
+              <td><a href="#" class="text-gold">View_Slip2.jpg</a></td>
+              <td>
+                <button class="btn-small">Verify</button>
+                <button class="btn-small-outline">Reject</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+/* ==========================================================================
+   KingKadKahwin - Production Staff Module Stylesheet
+   ========================================================================== */
+
+@import url("designer.css");
+
+/* Progress bar indicators for machine runs */
+.progress-bar {
+  width: 100%;
+  max-width: 160px;
+  height: 8px;
+  background-color: var(--bg-elevated);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--accent-gold);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}

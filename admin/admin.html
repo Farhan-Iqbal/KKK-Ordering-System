@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Control Panel | KKK Ordering System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../design/admin.css">
+</head>
+<body>
+
+    <div class="admin-wrapper">
+        <!-- Top Navbar -->
+        <header class="admin-navbar">
+            <div class="brand">
+                <i class="fa-solid fa-gem"></i>
+                <span>KingKadKahwin Admin</span>
+            </div>
+            <div class="nav-actions">
+                <span class="admin-badge"><i class="fa-solid fa-shield-halved"></i> Super Admin</span>
+                <a href="../staff/dashboard.html" class="btn-light"><i class="fa-solid fa-arrow-left"></i> Exit to Staff Panel</a>
+            </div>
+        </header>
+
+        <div class="admin-container">
+            <aside class="admin-sidebar">
+                <nav class="admin-nav">
+                    <a href="#" class="active"><i class="fa-solid fa-sliders"></i> System Settings</a>
+                    <a href="#"><i class="fa-solid fa-users"></i> User Accounts</a>
+                    <a href="#"><i class="fa-solid fa-box-archive"></i> Package Management</a>
+                    <a href="#"><i class="fa-solid fa-database"></i> Database Backups</a>
+                </nav>
+            </aside>
+
+            <main class="admin-body">
+                <div class="card">
+                    <div class="card-title">
+                        <h3><i class="fa-solid fa-gears"></i> Core System Configurations</h3>
+                    </div>
+                    <form class="admin-form">
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label>System Name</label>
+                                <input type="text" value="KKK Ordering System">
+                            </div>
+                            <div class="input-group">
+                                <label>Default Photoshop Export Path</label>
+                                <input type="text" value="D:/laragon/www/KKK_Ordering_System/uploads/psd_export/">
+                            </div>
+                            <div class="input-group col-span-2">
+                                <label>Admin Notification Email</label>
+                                <input type="email" value="admin@kingkadkahwin.com">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>
