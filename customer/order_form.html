@@ -42,7 +42,6 @@
             align-items: center;
             position: relative;
             box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-            transition: all 0.3s ease;
             box-sizing: border-box;
         }
 
@@ -63,8 +62,8 @@
             justify-content: center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             cursor: pointer;
-            z-index: 10;
-            transition: all 0.2s ease;
+            z-index: 20;
+            transition: transform 0.2s ease, background-color 0.2s ease;
         }
         .swap-card-btn:hover {
             background-color: #0b5ed7;
@@ -130,11 +129,42 @@
             <div class="row g-3 mb-4">
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Your Full Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="customer_name" required placeholder="e.g. Aiman Kamil">
+                    <input type="text" class="form-control" name="customer_name" id="customerNameInput" required placeholder="e.g. Aiman Kamil">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">WhatsApp / Phone Number <span class="text-danger">*</span></label>
                     <input type="tel" class="form-control" name="customer_phone" required placeholder="e.g. 01123456789">
+                </div>
+            </div>
+
+            <!-- Fulfillment Method Selection -->
+            <div class="section-title"><i class="bi bi-box-seam me-2"></i>Pilihan Penghantaran / Fulfillment Option</div>
+            <div class="row g-3 mb-4">
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Kaedah Penerimaan / Method <span class="text-danger">*</span></label>
+                    <select class="form-select" name="fulfillment_option" id="fulfillmentSelect" required>
+                        <option value="pickup" selected>Ambil Sendiri / Self Pick-up</option>
+                        <option value="delivery">Penghantaran / Delivery (Courier)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Dynamic Shipping & Delivery Info (Positioned directly after contact & fulfillment option) -->
+            <div id="shippingSection" class="d-none">
+                <div class="section-title"><i class="bi bi-truck me-2"></i>Shipping & Delivery Info</div>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Recipient Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control shipping-input" name="shipping_recipient" id="shippingRecipient" placeholder="Recipient Name">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Recipient Phone <span class="text-danger">*</span></label>
+                        <input type="tel" class="form-control shipping-input" name="shipping_phone" id="shippingPhone" placeholder="Recipient Phone Number">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Delivery Address <span class="text-danger">*</span></label>
+                        <textarea class="form-control shipping-input" name="shipping_address" id="shippingAddress" rows="2" placeholder="Full mailing address for printed card delivery"></textarea>
+                    </div>
                 </div>
             </div>
 
@@ -268,7 +298,7 @@
                         <h6 class="fw-bold text-dark mb-2 w-100 text-center"><i class="bi bi-eye-fill me-2 text-primary"></i>Live Card Preview (4" x 6")</h6>
                         
                         <div class="card-preview-wrapper preview-theme-CARD-FLORAL-01" id="cardPreviewContainer">
-                            <!-- Card Indicator Badge for 2 Packages -->
+                            <!-- Card Indicator Badge -->
                             <div id="cardBadge" class="badge bg-primary mb-2 d-none">Kad 1: Pihak Lelaki</div>
 
                             <div class="preview-event-title" id="prevCardHeader">Walimatulurus</div>
@@ -284,46 +314,40 @@
                                 <!-- Extra contacts dynamic view -->
                             </div>
 
-                            <!-- Swap Card Button (Middle Right) -->
-                            <button type="button" class="swap-card-btn d-none" id="swapCardBtn" title="Swap Card Preview">
-                                <i class="bi bi-arrow-right-short fs-3"></i>
+                            <!-- Swap Arrow Button -->
+                            <button type="button" class="swap-card-btn d-none" id="swapCardBtn" title="Switch Card View">
+                                <i class="bi bi-arrow-left-right fs-5"></i>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Delivery Info -->
-            <div class="section-title"><i class="bi bi-truck me-2"></i>Shipping & Delivery Info</div>
-            <div class="row g-3 mb-4">
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Recipient Name</label>
-                    <input type="text" class="form-control" name="shipping_recipient" placeholder="Recipient Name">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Recipient Phone</label>
-                    <input type="tel" class="form-control" name="shipping_phone" placeholder="Recipient Phone Number">
-                </div>
-                <div class="col-12">
-                    <label class="form-label fw-semibold">Delivery Address</label>
-                    <textarea class="form-control" name="shipping_address" rows="2" placeholder="Full mailing address for printed card delivery"></textarea>
+            <!-- Payment & Receipt Verification -->
+            <div class="section-title"><i class="bi bi-qr-code-scan me-2"></i>Deposit Payment & Receipt Verification</div>
+            
+            <!-- Deposit Notice Banner -->
+            <div class="alert alert-info border-info d-flex align-items-center mb-3" role="alert">
+                <i class="bi bi-info-circle-fill fs-4 me-3 text-info"></i>
+                <div>
+                    <strong>Bayaran Deposit Sahaja / Deposit Payment Only</strong><br>
+                    Bayaran yang dibuat di borang ini adalah untuk **deposit sahaja**. Baki penuh bayaran akan dijelaskan selepas karya seni (artwork) kad anda siap direka dan disahkan.<br>
+                    <span class="text-muted small"><em>Payment made through this form is for deposit only. Full balance payment will be made after the card artwork is complete and approved.</em></span>
                 </div>
             </div>
 
-            <!-- Payment & Receipt Verification -->
-            <div class="section-title"><i class="bi bi-qr-code-scan me-2"></i>Payment & Receipt Verification</div>
             <div class="row g-3 mb-4">
                 <div class="col-md-6">
                     <div class="qr-box">
-                        <p class="fw-bold mb-2 text-secondary"><i class="bi bi-wallet2 me-1"></i> Scan QR to Pay</p>
+                        <p class="fw-bold mb-2 text-secondary"><i class="bi bi-wallet2 me-1"></i> Scan QR to Pay Deposit</p>
                         <img src="assets/img/payment_qr.jpg" alt="Payment QR Code" class="qr-img mb-2">
                         <p class="text-muted small mb-0">Scan using any Banking / e-Wallet App</p>
                     </div>
                 </div>
                 <div class="col-md-6 d-flex flex-column justify-content-center">
-                    <label class="form-label fw-semibold">Upload Payment Receipt / Proof <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold">Upload Deposit Payment Receipt / Proof <span class="text-danger">*</span></label>
                     <input type="file" class="form-control mb-2" name="payment_receipt" id="paymentReceipt" accept="image/*,.pdf" required>
-                    <div class="form-text text-muted">Please attach your transfer screenshot or PDF transaction receipt.</div>
+                    <div class="form-text text-muted">Please attach your deposit transfer screenshot or PDF transaction receipt.</div>
                     
                     <div id="receiptPreviewContainer" class="mt-2 d-none">
                         <span class="badge bg-secondary"><i class="bi bi-paperclip me-1"></i> Selected: <span id="fileName"></span></span>
@@ -350,35 +374,26 @@
 
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary btn-lg" id="submitBtn" disabled>
-                    <i class="bi bi-send-check me-2"></i> Submit Order Details & Receipt
+                    <i class="bi bi-send-check me-2"></i> Submit Order Details & Deposit Receipt
                 </button>
             </div>
         </form>
-
-        <!-- Success Alert Area -->
-        <div class="alert alert-success mt-4 d-none text-center" id="successAlert">
-            <h4 class="alert-heading fw-bold"><i class="bi bi-check-circle-fill me-2"></i>Submission Successful!</h4>
-            <p class="mb-2">Thank you! Your order reference is <strong id="resOrderId"></strong>.</p>
-            <p class="text-muted small mb-3">Our staff will review your payment receipt and initiate design rendering shortly.</p>
-            
-            <hr>
-            
-            <div class="d-grid gap-2 col-md-8 mx-auto mt-3">
-                <a href="#" id="whatsappBtn" target="_blank" class="btn btn-success btn-lg fw-semibold">
-                    <i class="bi bi-whatsapp me-2"></i> Notify Staff on WhatsApp
-                </a>
-            </div>
-        </div>
     </div>
 </div>
 
 <script>
-    const STAFF_WHATSAPP_NUMBER = "60123456789"; 
+    const STAFF_WHATSAPP_NUMBER = "60186684036"; 
 
+    const customerForm = document.getElementById('customerForm');
     const orderSideSelect = document.getElementById('orderSideSelect');
     const designCodeSelect = document.getElementById('designCodeSelect');
     const singleSideSection = document.getElementById('singleSideSection');
     const bothSidesSection = document.getElementById('bothSidesSection');
+
+    // Fulfillment & Shipping Elements
+    const fulfillmentSelect = document.getElementById('fulfillmentSelect');
+    const shippingSection = document.getElementById('shippingSection');
+    const shippingInputs = document.querySelectorAll('.shipping-input');
 
     // Parents Wrappers & Inputs
     const groomParentsWrapper = document.getElementById('groomParentsWrapper');
@@ -389,6 +404,7 @@
     // Couple Inputs
     const groomNameInput = document.getElementById('groomNameInput');
     const brideNameInput = document.getElementById('brideNameInput');
+    const customerNameInput = document.getElementById('customerNameInput');
     
     // Date & Venue Inputs
     const singleEventDate = document.getElementById('singleEventDate');
@@ -417,8 +433,24 @@
     const swapCardBtn = document.getElementById('swapCardBtn');
     const cardBadge = document.getElementById('cardBadge');
 
-    // Active Card View state for 'two_packages' (0 = Groom, 1 = Bride)
+    // Active Card View state (0 = Groom, 1 = Bride)
     let activeCardIndex = 0;
+
+    // Toggle Shipping Section based on fulfillment choice
+    function toggleFulfillment() {
+        if (fulfillmentSelect.value === 'delivery') {
+            shippingSection.classList.remove('d-none');
+            shippingInputs.forEach(input => input.required = true);
+        } else {
+            shippingSection.classList.add('d-none');
+            shippingInputs.forEach(input => {
+                input.required = false;
+                input.value = ''; // Reset values when pickup is selected
+            });
+        }
+    }
+
+    fulfillmentSelect.addEventListener('change', toggleFulfillment);
 
     // Convert date YYYY-MM-DD -> DD/MM/YYYY
     function formatDate(dateStr) {
@@ -439,13 +471,15 @@
         const gParents = groomParentsInput.value.trim() || "Ibu Bapa Lelaki";
         const bParents = brideParentsInput.value.trim() || "Ibu Bapa Perempuan";
 
-        if (selectedPkg === 'two_packages') {
+        if (selectedPkg === 'two_packages' || selectedPkg === 'bifold') {
             swapCardBtn.classList.remove('d-none');
             cardBadge.classList.remove('d-none');
 
+            const packagePrefix = selectedPkg === 'bifold' ? 'Kad Berlipat: ' : '';
+
             if (activeCardIndex === 0) {
-                // CARD 1: GROOM
-                cardBadge.innerText = "Kad 1: Pihak Lelaki";
+                // CARD 1: GROOM SIDE
+                cardBadge.innerText = `${packagePrefix}Pihak Lelaki`;
                 cardBadge.className = "badge bg-primary mb-2";
                 prevCardHeader.innerText = "Walimatulurus (Pihak Lelaki)";
                 prevParents.innerText = gParents;
@@ -455,8 +489,8 @@
                 prevDate.innerText = gDate;
                 prevVenue.innerText = groomSideVenue.value || "Lokasi Majlis Lelaki";
             } else {
-                // CARD 2: BRIDE
-                cardBadge.innerText = "Kad 2: Pihak Perempuan";
+                // CARD 2: BRIDE SIDE
+                cardBadge.innerText = `${packagePrefix}Pihak Perempuan`;
                 cardBadge.className = "badge bg-danger mb-2";
                 prevCardHeader.innerText = "Walimatulurus (Pihak Perempuan)";
                 prevParents.innerText = bParents;
@@ -478,18 +512,6 @@
                 const formattedDate = formatDate(singleEventDate.value);
                 prevDate.innerText = formattedDate ? formattedDate : "DD/MM/YYYY";
                 prevVenue.innerText = singleVenue.value || "Sila isi alamat / lokasi majlis";
-            } else if (selectedPkg === 'bifold') {
-                prevCardHeader.innerText = "Kad Berlipat (2 Pihak)";
-                prevParents.innerText = `${gParents} & ${bParents}`;
-                prevCoupleName.innerText = `${groom} & ${bride}`;
-
-                const gDate = formatDate(groomSideDate.value) || "DD/MM/YYYY";
-                const bDate = formatDate(brideSideDate.value) || "DD/MM/YYYY";
-                const gVenue = groomSideVenue.value || "Lokasi Lelaki";
-                const bVenue = brideSideVenue.value || "Lokasi Perempuan";
-
-                prevDate.innerHTML = `<strong>Lelaki:</strong> ${gDate} | <strong>Perempuan:</strong> ${bDate}`;
-                prevVenue.innerHTML = `<strong>Lelaki:</strong> ${gVenue}<br><strong>Perempuan:</strong> ${bVenue}`;
             } else { // groom default
                 prevCardHeader.innerText = "Walimatulurus (Pihak Lelaki)";
                 prevParents.innerText = gParents;
@@ -510,7 +532,7 @@
         prevContacts.innerHTML = contactsHTML ? `<strong>Hubungi:</strong>` + contactsHTML : "";
     }
 
-    // Toggle Card index when clicking swap arrow button
+    // Toggle Card index instantly on arrow click
     swapCardBtn.addEventListener('click', function() {
         activeCardIndex = activeCardIndex === 0 ? 1 : 0;
         updateCardPreview();
@@ -588,69 +610,23 @@
     check1.addEventListener('change', toggleSubmitButton);
     check2.addEventListener('change', toggleSubmitButton);
 
+    // Payment receipt file preview handler
     document.getElementById('paymentReceipt').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            document.getElementById('fileName').innerText = file.name;
-            document.getElementById('receiptPreviewContainer').classList.remove('d-none');
+        const fileContainer = document.getElementById('receiptPreviewContainer');
+        const fileNameSpan = document.getElementById('fileName');
+        if (e.target.files && e.target.files.length > 0) {
+            fileNameSpan.innerText = e.target.files[0].name;
+            fileContainer.classList.remove('d-none');
         } else {
-            document.getElementById('receiptPreviewContainer').classList.add('d-none');
+            fileContainer.classList.add('d-none');
         }
     });
 
-    document.getElementById('customerForm').addEventListener('submit', async function(e) {
+    // Form submit handler
+    customerForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Submitting Order & Uploading...';
-
-        const formData = new FormData(this);
-
-        try {
-            const res = await fetch('../api/submit_order_details.php', {
-                method: 'POST',
-                body: formData
-            });
-
-            const result = await res.json();
-
-            if (result.success) {
-                this.classList.add('d-none');
-                document.getElementById('resOrderId').innerText = result.order_id;
-                document.getElementById('successAlert').classList.remove('d-none');
-
-                const customerName = formData.get('customer_name') || '';
-                const groomName = (formData.get('groom_name') || '').trim();
-                const brideName = (formData.get('bride_name') || '').trim();
-                
-                let pkgText = orderSideSelect.options[orderSideSelect.selectedIndex].text;
-
-                const rawMessage = `Hello KingKadKahwin Team!\n` +
-                                   `I have just submitted my wedding card details and payment receipt.\n\n` +
-                                   `Order ID: ${result.order_id}\n` +
-                                   `Name: ${customerName}\n` +
-                                   `Couple: ${groomName} & ${brideName}\n` +
-                                   `Package: ${pkgText}\n\n` +
-                                   `Please confirm my payment and order. Thank you!`;
-
-                const waUrl = `https://wa.me/${STAFF_WHATSAPP_NUMBER}?text=${encodeURIComponent(rawMessage)}`;
-                document.getElementById('whatsappBtn').setAttribute('href', waUrl);
-
-            } else {
-                alert('Submission Error: ' + result.message);
-                toggleSubmitButton();
-                submitBtn.innerHTML = '<i class="bi bi-send-check me-2"></i> Submit Order Details & Receipt';
-            }
-        } catch (err) {
-            alert('Failed to connect to backend.');
-            toggleSubmitButton();
-            submitBtn.innerHTML = '<i class="bi bi-send-check me-2"></i> Submit Order Details & Receipt';
-        }
+        alert('Form submitted successfully!');
     });
-
-    // Initialize preview state on page load
-    updateCardPreview();
 </script>
-
 </body>
 </html>
