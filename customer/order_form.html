@@ -3,631 +3,698 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit Wedding Card Details - KingKadKahwin</title>
+    <title>Borang Tempahan Kad Kahwin | KingKadKahwin</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .form-card { max-width: 1050px; margin: 40px auto; background: #fff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
-        .header-brand { text-align: center; margin-bottom: 25px; }
-        .section-title { font-size: 1.1rem; font-weight: 700; color: #0d6efd; border-bottom: 2px solid #e9ecef; padding-bottom: 8px; margin-bottom: 18px; }
-        .qr-box { background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 10px; padding: 20px; text-align: center; }
-        .qr-img { max-width: 220px; height: auto; border-radius: 8px; border: 1px solid #ddd; }
-        .confirmation-box { background-color: #fff8e6; border: 1px solid #ffeba8; border-radius: 8px; padding: 18px; }
-        .side-details-box { background-color: #f8f9fa; border-radius: 8px; padding: 15px; border-left: 4px solid #0d6efd; }
-
-        /* Card Live Preview Container */
-        .preview-container-box {
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+        .form-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 35px;
+            margin-bottom: 50px;
+        }
+        .section-header {
+            border-bottom: 2px solid #eef2ff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #4f46e5;
+            font-weight: 700;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.92rem;
+        }
+        .sub-text {
+            font-size: 0.82rem;
+            color: #6c757d;
+        }
+        .btn-custom-primary {
+            background-color: #4f46e5;
+            border-color: #4f46e5;
+            color: #fff;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .btn-custom-primary:hover {
+            background-color: #4338ca;
+            border-color: #4338ca;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        .required-asterisk {
+            color: #ef4444;
+        }
+        
+        /* Sticky Live Card Preview Sidebar */
+        .preview-sticky {
+            position: -webkit-sticky;
             position: sticky;
             top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
-        /* 4x6 Ratio Live Card Wrapper */
+        /* 4x6 Aspect Ratio Card Container */
         .card-preview-wrapper {
-            aspect-ratio: 4 / 6;
             width: 100%;
-            max-width: 360px; /* Maintains physical 4x6 proportion on screens */
-            background-color: #fdfbf7;
-            border: 2px dashed #d1c7bd;
-            border-radius: 12px;
-            padding: 20px 15px;
-            text-align: center;
+            max-width: 320px;
+            aspect-ratio: 4 / 6;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #ffffff 0%, #fdfbf7 100%);
+            border: 2px dashed #c7d2fe;
+            border-radius: 16px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.1);
             position: relative;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-            box-sizing: border-box;
+            transition: all 0.3s ease;
         }
 
-        /* Swap Arrow Button */
-        .swap-card-btn {
-            position: absolute;
-            right: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background-color: #0d6efd;
-            color: #fff;
-            border: 2px solid #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            z-index: 20;
-            transition: transform 0.2s ease, background-color 0.2s ease;
+        .preview-title-badge {
+            background-color: #eef2ff;
+            color: #4f46e5;
+            font-weight: 700;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            display: inline-block;
         }
-        .swap-card-btn:hover {
-            background-color: #0b5ed7;
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        /* Card Design Themes */
-        .preview-theme-CARD-FLORAL-01 {
-            border: 8px double #d4af37;
-            background: #fdfbf7 url('https://www.transparenttextures.com/patterns/floral-paper.png');
-            color: #4a3b32;
-        }
-        .preview-theme-CARD-GOLD-02 {
-            border: 3px solid #d4af37;
-            background: #111111;
-            color: #f3e5ab;
-        }
-        .preview-theme-CARD-MINIMAL-03 {
-            border: 1px solid #e0e0e0;
-            background: #ffffff;
-            color: #2c3e50;
-        }
-
-        .preview-couple-name {
-            font-family: 'Great Vibes', cursive;
-            font-size: 2rem;
+        .preview-names {
+            font-family: 'Georgia', serif;
+            font-size: 1.35rem;
+            font-weight: bold;
+            color: #1f2937;
             margin: 8px 0;
-            line-height: 1.2;
-            white-space: pre-line;
+            line-height: 1.3;
         }
         .preview-event-title {
-            font-family: 'Playfair Display', serif;
             font-size: 0.8rem;
-            letter-spacing: 1.5px;
             text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #6b7280;
         }
-        .preview-details {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.8rem;
-            margin-top: 8px;
-            line-height: 1.4;
-        }
-        .preview-contacts {
-            font-size: 0.7rem;
-            margin-top: 8px;
-            border-top: 1px dashed #ccc;
-            padding-top: 6px;
+        .qr-placeholder {
+            width: 140px;
+            height: 140px;
+            background-color: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="form-card">
-        <div class="header-brand">
-            <h2 class="fw-bold"><i class="bi bi-card-heading text-primary me-2"></i>KingKadKahwin</h2>
-            <p class="text-muted">Please fill in your wedding details to proceed with card design rendering.</p>
-        </div>
+<div class="container my-4">
+    <!-- Header -->
+    <div class="text-center mb-4">
+        <h2 class="fw-bold text-dark">BORANG TEMPAHAN KAD KAHWIN</h2>
+        <p class="text-muted">Sila isi maklumat tempahan anda dengan teliti untuk proses rekaan & cetakan.</p>
+    </div>
 
-        <form id="customerForm" enctype="multipart/form-data">
-            <!-- Customer Contact -->
-            <div class="section-title"><i class="bi bi-person-lines-fill me-2"></i>Contact Information</div>
-            <div class="row g-3 mb-4">
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Your Full Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="customer_name" id="customerNameInput" required placeholder="e.g. Aiman Kamil">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">WhatsApp / Phone Number <span class="text-danger">*</span></label>
-                    <input type="tel" class="form-control" name="customer_phone" required placeholder="e.g. 01123456789">
-                </div>
-            </div>
-
-            <!-- Fulfillment Method Selection -->
-            <div class="section-title"><i class="bi bi-box-seam me-2"></i>Pilihan Penghantaran / Fulfillment Option</div>
-            <div class="row g-3 mb-4">
-                <div class="col-12">
-                    <label class="form-label fw-semibold">Kaedah Penerimaan / Method <span class="text-danger">*</span></label>
-                    <select class="form-select" name="fulfillment_option" id="fulfillmentSelect" required>
-                        <option value="pickup" selected>Ambil Sendiri / Self Pick-up</option>
-                        <option value="delivery">Penghantaran / Delivery (Courier)</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Dynamic Shipping & Delivery Info -->
-            <div id="shippingSection" class="d-none">
-                <div class="section-title"><i class="bi bi-truck me-2"></i>Shipping & Delivery Info</div>
-                <div class="row g-3 mb-4">
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">Recipient Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control shipping-input" name="shipping_recipient" id="shippingRecipient" placeholder="Recipient Name">
+    <form id="orderForm" action="thank_you.html" method="GET" class="needs-validation" novalidate>
+        <div class="row g-4">
+            
+            <!-- Left Column: Form Fields -->
+            <div class="col-lg-8">
+                <div class="form-card">
+                    
+                    <!-- SECTION 1: MAKLUMAT PELANGGAN -->
+                    <div class="mb-5">
+                        <h5 class="section-header"><i class="bi bi-person-lines-fill me-2"></i>1. MAKLUMAT PELANGGAN</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="namaPelanggan" class="form-label">NAMA PENUH PELANGGAN <span class="required-asterisk">*</span></label>
+                                <input type="text" class="form-control" id="namaPelanggan" name="name" placeholder="Sila isi nama penuh pelanggan" required>
+                                <div class="invalid-feedback">Sila masukkan nama penuh anda.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="noTelefon" class="form-label">NO. TELEFON <span class="required-asterisk">*</span></label>
+                                <input type="tel" class="form-control" id="noTelefon" name="phone" placeholder="Contoh: 0123456789" required>
+                                <div class="invalid-feedback">Sila masukkan no. telefon yang boleh dihubungi.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="emailPelanggan" class="form-label">EMAIL</label>
+                                <input type="email" class="form-control" id="emailPelanggan" name="email" placeholder="Contoh: nama@gmail.com">
+                                <div class="sub-text">Digunakan untuk penghantaran salinan tempahan dan maklumat berkaitan.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">PILIHAN PAKEJ MAJLIS <span class="required-asterisk">*</span></label>
+                                <select class="form-select" id="pakejChoice" name="package_type" onchange="handlePackageChange()" required>
+                                    <option value="Pihak Lelaki (1 Pakej)" selected>Pihak Lelaki (1 Pakej)</option>
+                                    <option value="Pihak Perempuan (1 Pakej)">Pihak Perempuan (1 Pakej)</option>
+                                    <option value="Kedua-dua Pihak (2 Pakej)">Kedua-dua Pihak (2 Pakej)</option>
+                                    <option value="Kedua-dua Pihak (1 Pakej - Kad Lipatan)">Kedua-dua Pihak (1 Pakej - Kad Lipatan)</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">Recipient Phone <span class="text-danger">*</span></label>
-                        <input type="tel" class="form-control shipping-input" name="shipping_phone" id="shippingPhone" placeholder="Recipient Phone Number">
+
+                    <!-- SECTION 2: PILIHAN DESIGN -->
+                    <div class="mb-5">
+                        <h5 class="section-header"><i class="bi bi-palette-fill me-2"></i>2. PILIHAN DESIGN</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="temaDesign" class="form-label">TEMA DESIGN <span class="required-asterisk">*</span></label>
+                                <select class="form-select" id="temaDesign" name="theme" required>
+                                    <option value="" disabled selected>Choose tema design...</option>
+                                    <option value="Floral / Bunga">Floral / Bunga</option>
+                                    <option value="Minimalist / Modern">Minimalist / Modern</option>
+                                    <option value="Classic / Traditional">Classic / Traditional</option>
+                                    <option value="Elegance / Premium">Elegance / Premium</option>
+                                    <option value="Portrait / Gambar">Portrait / Gambar</option>
+                                </select>
+                                <div class="invalid-feedback">Sila pilih tema design.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="kodDesign" class="form-label">KOD DESIGN <span class="required-asterisk">*</span></label>
+                                <input type="text" class="form-control" id="kodDesign" name="design_code" placeholder="Contoh: CKP-001" oninput="updateLivePreview()" required>
+                                <div class="invalid-feedback">Sila masukkan kod design.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="tajukMajlis" class="form-label">TAJUK MAJLIS <span class="required-asterisk">*</span></label>
+                                <select class="form-select" id="tajukMajlis" name="event_title" onchange="updateLivePreview()" required>
+                                    <option value="" disabled selected>Choose tajuk majlis...</option>
+                                    <option value="Walimatulurus">Walimatulurus</option>
+                                    <option value="Majlis Kesyukuran">Majlis Kesyukuran</option>
+                                    <option value="Majlis Sambut Menantu">Majlis Sambut Menantu</option>
+                                    <option value="Majlis Perkahwinan">Majlis Perkahwinan</option>
+                                </select>
+                                <div class="invalid-feedback">Sila pilih tajuk majlis.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="gambarPengantin" class="form-label">GAMBAR PENGANTIN (Jika Berkenaan)</label>
+                                <input type="file" class="form-control" id="gambarPengantin" name="bride_photo" accept="image/*">
+                                <div class="sub-text">Upload gambar jika memilih tema portrait (Max: 10MB).</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-12">
-                        <label class="form-label fw-semibold">Delivery Address <span class="text-danger">*</span></label>
-                        <textarea class="form-control shipping-input" name="shipping_address" id="shippingAddress" rows="2" placeholder="Full mailing address for printed card delivery"></textarea>
+
+                    <!-- SECTION 3: MAKLUMAT PENGANTIN -->
+                    <div class="mb-5">
+                        <h5 class="section-header"><i class="bi bi-heart-fill me-2"></i>3. MAKLUMAT PENGANTIN</h5>
+                        <div class="row g-3">
+                            <div class="col-md-7">
+                                <label for="namaLelaki" class="form-label">NAMA PENGANTIN LELAKI <span class="required-asterisk">*</span></label>
+                                <input type="text" class="form-control" id="namaLelaki" name="groom_name" placeholder="Sila isi nama penuh pengantin lelaki" required>
+                                <div class="invalid-feedback">Sila masukkan nama penuh pengantin lelaki.</div>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="singkatanLelaki" class="form-label">SINGKATAN NAMA LELAKI <span class="required-asterisk">*</span></label>
+                                <input type="text" class="form-control" id="singkatanLelaki" name="groom_short" placeholder="Contoh: Syafiq" oninput="updateLivePreview()" required>
+                                <div class="invalid-feedback">Sila masukkan nama singkatan pengantin lelaki.</div>
+                            </div>
+
+                            <div class="col-md-7">
+                                <label for="namaPerempuan" class="form-label">NAMA PENGANTIN PEREMPUAN <span class="required-asterisk">*</span></label>
+                                <input type="text" class="form-control" id="namaPerempuan" name="bride_name" placeholder="Sila isi nama penuh pengantin perempuan" required>
+                                <div class="invalid-feedback">Sila masukkan nama penuh pengantin perempuan.</div>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="singkatanPerempuan" class="form-label">SINGKATAN NAMA PEREMPUAN <span class="required-asterisk">*</span></label>
+                                <input type="text" class="form-control" id="singkatanPerempuan" name="bride_short" placeholder="Contoh: Awanis" oninput="updateLivePreview()" required>
+                                <div class="invalid-feedback">Sila masukkan nama singkatan pengantin perempuan.</div>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Extra Couple (For Kedua-dua Pihak) -->
+                        <div id="extraCoupleSection" class="border rounded p-3 mt-3 bg-light d-none">
+                            <h6 class="fw-bold text-dark mb-2"><i class="bi bi-people-fill me-2 text-primary"></i>PASANGAN TAMBAHAN / MAJLIS KEDUA</h6>
+                            <p class="sub-text mb-3">Isi maklumat bagi pasangan kedua atau maklumat majlis sebelah lagi.</p>
+                            <div class="row g-3">
+                                <div class="col-md-7">
+                                    <label for="namaPasanganTambahan" class="form-label">NAMA PENUH PASANGAN TAMBAHAN</label>
+                                    <input type="text" class="form-control" id="namaPasanganTambahan" name="extra_couple_full" placeholder="Contoh: MUHAMMAD FAUZI & NURUL SYAFIQAH">
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="singkatanPasanganTambahan" class="form-label">SINGKATAN NAMA PASANGAN TAMBAHAN</label>
+                                    <input type="text" class="form-control" id="singkatanPasanganTambahan" name="extra_couple_short" placeholder="Contoh: FAUZI & SYAFIQAH" oninput="updateLivePreview()">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Order Type Selection -->
-            <div class="section-title"><i class="bi bi-people-fill me-2"></i>Order Type / Pakej Tempahan</div>
-            <div class="row g-3 mb-4">
-                <div class="col-12">
-                    <label class="form-label fw-semibold">Pilih Pakej Tempahan <span class="text-danger">*</span></label>
-                    <select class="form-select" name="order_side" id="orderSideSelect" required>
-                        <option value="groom" selected>Pihak Lelaki sahaja</option>
-                        <option value="bride">Pihak Perempuan sahaja</option>
-                        <option value="two_packages">Pihak Lelaki & Pihak Perempuan (2 Pakej Berasingan)</option>
-                        <option value="bifold">Pihak Lelaki & Pihak Perempuan (Kad Berlipat - 2 Pihak)</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Wedding Details Section -->
-            <div class="section-title"><i class="bi bi-heart-fill me-2"></i>Wedding & Couple Details</div>
-            <div class="row g-4 mb-4">
-                <!-- Left Column: Inputs -->
-                <div class="col-lg-6">
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <label class="form-label fw-semibold">Design Code Choice</label>
-                            <select class="form-select" name="design_code" id="designCodeSelect">
-                                <option value="CARD-FLORAL-01">CARD-FLORAL-01 (Classic Floral)</option>
-                                <option value="CARD-GOLD-02">CARD-GOLD-02 (Modern Gold)</option>
-                                <option value="CARD-MINIMAL-03">CARD-MINIMAL-03 (Minimalist White)</option>
-                            </select>
-                        </div>
-
-                        <!-- Dynamic Parents Names -->
-                        <div class="col-12" id="groomParentsWrapper">
-                            <label class="form-label fw-semibold">Nama Ibu Bapa Pengantin Lelaki <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control preview-trigger" name="groom_parents" id="groomParentsInput" required placeholder="e.g. Encik Ahmad & Puan Aminah">
-                        </div>
-                        <div class="col-12 d-none" id="brideParentsWrapper">
-                            <label class="form-label fw-semibold">Nama Ibu Bapa Pengantin Perempuan <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control preview-trigger" name="bride_parents" id="brideParentsInput" placeholder="e.g. Encik Hassan & Puan Fatimah">
-                        </div>
-
-                        <!-- Couple Names -->
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Groom's Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control preview-trigger" name="groom_name" id="groomNameInput" required placeholder="e.g. Mad Dane">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Bride's Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control preview-trigger" name="bride_name" id="brideNameInput" required placeholder="e.g. Selena">
-                        </div>
-
-                        <!-- Single Event Date/Venue Input Area -->
-                        <div id="singleSideSection" class="col-12 row g-3 m-0 p-0">
-                            <div class="col-12">
-                                <label class="form-label fw-semibold">Event Date <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control preview-trigger" name="groom_event_date" id="singleEventDate" required>
+                    <!-- SECTION 4: MAKLUMAT IBU BAPA -->
+                    <div class="mb-5">
+                        <h5 class="section-header"><i class="bi bi-people-fill me-2"></i>4. MAKLUMAT IBU BAPA</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="namaBapa" class="form-label">NAMA BAPA PENGANTIN <span class="required-asterisk">*</span></label>
+                                <input type="text" class="form-control" id="namaBapa" name="father_name" placeholder="Nama penuh bapa pengantin" required>
+                                <div class="invalid-feedback">Sila masukkan nama bapa pengantin.</div>
                             </div>
-                            <div class="col-12">
-                                <label class="form-label fw-semibold">Event Venue / Address <span class="text-danger">*</span></label>
-                                <textarea class="form-control preview-trigger" name="groom_venue" id="singleVenue" rows="2" required placeholder="e.g. Dewan Perdana, Shah Alam"></textarea>
+                            <div class="col-md-6">
+                                <label for="namaIbu" class="form-label">NAMA IBU PENGANTIN</label>
+                                <input type="text" class="form-control" id="namaIbu" name="mother_name" placeholder="Nama penuh ibu pengantin">
                             </div>
                         </div>
-
-                        <!-- Dual Sides Event Details -->
-                        <div id="bothSidesSection" class="col-12 d-none">
-                            <div class="side-details-box mb-3">
-                                <h6 class="fw-bold text-primary mb-2"><i class="bi bi-gender-male me-2"></i>Majlis Pihak Lelaki</h6>
-                                <div class="row g-2">
-                                    <div class="col-12">
-                                        <input type="date" class="form-control preview-trigger" name="groom_side_date" id="groomSideDate" placeholder="Tarikh Lelaki">
-                                    </div>
-                                    <div class="col-12">
-                                        <textarea class="form-control preview-trigger" name="groom_side_venue" id="groomSideVenue" rows="2" placeholder="Lokasi Lelaki"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="side-details-box">
-                                <h6 class="fw-bold text-primary mb-2"><i class="bi bi-gender-female me-2"></i>Majlis Pihak Perempuan</h6>
-                                <div class="row g-2">
-                                    <div class="col-12">
-                                        <input type="date" class="form-control preview-trigger" name="bride_side_date" id="brideSideDate" placeholder="Tarikh Perempuan">
-                                    </div>
-                                    <div class="col-12">
-                                        <textarea class="form-control preview-trigger" name="bride_side_venue" id="brideSideVenue" rows="2" placeholder="Lokasi Perempuan"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Extra Contacts -->
-                        <div class="col-12">
-                            <label class="form-label fw-semibold"><i class="bi bi-telephone-plus me-1"></i> Hubungi Untuk Diperhatikan (Extra Contacts)</label>
-                            
-                            <div class="row g-2 mb-2">
-                                <div class="col-6">
-                                    <input type="text" class="form-control preview-trigger" name="contact_name_1" id="contactName1" placeholder="Nama Contact 1">
-                                </div>
-                                <div class="col-6">
-                                    <input type="tel" class="form-control preview-trigger" name="contact_phone_1" id="contactPhone1" placeholder="No. Tel 1">
-                                </div>
-                            </div>
-                            <div class="row g-2 mb-2">
-                                <div class="col-6">
-                                    <input type="text" class="form-control preview-trigger" name="contact_name_2" id="contactName2" placeholder="Nama Contact 2">
-                                </div>
-                                <div class="col-6">
-                                    <input type="tel" class="form-control preview-trigger" name="contact_phone_2" id="contactPhone2" placeholder="No. Tel 2">
-                                </div>
-                            </div>
-                            <div class="row g-2">
-                                <div class="col-6">
-                                    <input type="text" class="form-control preview-trigger" name="contact_name_3" id="contactName3" placeholder="Nama Contact 3">
-                                </div>
-                                <div class="col-6">
-                                    <input type="tel" class="form-control preview-trigger" name="contact_phone_3" id="contactPhone3" placeholder="No. Tel 3">
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
-                </div>
 
-                <!-- Right Column: 4x6 Card Preview -->
-                <div class="col-lg-6">
-                    <div class="preview-container-box">
-                        <h6 class="fw-bold text-dark mb-2 w-100 text-center"><i class="bi bi-eye-fill me-2 text-primary"></i>Live Card Preview (4" x 6")</h6>
+                    <!-- SECTION 5: MAKLUMAT MAJLIS -->
+                    <div class="mb-5">
+                        <h5 class="section-header"><i class="bi bi-calendar-event-fill me-2"></i>5. MAKLUMAT MAJLIS</h5>
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label for="hariMajlis" class="form-label">HARI MAJLIS <span class="required-asterisk">*</span></label>
+                                <select class="form-select" id="hariMajlis" name="event_day" onchange="updateLivePreview()" required>
+                                    <option value="" disabled selected>Pilih Hari...</option>
+                                    <option value="Sabtu">Sabtu</option>
+                                    <option value="Ahad">Ahad</option>
+                                    <option value="Jumaat">Jumaat</option>
+                                    <option value="Isnin">Isnin</option>
+                                    <option value="Lain-lain">Lain-lain</option>
+                                </select>
+                                <div class="invalid-feedback">Sila pilih hari majlis.</div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="tarikhMajlis" class="form-label">TARIKH MAJLIS <span class="required-asterisk">*</span></label>
+                                <input type="date" class="form-control" id="tarikhMajlis" name="event_date" onchange="updateLivePreview()" required>
+                                <div class="invalid-feedback">Sila pilih tarikh majlis.</div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="tarikhHijrah" class="form-label">TARIKH HIJRAH <span class="required-asterisk">*</span></label>
+                                <input type="text" class="form-control" id="tarikhHijrah" name="hijri_date" placeholder="Contoh: 15 SAFAR 1448H" required>
+                                <div class="invalid-feedback">Sila masukkan tarikh hijrah.</div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="masaJamuan" class="form-label">MASA MAJLIS (JAMUAN) <span class="required-asterisk">*</span></label>
+                                <input type="text" class="form-control" id="masaJamuan" name="event_time" placeholder="Contoh: 11.00 AM - 4.00 PM" oninput="updateLivePreview()" required>
+                                <div class="invalid-feedback">Sila masukkan masa majlis.</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="masaBersanding" class="form-label">MASA BERSANDING <span class="required-asterisk">*</span></label>
+                                <input type="text" class="form-control" id="masaBersanding" name="sanding_time" placeholder="Contoh: 12.30 PM" required>
+                                <div class="invalid-feedback">Sila masukkan masa bersanding.</div>
+                            </div>
+                            <div class="col-md-8">
+                                <label for="alamatMajlis" class="form-label">ALAMAT MAJLIS PERKAHWINAN <span class="required-asterisk">*</span></label>
+                                <input type="text" class="form-control" id="alamatMajlis" name="event_address" placeholder="Sila isi alamat lengkap majlis" oninput="updateLivePreview()" required>
+                                <div class="invalid-feedback">Sila masukkan alamat lengkap majlis.</div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="linkLokasi" class="form-label">LINK LOKASI MAJLIS (GOOGLE MAPS / WAZE) <span class="required-asterisk">*</span></label>
+                                <input type="url" class="form-control" id="linkLokasi" name="location_url" placeholder="Contoh: https://maps.app.goo.gl/..." required>
+                                <div class="sub-text">Sila berikan link dengan tepat bagi mengelakkan kesalahan lokasi dalam kad anda.</div>
+                                <div class="invalid-feedback">Sila berikan URL link lokasi.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 6: NO. TELEFON UNTUK DIHUBUNGI -->
+                    <div class="mb-5">
+                        <h5 class="section-header"><i class="bi bi-telephone-fill me-2"></i>6. NO. TELEFON UNTUK DIHUBUNGI</h5>
+                        <p class="sub-text mb-3">Akan diletakkan di dalam kad kahwin & alivecard (jika ada).</p>
                         
-                        <div class="card-preview-wrapper preview-theme-CARD-FLORAL-01" id="cardPreviewContainer">
-                            <div id="cardBadge" class="badge bg-primary mb-2 d-none">Kad 1: Pihak Lelaki</div>
-
-                            <div class="preview-event-title" id="prevCardHeader">Walimatulurus</div>
-                            <div class="small text-muted mt-1" id="prevParents">Nama Ibu Bapa</div>
-                            <div class="preview-couple-name" id="prevCoupleName">Mad Dane & Selena</div>
-                            <p class="small text-muted mb-2" style="font-size: 0.75rem;">Mempersilakan ke Majlis Perkahwinan Kami</p>
-                            <hr class="w-50 my-2" style="border-color: inherit;">
-                            <div class="preview-details" id="prevDetails">
-                                <div><i class="bi bi-calendar3 me-1"></i> <span id="prevDate">Tarikh Majlis</span></div>
-                                <div class="mt-1"><i class="bi bi-geo-alt-fill me-1"></i> <span id="prevVenue">Lokasi Majlis</span></div>
+                        <div class="row g-3 mb-2">
+                            <div class="col-md-6">
+                                <label for="namaHubungi1" class="form-label">NAMA UNTUK DIHUBUNGI 1 <span class="required-asterisk">*</span></label>
+                                <input type="text" class="form-control" id="namaHubungi1" name="contact1_name" placeholder="Contoh: Ayah / Abang" required>
+                                <div class="invalid-feedback">Sila masukkan nama rujukan 1.</div>
                             </div>
-                            <div class="preview-contacts w-100" id="prevContacts"></div>
+                            <div class="col-md-6">
+                                <label for="noHubungi1" class="form-label">NO TELEFON UNTUK DIHUBUNGI 1 <span class="required-asterisk">*</span></label>
+                                <input type="tel" class="form-control" id="noHubungi1" name="contact1_phone" placeholder="Contoh: 0123456789" required>
+                                <div class="invalid-feedback">Sila masukkan no telefon 1.</div>
+                            </div>
+                        </div>
 
-                            <button type="button" class="swap-card-btn d-none" id="swapCardBtn" title="Switch Card View">
-                                <i class="bi bi-arrow-left-right fs-5"></i>
+                        <div class="row g-3 mb-2">
+                            <div class="col-md-6">
+                                <label for="namaHubungi2" class="form-label">NAMA UNTUK DIHUBUNGI 2 <span class="required-asterisk">*</span></label>
+                                <input type="text" class="form-control" id="namaHubungi2" name="contact2_name" placeholder="Contoh: Ibu" required>
+                                <div class="invalid-feedback">Sila masukkan nama rujukan 2.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="noHubungi2" class="form-label">NO TELEFON UNTUK DIHUBUNGI 2 <span class="required-asterisk">*</span></label>
+                                <input type="tel" class="form-control" id="noHubungi2" name="contact2_phone" placeholder="Contoh: 0114332928" required>
+                                <div class="invalid-feedback">Sila masukkan no telefon 2.</div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="namaHubungi3" class="form-label">NAMA UNTUK DIHUBUNGI 3</label>
+                                <input type="text" class="form-control" id="namaHubungi3" name="contact3_name" placeholder="Contoh: Abang / Kakak">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="noHubungi3" class="form-label">NO TELEFON UNTUK DIHUBUNGI 3</label>
+                                <input type="tel" class="form-control" id="noHubungi3" name="contact3_phone" placeholder="Contoh: 0198765432">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 7: PENGHANTARAN TEMPAHAN -->
+                    <div class="mb-5">
+                        <h5 class="section-header"><i class="bi bi-truck me-2"></i>7. PENGHANTARAN TEMPAHAN</h5>
+                        <label class="form-label mb-2">BAGAIMANA ANDA INGIN MENERIMA TEMPAHAN? <span class="required-asterisk">*</span></label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="delivery_method" id="deliveryPos" value="Pos / Courier" checked onclick="toggleShippingSection()">
+                            <label class="form-check-label" for="deliveryPos">
+                                <strong>Pos / Courier</strong> (Caj penghantaran akan dikenakan bagi tempahan yang dipos)
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="delivery_method" id="deliveryPickup" value="Self Pickup" onclick="toggleShippingSection()">
+                            <label class="form-check-label" for="deliveryPickup">
+                                <strong>Self Pickup</strong> di King Kad Kahwin (Tiada caj penghantaran)
+                            </label>
+                        </div>
+
+                        <!-- Dynamic Shipping Information Section -->
+                        <div id="shippingAddressSection" class="border rounded p-3 mt-3 bg-light">
+                            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-geo-alt-fill me-2 text-primary"></i>ALAMAT PENGHANTARAN (SHIPPING ADDRESS)</h6>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label for="shippingAddress" class="form-label">ALAMAT LENGKAP PENGHANTARAN <span class="required-asterisk">*</span></label>
+                                    <textarea class="form-control" id="shippingAddress" name="shipping_address" rows="2" placeholder="No. Rumah, Jalan, Taman / Kampung" required></textarea>
+                                    <div class="invalid-feedback">Sila masukkan alamat penghantaran.</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="shippingPostcode" class="form-label">POSKOD <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control" id="shippingPostcode" name="shipping_postcode" placeholder="Contoh: 75450" required>
+                                    <div class="invalid-feedback">Sila masukkan poskod.</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="shippingCity" class="form-label">BANDAR <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control" id="shippingCity" name="shipping_city" placeholder="Contoh: Ayer Keroh" required>
+                                    <div class="invalid-feedback">Sila masukkan bandar.</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="shippingState" class="form-label">NEGERI <span class="required-asterisk">*</span></label>
+                                    <select class="form-select" id="shippingState" name="shipping_state" required>
+                                        <option value="" disabled selected>Pilih Negeri...</option>
+                                        <option value="Melaka">Melaka</option>
+                                        <option value="Johor">Johor</option>
+                                        <option value="Kedah">Kedah</option>
+                                        <option value="Kelantan">Kelantan</option>
+                                        <option value="Negeri Sembilan">Negeri Sembilan</option>
+                                        <option value="Pahang">Pahang</option>
+                                        <option value="Perak">Perak</option>
+                                        <option value="Perlis">Perlis</option>
+                                        <option value="Pulau Pinang">Pulau Pinang</option>
+                                        <option value="Sabah">Sabah</option>
+                                        <option value="Sarawak">Sarawak</option>
+                                        <option value="Selangor">Selangor</option>
+                                        <option value="Terengganu">Terengganu</option>
+                                        <option value="WP Kuala Lumpur">WP Kuala Lumpur</option>
+                                        <option value="WP Labuan">WP Labuan</option>
+                                        <option value="WP Putrajaya">WP Putrajaya</option>
+                                    </select>
+                                    <div class="invalid-feedback">Sila pilih negeri.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 8: RESIT DEPOSIT & PENGESAHAN -->
+                    <div class="mb-4">
+                        <h5 class="section-header"><i class="bi bi-receipt me-2"></i>8. RESIT DEPOSIT & PENGESAHAN</h5>
+                        
+                        <!-- Deposit Payment Reminder Box & QR -->
+                        <div class="alert alert-warning border-warning d-flex align-items-start mb-4" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill fs-4 me-3 text-warning"></i>
+                            <div>
+                                <h6 class="fw-bold mb-1">PERINGATAN PEMBAYARAN DEPOSIT</h6>
+                                <p class="mb-0 small text-dark">
+                                    Bayaran ini adalah untuk <strong>DEPOSIT TEMPAHAN SAHAJA</strong>. Baki selebihnya akan dijelaskan selepas draf artwork sedia dan disahkan oleh anda sebelum proses cetakan bermula.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- QR Code Container -->
+                        <div class="card border-0 bg-light p-3 text-center mb-4">
+                            <h6 class="fw-bold mb-2">IMBAS QR UNTUK BAYARAN DEPOSIT (RM50)</h6>
+                            <div class="qr-placeholder my-2">
+                                <i class="bi bi-qr-code-scan fs-1 text-secondary"></i>
+                            </div>
+                            <div class="small text-muted">Akaun: <strong>King Kad Kahwin Enterprise</strong> (Maybank)</div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label for="resitDeposit" class="form-label">UPLOAD RESIT DEPOSIT BUKTI PEMBAYARAN <span class="required-asterisk">*</span></label>
+                                <input type="file" class="form-control" id="resitDeposit" accept="image/*,.pdf" required>
+                                <div class="invalid-feedback">Sila upload bukti pembayaran deposit.</div>
+                            </div>
+                        </div>
+
+                        <!-- Customer Acknowledgement & Terms Checkboxes -->
+                        <div class="border-top pt-3 mt-4">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="checkConfirmAccuracy" required>
+                                <label class="form-check-label text-dark" for="checkConfirmAccuracy">
+                                    Saya mengesahkan bahawa semua maklumat yang dimasukkan di dalam borang ini adalah <strong>TEPAT dan BENAR</strong>. <span class="required-asterisk">*</span>
+                                </label>
+                                <div class="invalid-feedback">Sila sahkan bahawa maklumat anda adalah tepat.</div>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="checkConfirmDisclaimer" required>
+                                <label class="form-check-label text-dark" for="checkConfirmDisclaimer">
+                                    Saya faham dan bersetuju bahawa sebarang kesilapan ejaan, tarikh, atau maklumat selepas borang dihantar yang berpunca daripada pihak saya <strong>TIDAK AKAN DITANGGUNG oleh pihak KingKadKahwin</strong>. <span class="required-asterisk">*</span>
+                                </label>
+                                <div class="invalid-feedback">Sila tandakan persetujuan terma dan syarat ini.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Auto Generated Order Reference -->
+                    <input type="hidden" id="orderIdInput" name="order_id" value="">
+                    <input type="hidden" id="coupleSummaryInput" name="couple" value="">
+                    <input type="hidden" id="sideInput" name="side" value="Pihak Lelaki">
+
+                    <!-- Submit Button -->
+                    <div class="d-grid gap-2 mt-5">
+                        <button type="submit" class="btn btn-custom-primary btn-lg shadow-sm">
+                            <i class="bi bi-send-fill me-2"></i> SUBMIT TEMPAHAN KAD KAHWIN
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right Column: Sticky 4x6 Live Card Preview -->
+            <div class="col-lg-4">
+                <div class="preview-sticky">
+                    <div class="card p-3 border-0 shadow-sm rounded-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="preview-title-badge"><i class="bi bi-eye-fill me-1"></i> Live Card Preview</span>
+                            <!-- Card Switcher Arrows (for Dual Packages) -->
+                            <div id="cardSwitchControls" class="btn-group btn-group-sm d-none" role="group">
+                                <button type="button" class="btn btn-outline-primary active" id="btnCard1" onclick="switchCard(1)">Card 1</button>
+                                <button type="button" class="btn btn-outline-primary" id="btnCard2" onclick="switchCard(2)">Card 2</button>
+                            </div>
+                        </div>
+
+                        <!-- 4:6 Aspect Ratio Preview Card -->
+                        <div class="card-preview-wrapper" id="cardContainer">
+                            
+                            <!-- FRONT VIEW CONTENT -->
+                            <div id="cardFrontView" class="w-100 h-100 d-flex flex-column justify-content-between">
+                                <div class="preview-event-title" id="prevEventTitle">WALIMATULURUS</div>
+                                
+                                <div>
+                                    <div class="preview-names" id="prevCoupleNames">Syafiq & Awanis</div>
+                                    <p class="text-muted small mb-0" id="prevDateText">Tarikh Majlis</p>
+                                </div>
+
+                                <div class="text-muted small border-top pt-2 mt-2" style="font-size: 0.72rem;">
+                                    <div><strong>Kod:</strong> <span id="prevCodeDisplay">CKP-001</span></div>
+                                    <div><strong>Pihak:</strong> <span id="prevSideDisplay">Pihak Lelaki</span></div>
+                                </div>
+                            </div>
+
+                            <!-- BACK VIEW CONTENT -->
+                            <div id="cardBackView" class="w-100 h-100 flex-column justify-content-between d-none">
+                                <div class="preview-event-title">MAKLUMAT MAJLIS</div>
+                                
+                                <div class="my-auto text-center px-1">
+                                    <div class="fw-bold mb-1 text-dark" style="font-size: 0.85rem;" id="prevBackTime">Masa Jamuan</div>
+                                    <div class="text-muted small mb-2" style="font-size: 0.75rem;" id="prevBackAddress">Alamat Majlis Perkahwinan</div>
+                                    <div class="badge bg-light text-primary border border-primary font-monospace" style="font-size: 0.7rem;">
+                                        <i class="bi bi-geo-alt-fill me-1"></i> Location Map Ready
+                                    </div>
+                                </div>
+
+                                <div class="text-muted small border-top pt-2 w-100" style="font-size: 0.7rem;">
+                                    <i class="bi bi-heart-fill text-danger me-1"></i> Terima Kasih
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Front / Back Switch Buttons -->
+                        <div class="btn-group w-100 mt-3" role="group">
+                            <button type="button" class="btn btn-sm btn-primary" id="btnFront" onclick="switchView('front')">
+                                <i class="bi bi-card-heading me-1"></i> Front View
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="btnBack" onclick="switchView('back')">
+                                <i class="bi bi-card-text me-1"></i> Back View
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Payment & Receipt Verification -->
-            <div class="section-title"><i class="bi bi-qr-code-scan me-2"></i>Deposit Payment & Receipt Verification</div>
-            
-            <div class="alert alert-info border-info d-flex align-items-center mb-3" role="alert">
-                <i class="bi bi-info-circle-fill fs-4 me-3 text-info"></i>
-                <div>
-                    <strong>Bayaran Deposit Sahaja / Deposit Payment Only</strong><br>
-                    Bayaran yang dibuat di borang ini adalah untuk **deposit sahaja**. Baki penuh bayaran akan dijelaskan selepas karya seni (artwork) kad anda siap direka dan disahkan.<br>
-                    <span class="text-muted small"><em>Payment made through this form is for deposit only. Full balance payment will be made after the card artwork is complete and approved.</em></span>
-                </div>
-            </div>
-
-            <div class="row g-3 mb-4">
-                <div class="col-md-6">
-                    <div class="qr-box">
-                        <p class="fw-bold mb-2 text-secondary"><i class="bi bi-wallet2 me-1"></i> Scan QR to Pay Deposit</p>
-                        <img src="assets/img/payment_qr.jpg" alt="Payment QR Code" class="qr-img mb-2">
-                        <p class="text-muted small mb-0">Scan using any Banking / e-Wallet App</p>
-                    </div>
-                </div>
-                <div class="col-md-6 d-flex flex-column justify-content-center">
-                    <label class="form-label fw-semibold">Upload Deposit Payment Receipt / Proof <span class="text-danger">*</span></label>
-                    <input type="file" class="form-control mb-2" name="payment_receipt" id="paymentReceipt" accept="image/*,.pdf" required>
-                    <div class="form-text text-muted">Please attach your deposit transfer screenshot or PDF transaction receipt.</div>
-                    
-                    <div id="receiptPreviewContainer" class="mt-2 d-none">
-                        <span class="badge bg-secondary"><i class="bi bi-paperclip me-1"></i> Selected: <span id="fileName"></span></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Confirmation Checkboxes Section -->
-            <div class="section-title"><i class="bi bi-shield-check me-2"></i>Pengesahan Maklumat</div>
-            <div class="confirmation-box mb-4">
-                <div class="form-check mb-3">
-                    <input class="form-check-input confirm-check" type="checkbox" id="confirmCheck1" required>
-                    <label class="form-check-label text-dark fw-semibold" for="confirmCheck1">
-                        Saya telah menyemak maklumat diatas dan mengesahkan bahawa ianya betul. Pihak KingKadKahwin tidak akan bertanggungjawab atas apa-apa kesilapan selepas ini. <span class="text-danger">*</span>
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input confirm-check" type="checkbox" id="confirmCheck2" required>
-                    <label class="form-check-label text-dark fw-semibold" for="confirmCheck2">
-                        Semua maklumat diatas adalah benar dan tepat. Sebarang kesilapan yang terjadi selepas ini adalah daripada diri saya sendiri. <span class="text-danger">*</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary btn-lg" id="submitBtn" disabled>
-                    <i class="bi bi-send-check me-2"></i> Submit Order Details & Deposit Receipt
-                </button>
-            </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
 
+<!-- JS Script -->
 <script>
-    const customerForm = document.getElementById('customerForm');
-    const orderSideSelect = document.getElementById('orderSideSelect');
-    const designCodeSelect = document.getElementById('designCodeSelect');
-    const singleSideSection = document.getElementById('singleSideSection');
-    const bothSidesSection = document.getElementById('bothSidesSection');
-    const submitBtn = document.getElementById('submitBtn');
+    let currentCardNum = 1;
+    let currentSideView = 'front';
 
-    // Fulfillment & Shipping Elements
-    const fulfillmentSelect = document.getElementById('fulfillmentSelect');
-    const shippingSection = document.getElementById('shippingSection');
-    const shippingInputs = document.querySelectorAll('.shipping-input');
+    // Handle package changes: Show extra couple input and card switcher controls
+    function handlePackageChange() {
+        const pkg = document.getElementById('pakejChoice').value;
+        const extraSection = document.getElementById('extraCoupleSection');
+        const switchControls = document.getElementById('cardSwitchControls');
+        const sideHidden = document.getElementById('sideInput');
 
-    // Parents Wrappers & Inputs
-    const groomParentsWrapper = document.getElementById('groomParentsWrapper');
-    const brideParentsWrapper = document.getElementById('brideParentsWrapper');
-    const groomParentsInput = document.getElementById('groomParentsInput');
-    const brideParentsInput = document.getElementById('brideParentsInput');
+        if (pkg.includes('Kedua-dua Pihak')) {
+            extraSection.classList.remove('d-none');
+            switchControls.classList.remove('d-none');
+            sideHidden.value = "Kedua-dua Pihak";
+        } else {
+            extraSection.classList.add('d-none');
+            switchControls.classList.add('d-none');
+            sideHidden.value = pkg;
+        }
+        updateLivePreview();
+    }
 
-    // Couple Inputs
-    const groomNameInput = document.getElementById('groomNameInput');
-    const brideNameInput = document.getElementById('brideNameInput');
-    const customerNameInput = document.getElementById('customerNameInput');
-    
-    // Date & Venue Inputs
-    const singleEventDate = document.getElementById('singleEventDate');
-    const singleVenue = document.getElementById('singleVenue');
-    const groomSideDate = document.getElementById('groomSideDate');
-    const groomSideVenue = document.getElementById('groomSideVenue');
-    const brideSideDate = document.getElementById('brideSideDate');
-    const brideSideVenue = document.getElementById('brideSideVenue');
+    // Toggle Shipping Info visibility based on Delivery Method
+    function toggleShippingSection() {
+        const isPos = document.getElementById('deliveryPos').checked;
+        const shippingSection = document.getElementById('shippingAddressSection');
+        const shippingInputs = shippingSection.querySelectorAll('input, select, textarea');
 
-    // Contacts Inputs
-    const contact1Name = document.getElementById('contactName1');
-    const contact1Phone = document.getElementById('contactPhone1');
-    const contact2Name = document.getElementById('contactName2');
-    const contact2Phone = document.getElementById('contactPhone2');
-    const contact3Name = document.getElementById('contactName3');
-    const contact3Phone = document.getElementById('contactPhone3');
-
-    // Card Preview Elements
-    const cardPreviewContainer = document.getElementById('cardPreviewContainer');
-    const prevCardHeader = document.getElementById('prevCardHeader');
-    const prevParents = document.getElementById('prevParents');
-    const prevCoupleName = document.getElementById('prevCoupleName');
-    const prevDate = document.getElementById('prevDate');
-    const prevVenue = document.getElementById('prevVenue');
-    const prevContacts = document.getElementById('prevContacts');
-    const swapCardBtn = document.getElementById('swapCardBtn');
-    const cardBadge = document.getElementById('cardBadge');
-
-    // Payment Receipt Elements
-    const paymentReceipt = document.getElementById('paymentReceipt');
-    const receiptPreviewContainer = document.getElementById('receiptPreviewContainer');
-    const fileNameSpan = document.getElementById('fileName');
-
-    // Checkboxes
-    const confirmChecks = document.querySelectorAll('.confirm-check');
-
-    let activeCardIndex = 0;
-
-    // Toggle Shipping Section
-    function toggleFulfillment() {
-        if (fulfillmentSelect.value === 'delivery') {
+        if (isPos) {
             shippingSection.classList.remove('d-none');
-            shippingInputs.forEach(input => input.required = true);
+            shippingInputs.forEach(input => input.setAttribute('required', 'required'));
         } else {
             shippingSection.classList.add('d-none');
-            shippingInputs.forEach(input => {
-                input.required = false;
-                input.value = '';
-            });
+            shippingInputs.forEach(input => input.removeAttribute('required'));
         }
     }
 
-    fulfillmentSelect.addEventListener('change', toggleFulfillment);
+    // Switch Front / Back Card Views
+    function switchView(view) {
+        currentSideView = view;
+        const frontElem = document.getElementById('cardFrontView');
+        const backElem = document.getElementById('cardBackView');
+        const btnFront = document.getElementById('btnFront');
+        const btnBack = document.getElementById('btnBack');
 
-    // Format Date string YYYY-MM-DD to DD/MM/YYYY
-    function formatDate(dateStr) {
-        if (!dateStr) return '';
-        const parts = dateStr.split('-');
-        if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
-        return dateStr;
+        if (view === 'front') {
+            frontElem.classList.remove('d-none');
+            frontElem.classList.add('d-flex');
+            backElem.classList.add('d-none');
+            backElem.classList.remove('d-flex');
+            
+            btnFront.className = 'btn btn-sm btn-primary';
+            btnBack.className = 'btn btn-sm btn-outline-primary';
+        } else {
+            backElem.classList.remove('d-none');
+            backElem.classList.add('d-flex');
+            frontElem.classList.add('d-none');
+            frontElem.classList.remove('d-flex');
+
+            btnBack.className = 'btn btn-sm btn-primary';
+            btnFront.className = 'btn btn-sm btn-outline-primary';
+        }
     }
 
-    // Live Card Preview
-    function updateCardPreview() {
-        const selectedTheme = designCodeSelect.value;
-        cardPreviewContainer.className = `card-preview-wrapper preview-theme-${selectedTheme}`;
+    // Switch between Card 1 and Card 2 (For Dual Packages)
+    function switchCard(cardNum) {
+        currentCardNum = cardNum;
+        document.getElementById('btnCard1').classList.toggle('active', cardNum === 1);
+        document.getElementById('btnCard2').classList.toggle('active', cardNum === 2);
+        updateLivePreview();
+    }
 
-        const selectedPkg = orderSideSelect.value;
-        const groom = groomNameInput.value.trim() || "Groom";
-        const bride = brideNameInput.value.trim() || "Bride";
-        const gParents = groomParentsInput.value.trim() || "Ibu Bapa Lelaki";
-        const bParents = brideParentsInput.value.trim() || "Ibu Bapa Perempuan";
+    // Real-time Card Preview update logic
+    function updateLivePreview() {
+        const groomShort = document.getElementById('singkatanLelaki').value.trim() || "Groom";
+        const brideShort = document.getElementById('singkatanPerempuan').value.trim() || "Bride";
+        const extraCoupleShort = document.getElementById('singkatanPasanganTambahan').value.trim() || "Extra Couple";
+        const eventTitle = document.getElementById('tajukMajlis').value || "WALIMATULURUS";
+        const designCode = document.getElementById('kodDesign').value.trim() || "CKP-001";
+        const eventDay = document.getElementById('hariMajlis').value || "";
+        const eventDate = document.getElementById('tarikhMajlis').value || "";
+        const pkgType = document.getElementById('pakejChoice').value;
+        const timeVal = document.getElementById('masaJamuan').value.trim() || "11.00 AM - 4.00 PM";
+        const addrVal = document.getElementById('alamatMajlis').value.trim() || "Alamat Majlis Perkahwinan";
 
-        if (selectedPkg === 'two_packages' || selectedPkg === 'bifold') {
-            swapCardBtn.classList.remove('d-none');
-            cardBadge.classList.remove('d-none');
+        // Display Couple Names based on active card tab
+        let displayCouple = `${groomShort} & ${brideShort}`;
+        if (pkgType.includes('Kedua-dua Pihak') && currentCardNum === 2) {
+            displayCouple = extraCoupleShort;
+        }
 
-            const packagePrefix = selectedPkg === 'bifold' ? 'Kad Berlipat: ' : '';
+        document.getElementById('prevCoupleNames').innerHTML = displayCouple;
+        document.getElementById('prevEventTitle').innerText = eventTitle.toUpperCase();
 
-            if (activeCardIndex === 0) {
-                cardBadge.innerText = `${packagePrefix}Pihak Lelaki`;
-                cardBadge.className = "badge bg-primary mb-2";
-                prevCardHeader.innerText = "Walimatulurus (Pihak Lelaki)";
-                prevParents.innerText = gParents;
-                prevCoupleName.innerText = `${groom} & ${bride}`;
-                
-                const gDate = formatDate(groomSideDate.value) || "DD/MM/YYYY";
-                prevDate.innerText = gDate;
-                prevVenue.innerText = groomSideVenue.value || "Lokasi Majlis Lelaki";
+        // Date Display
+        if (eventDate) {
+            document.getElementById('prevDateText').innerText = `${eventDay ? eventDay + ', ' : ''}${eventDate}`;
+        } else {
+            document.getElementById('prevDateText').innerText = "Tarikh Majlis";
+        }
+
+        // Code & Side
+        document.getElementById('prevCodeDisplay').innerText = designCode;
+        document.getElementById('prevSideDisplay').innerText = pkgType.includes('Kedua-dua Pihak') ? `Card ${currentCardNum}` : pkgType;
+
+        // Back View Info
+        document.getElementById('prevBackTime').innerText = timeVal;
+        document.getElementById('prevBackAddress').innerText = addrVal;
+    }
+
+    // Auto-generate Order ID (e.g., KKK-5928)
+    function generateOrderId() {
+        return `KKK-${Math.floor(1000 + Math.random() * 9000)}`;
+    }
+
+    // Form submission & Bootstrap validation handler
+    (function () {
+        'use strict'
+        const form = document.getElementById('orderForm');
+
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
             } else {
-                cardBadge.innerText = `${packagePrefix}Pihak Perempuan`;
-                cardBadge.className = "badge bg-danger mb-2";
-                prevCardHeader.innerText = "Walimatulurus (Pihak Perempuan)";
-                prevParents.innerText = bParents;
-                prevCoupleName.innerText = `${bride} & ${groom}`;
+                // Auto-generate Order ID
+                document.getElementById('orderIdInput').value = generateOrderId();
                 
-                const bDate = formatDate(brideSideDate.value) || "DD/MM/YYYY";
-                prevDate.innerText = bDate;
-                prevVenue.innerText = brideSideVenue.value || "Lokasi Majlis Perempuan";
+                // Construct Couple summary for URL parameter passed to thank_you.html
+                const groomShort = document.getElementById('singkatanLelaki').value;
+                const brideShort = document.getElementById('singkatanPerempuan').value;
+                document.getElementById('coupleSummaryInput').value = `${groomShort} & ${brideShort}`;
             }
-        } else {
-            swapCardBtn.classList.add('d-none');
-            cardBadge.classList.add('d-none');
 
-            if (selectedPkg === 'bride') {
-                prevCardHeader.innerText = "Walimatulurus (Pihak Perempuan)";
-                prevParents.innerText = bParents;
-                prevCoupleName.innerText = `${bride} & ${groom}`;
-                
-                const formattedDate = formatDate(singleEventDate.value);
-                prevDate.innerText = formattedDate ? formattedDate : "DD/MM/YYYY";
-                prevVenue.innerText = singleVenue.value || "Sila isi alamat / lokasi majlis";
-            } else {
-                prevCardHeader.innerText = "Walimatulurus (Pihak Lelaki)";
-                prevParents.innerText = gParents;
-                prevCoupleName.innerText = `${groom} & ${bride}`;
-
-                const formattedDate = formatDate(singleEventDate.value);
-                prevDate.innerText = formattedDate ? formattedDate : "DD/MM/YYYY";
-                prevVenue.innerText = singleVenue.value || "Sila isi alamat / lokasi majlis";
-            }
-        }
-
-        let contactsHTML = "";
-        if (contact1Name.value || contact1Phone.value) contactsHTML += `<div>${contact1Name.value || 'Contact 1'}: ${contact1Phone.value || '-'}</div>`;
-        if (contact2Name.value || contact2Phone.value) contactsHTML += `<div>${contact2Name.value || 'Contact 2'}: ${contact2Phone.value || '-'}</div>`;
-        if (contact3Name.value || contact3Phone.value) contactsHTML += `<div>${contact3Name.value || 'Contact 3'}: ${contact3Phone.value || '-'}</div>`;
-        
-        prevContacts.innerHTML = contactsHTML ? `<strong>Hubungi:</strong>` + contactsHTML : "";
-    }
-
-    swapCardBtn.addEventListener('click', function() {
-        activeCardIndex = activeCardIndex === 0 ? 1 : 0;
-        updateCardPreview();
-    });
-
-    document.querySelectorAll('.preview-trigger').forEach(input => {
-        input.addEventListener('input', updateCardPreview);
-        input.addEventListener('change', updateCardPreview);
-    });
-    designCodeSelect.addEventListener('change', updateCardPreview);
-
-    // Package Choice Handler
-    orderSideSelect.addEventListener('change', function() {
-        const pkg = this.value;
-        activeCardIndex = 0;
-
-        if (pkg === 'groom') {
-            groomParentsWrapper.classList.remove('d-none');
-            groomParentsInput.required = true;
-            brideParentsWrapper.classList.add('d-none');
-            brideParentsInput.required = false;
-        } else if (pkg === 'bride') {
-            groomParentsWrapper.classList.add('d-none');
-            groomParentsInput.required = false;
-            brideParentsWrapper.classList.remove('d-none');
-            brideParentsInput.required = true;
-        } else {
-            groomParentsWrapper.classList.remove('d-none');
-            groomParentsInput.required = true;
-            brideParentsWrapper.classList.remove('d-none');
-            brideParentsInput.required = true;
-        }
-
-        if (pkg === 'two_packages' || pkg === 'bifold') {
-            singleSideSection.classList.add('d-none');
-            singleEventDate.required = false;
-            singleVenue.required = false;
-
-            bothSidesSection.classList.remove('d-none');
-            groomSideDate.required = true;
-            groomSideVenue.required = true;
-            brideSideDate.required = true;
-            brideSideVenue.required = true;
-        } else {
-            singleSideSection.classList.remove('d-none');
-            singleEventDate.required = true;
-            singleVenue.required = true;
-
-            bothSidesSection.classList.add('d-none');
-            groomSideDate.required = false;
-            groomSideVenue.required = false;
-            brideSideDate.required = false;
-            brideSideVenue.required = false;
-        }
-
-        updateCardPreview();
-    });
-
-    // Payment File Preview
-    paymentReceipt.addEventListener('change', function() {
-        if (this.files && this.files[0]) {
-            fileNameSpan.innerText = this.files[0].name;
-            receiptPreviewContainer.classList.remove('d-none');
-        } else {
-            receiptPreviewContainer.classList.add('d-none');
-        }
-    });
-
-    // Checkboxes validation for enabling submit button
-    function checkConfirmation() {
-        const allChecked = Array.from(confirmChecks).every(chk => chk.checked);
-        submitBtn.disabled = !allChecked;
-    }
-
-    confirmChecks.forEach(chk => chk.addEventListener('change', checkConfirmation));
-
-    // Form Submission & Direct Redirect
-    customerForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Submitting Order...';
-
-        const randomHex = Math.random().toString(16).substr(2, 11).toUpperCase();
-        const orderId = 'KKK-' + randomHex;
-
-        const custName = customerNameInput.value.trim() || "N/A";
-        const groom = groomNameInput.value.trim() || "";
-        const bride = brideNameInput.value.trim() || "";
-        const coupleStr = groom && bride ? `${groom} & ${bride}` : (groom || bride || "N/A");
-        const selectedSideText = orderSideSelect.options[orderSideSelect.selectedIndex].text;
-
-        const params = new URLSearchParams({
-            order_id: orderId,
-            name: custName,
-            couple: coupleStr,
-            side: selectedSideText
-        });
-
-        window.location.href = `thank_you.html?${params.toString()}`;
-    });
+            form.classList.add('was-validated');
+        }, false);
+    })();
 </script>
 
 </body>
