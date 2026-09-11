@@ -36,6 +36,7 @@
             justify-content: center;
             font-size: 2.2rem;
             margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
         .order-badge {
             background-color: #eef2ff;
@@ -45,6 +46,7 @@
             border-radius: 20px;
             display: inline-block;
             font-size: 0.95rem;
+            border: 1px solid #c7d2fe;
         }
         .summary-card {
             background-color: #f8f9fa;
@@ -56,12 +58,24 @@
         .summary-item {
             display: flex;
             justify-content: space-between;
-            padding: 6px 0;
+            padding: 8px 0;
             font-size: 0.92rem;
             border-bottom: 1px dashed #dee2e6;
         }
         .summary-item:last-child {
             border-bottom: none;
+        }
+        .btn-whatsapp {
+            background-color: #25d366;
+            color: #ffffff;
+            border: none;
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-whatsapp:hover, .btn-whatsapp:focus {
+            background-color: #1eb956;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.3);
         }
     </style>
 </head>
@@ -74,42 +88,42 @@
             <i class="bi bi-check-lg"></i>
         </div>
 
-        <h2 class="fw-bold mb-3 text-dark">Thank You!</h2>
+        <h2 class="fw-bold mb-2 text-dark">Thank You!</h2>
         <p class="text-muted mb-3">
             Your order details have been successfully submitted and sent to our design team.
         </p>
 
         <!-- Order Reference Badge -->
-        <div class="mb-3">
-            <span class="order-badge" id="orderRefDisplay">Order Reference: N/A</span>
+        <div class="mb-4">
+            <span class="order-badge" id="orderRefDisplay">Order Reference: Loading...</span>
         </div>
 
         <!-- Order Details Summary -->
         <div class="summary-card mb-4">
-            <h6 class="fw-bold text-dark mb-2"><i class="bi bi-file-text me-2 text-primary"></i>Order Summary</h6>
+            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-file-earmark-text me-2 text-primary"></i>Order Summary</h6>
             <div class="summary-item">
                 <span class="text-muted">Customer Name:</span>
-                <span class="fw-semibold text-dark" id="summaryName">N/A</span>
+                <span class="fw-semibold text-dark text-end ms-2" id="summaryName">N/A</span>
             </div>
             <div class="summary-item">
                 <span class="text-muted">Couple Name:</span>
-                <span class="fw-semibold text-dark" id="summaryCouple">N/A</span>
+                <span class="fw-semibold text-dark text-end ms-2" id="summaryCouple">N/A</span>
             </div>
             <div class="summary-item">
                 <span class="text-muted">Pakej / Side Option:</span>
-                <span class="fw-semibold text-dark" id="summarySide">N/A</span>
+                <span class="fw-semibold text-dark text-end ms-2" id="summarySide">N/A</span>
             </div>
         </div>
 
         <!-- Action Buttons -->
-        <div class="d-grid gap-2 col-10 mx-auto">
+        <div class="d-grid gap-2 col-11 mx-auto">
             <!-- WhatsApp Notification Button -->
-            <a href="#" id="whatsappBtn" target="_blank" class="btn btn-success btn-lg fw-semibold shadow-sm">
-                <i class="bi bi-whatsapp me-2"></i> Notify Staff on WhatsApp
+            <a href="#" id="whatsappBtn" target="_blank" class="btn btn-whatsapp btn-lg fw-semibold shadow-sm py-3">
+                <i class="bi bi-whatsapp me-2 fs-5"></i> Notify Staff on WhatsApp
             </a>
 
-            <!-- Styled Submit Another Order Button -->
-            <a href="order_form.html" class="btn btn-outline-primary btn-lg fw-semibold mt-2">
+            <!-- Submit Another Order Button -->
+            <a href="order_form.html" class="btn btn-outline-primary btn-lg fw-semibold mt-2 py-2">
                 <i class="bi bi-plus-circle me-2"></i> Submit Another Order
             </a>
         </div>
@@ -117,7 +131,7 @@
 </div>
 
 <script>
-    // Config: Staff WhatsApp number 
+    // Config: Staff WhatsApp number (Malaysian format without leading +)
     const STAFF_WHATSAPP_NUMBER = "60186684036";
 
     // Extract Order Parameters from URL

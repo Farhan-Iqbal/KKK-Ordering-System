@@ -149,7 +149,7 @@
                 </div>
             </div>
 
-            <!-- Dynamic Shipping & Delivery Info (Positioned directly after contact & fulfillment option) -->
+            <!-- Dynamic Shipping & Delivery Info -->
             <div id="shippingSection" class="d-none">
                 <div class="section-title"><i class="bi bi-truck me-2"></i>Shipping & Delivery Info</div>
                 <div class="row g-3 mb-4">
@@ -229,7 +229,7 @@
                             </div>
                         </div>
 
-                        <!-- Dual Sides Event Details (2 Packages or Bi-Fold) -->
+                        <!-- Dual Sides Event Details -->
                         <div id="bothSidesSection" class="col-12 d-none">
                             <div class="side-details-box mb-3">
                                 <h6 class="fw-bold text-primary mb-2"><i class="bi bi-gender-male me-2"></i>Majlis Pihak Lelaki</h6>
@@ -256,11 +256,10 @@
                             </div>
                         </div>
 
-                        <!-- Extra Contacts (3 Rows) -->
+                        <!-- Extra Contacts -->
                         <div class="col-12">
                             <label class="form-label fw-semibold"><i class="bi bi-telephone-plus me-1"></i> Hubungi Untuk Diperhatikan (Extra Contacts)</label>
                             
-                            <!-- Row 1 -->
                             <div class="row g-2 mb-2">
                                 <div class="col-6">
                                     <input type="text" class="form-control preview-trigger" name="contact_name_1" id="contactName1" placeholder="Nama Contact 1">
@@ -269,7 +268,6 @@
                                     <input type="tel" class="form-control preview-trigger" name="contact_phone_1" id="contactPhone1" placeholder="No. Tel 1">
                                 </div>
                             </div>
-                            <!-- Row 2 -->
                             <div class="row g-2 mb-2">
                                 <div class="col-6">
                                     <input type="text" class="form-control preview-trigger" name="contact_name_2" id="contactName2" placeholder="Nama Contact 2">
@@ -278,7 +276,6 @@
                                     <input type="tel" class="form-control preview-trigger" name="contact_phone_2" id="contactPhone2" placeholder="No. Tel 2">
                                 </div>
                             </div>
-                            <!-- Row 3 -->
                             <div class="row g-2">
                                 <div class="col-6">
                                     <input type="text" class="form-control preview-trigger" name="contact_name_3" id="contactName3" placeholder="Nama Contact 3">
@@ -298,7 +295,6 @@
                         <h6 class="fw-bold text-dark mb-2 w-100 text-center"><i class="bi bi-eye-fill me-2 text-primary"></i>Live Card Preview (4" x 6")</h6>
                         
                         <div class="card-preview-wrapper preview-theme-CARD-FLORAL-01" id="cardPreviewContainer">
-                            <!-- Card Indicator Badge -->
                             <div id="cardBadge" class="badge bg-primary mb-2 d-none">Kad 1: Pihak Lelaki</div>
 
                             <div class="preview-event-title" id="prevCardHeader">Walimatulurus</div>
@@ -310,11 +306,8 @@
                                 <div><i class="bi bi-calendar3 me-1"></i> <span id="prevDate">Tarikh Majlis</span></div>
                                 <div class="mt-1"><i class="bi bi-geo-alt-fill me-1"></i> <span id="prevVenue">Lokasi Majlis</span></div>
                             </div>
-                            <div class="preview-contacts w-100" id="prevContacts">
-                                <!-- Extra contacts dynamic view -->
-                            </div>
+                            <div class="preview-contacts w-100" id="prevContacts"></div>
 
-                            <!-- Swap Arrow Button -->
                             <button type="button" class="swap-card-btn d-none" id="swapCardBtn" title="Switch Card View">
                                 <i class="bi bi-arrow-left-right fs-5"></i>
                             </button>
@@ -326,7 +319,6 @@
             <!-- Payment & Receipt Verification -->
             <div class="section-title"><i class="bi bi-qr-code-scan me-2"></i>Deposit Payment & Receipt Verification</div>
             
-            <!-- Deposit Notice Banner -->
             <div class="alert alert-info border-info d-flex align-items-center mb-3" role="alert">
                 <i class="bi bi-info-circle-fill fs-4 me-3 text-info"></i>
                 <div>
@@ -382,13 +374,12 @@
 </div>
 
 <script>
-    const STAFF_WHATSAPP_NUMBER = "60186684036"; 
-
     const customerForm = document.getElementById('customerForm');
     const orderSideSelect = document.getElementById('orderSideSelect');
     const designCodeSelect = document.getElementById('designCodeSelect');
     const singleSideSection = document.getElementById('singleSideSection');
     const bothSidesSection = document.getElementById('bothSidesSection');
+    const submitBtn = document.getElementById('submitBtn');
 
     // Fulfillment & Shipping Elements
     const fulfillmentSelect = document.getElementById('fulfillmentSelect');
@@ -433,10 +424,17 @@
     const swapCardBtn = document.getElementById('swapCardBtn');
     const cardBadge = document.getElementById('cardBadge');
 
-    // Active Card View state (0 = Groom, 1 = Bride)
+    // Payment Receipt Elements
+    const paymentReceipt = document.getElementById('paymentReceipt');
+    const receiptPreviewContainer = document.getElementById('receiptPreviewContainer');
+    const fileNameSpan = document.getElementById('fileName');
+
+    // Checkboxes
+    const confirmChecks = document.querySelectorAll('.confirm-check');
+
     let activeCardIndex = 0;
 
-    // Toggle Shipping Section based on fulfillment choice
+    // Toggle Shipping Section
     function toggleFulfillment() {
         if (fulfillmentSelect.value === 'delivery') {
             shippingSection.classList.remove('d-none');
@@ -445,14 +443,14 @@
             shippingSection.classList.add('d-none');
             shippingInputs.forEach(input => {
                 input.required = false;
-                input.value = ''; // Reset values when pickup is selected
+                input.value = '';
             });
         }
     }
 
     fulfillmentSelect.addEventListener('change', toggleFulfillment);
 
-    // Convert date YYYY-MM-DD -> DD/MM/YYYY
+    // Format Date string YYYY-MM-DD to DD/MM/YYYY
     function formatDate(dateStr) {
         if (!dateStr) return '';
         const parts = dateStr.split('-');
@@ -460,7 +458,7 @@
         return dateStr;
     }
 
-    // Live update preview card
+    // Live Card Preview
     function updateCardPreview() {
         const selectedTheme = designCodeSelect.value;
         cardPreviewContainer.className = `card-preview-wrapper preview-theme-${selectedTheme}`;
@@ -478,7 +476,6 @@
             const packagePrefix = selectedPkg === 'bifold' ? 'Kad Berlipat: ' : '';
 
             if (activeCardIndex === 0) {
-                // CARD 1: GROOM SIDE
                 cardBadge.innerText = `${packagePrefix}Pihak Lelaki`;
                 cardBadge.className = "badge bg-primary mb-2";
                 prevCardHeader.innerText = "Walimatulurus (Pihak Lelaki)";
@@ -489,7 +486,6 @@
                 prevDate.innerText = gDate;
                 prevVenue.innerText = groomSideVenue.value || "Lokasi Majlis Lelaki";
             } else {
-                // CARD 2: BRIDE SIDE
                 cardBadge.innerText = `${packagePrefix}Pihak Perempuan`;
                 cardBadge.className = "badge bg-danger mb-2";
                 prevCardHeader.innerText = "Walimatulurus (Pihak Perempuan)";
@@ -512,7 +508,7 @@
                 const formattedDate = formatDate(singleEventDate.value);
                 prevDate.innerText = formattedDate ? formattedDate : "DD/MM/YYYY";
                 prevVenue.innerText = singleVenue.value || "Sila isi alamat / lokasi majlis";
-            } else { // groom default
+            } else {
                 prevCardHeader.innerText = "Walimatulurus (Pihak Lelaki)";
                 prevParents.innerText = gParents;
                 prevCoupleName.innerText = `${groom} & ${bride}`;
@@ -523,7 +519,6 @@
             }
         }
 
-        // Render Extra Contacts preview
         let contactsHTML = "";
         if (contact1Name.value || contact1Phone.value) contactsHTML += `<div>${contact1Name.value || 'Contact 1'}: ${contact1Phone.value || '-'}</div>`;
         if (contact2Name.value || contact2Phone.value) contactsHTML += `<div>${contact2Name.value || 'Contact 2'}: ${contact2Phone.value || '-'}</div>`;
@@ -532,64 +527,55 @@
         prevContacts.innerHTML = contactsHTML ? `<strong>Hubungi:</strong>` + contactsHTML : "";
     }
 
-    // Toggle Card index instantly on arrow click
     swapCardBtn.addEventListener('click', function() {
         activeCardIndex = activeCardIndex === 0 ? 1 : 0;
         updateCardPreview();
     });
 
-    // Attach event listeners for dynamic preview updates
     document.querySelectorAll('.preview-trigger').forEach(input => {
         input.addEventListener('input', updateCardPreview);
         input.addEventListener('change', updateCardPreview);
     });
     designCodeSelect.addEventListener('change', updateCardPreview);
 
-    // Dropdown view switcher
+    // Package Choice Handler
     orderSideSelect.addEventListener('change', function() {
         const pkg = this.value;
-        activeCardIndex = 0; // reset to Groom card first
+        activeCardIndex = 0;
 
-        // 1. Manage Parents Inputs Visibility & Required status
         if (pkg === 'groom') {
             groomParentsWrapper.classList.remove('d-none');
             groomParentsInput.required = true;
-
             brideParentsWrapper.classList.add('d-none');
             brideParentsInput.required = false;
         } else if (pkg === 'bride') {
             groomParentsWrapper.classList.add('d-none');
             groomParentsInput.required = false;
-
             brideParentsWrapper.classList.remove('d-none');
             brideParentsInput.required = true;
-        } else { // 'two_packages' or 'bifold'
+        } else {
             groomParentsWrapper.classList.remove('d-none');
             groomParentsInput.required = true;
-
             brideParentsWrapper.classList.remove('d-none');
             brideParentsInput.required = true;
         }
 
-        // 2. Manage Event Date/Venue Sections
         if (pkg === 'two_packages' || pkg === 'bifold') {
             singleSideSection.classList.add('d-none');
-            bothSidesSection.classList.remove('d-none');
-
             singleEventDate.required = false;
             singleVenue.required = false;
 
+            bothSidesSection.classList.remove('d-none');
             groomSideDate.required = true;
             groomSideVenue.required = true;
             brideSideDate.required = true;
             brideSideVenue.required = true;
         } else {
-            bothSidesSection.classList.add('d-none');
             singleSideSection.classList.remove('d-none');
-
             singleEventDate.required = true;
             singleVenue.required = true;
 
+            bothSidesSection.classList.add('d-none');
             groomSideDate.required = false;
             groomSideVenue.required = false;
             brideSideDate.required = false;
@@ -599,34 +585,50 @@
         updateCardPreview();
     });
 
-    const check1 = document.getElementById('confirmCheck1');
-    const check2 = document.getElementById('confirmCheck2');
-    const submitBtn = document.getElementById('submitBtn');
-
-    function toggleSubmitButton() {
-        submitBtn.disabled = !(check1.checked && check2.checked);
-    }
-
-    check1.addEventListener('change', toggleSubmitButton);
-    check2.addEventListener('change', toggleSubmitButton);
-
-    // Payment receipt file preview handler
-    document.getElementById('paymentReceipt').addEventListener('change', function(e) {
-        const fileContainer = document.getElementById('receiptPreviewContainer');
-        const fileNameSpan = document.getElementById('fileName');
-        if (e.target.files && e.target.files.length > 0) {
-            fileNameSpan.innerText = e.target.files[0].name;
-            fileContainer.classList.remove('d-none');
+    // Payment File Preview
+    paymentReceipt.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            fileNameSpan.innerText = this.files[0].name;
+            receiptPreviewContainer.classList.remove('d-none');
         } else {
-            fileContainer.classList.add('d-none');
+            receiptPreviewContainer.classList.add('d-none');
         }
     });
 
-    // Form submit handler
+    // Checkboxes validation for enabling submit button
+    function checkConfirmation() {
+        const allChecked = Array.from(confirmChecks).every(chk => chk.checked);
+        submitBtn.disabled = !allChecked;
+    }
+
+    confirmChecks.forEach(chk => chk.addEventListener('change', checkConfirmation));
+
+    // Form Submission & Direct Redirect
     customerForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        alert('Form submitted successfully!');
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Submitting Order...';
+
+        const randomHex = Math.random().toString(16).substr(2, 11).toUpperCase();
+        const orderId = 'KKK-' + randomHex;
+
+        const custName = customerNameInput.value.trim() || "N/A";
+        const groom = groomNameInput.value.trim() || "";
+        const bride = brideNameInput.value.trim() || "";
+        const coupleStr = groom && bride ? `${groom} & ${bride}` : (groom || bride || "N/A");
+        const selectedSideText = orderSideSelect.options[orderSideSelect.selectedIndex].text;
+
+        const params = new URLSearchParams({
+            order_id: orderId,
+            name: custName,
+            couple: coupleStr,
+            side: selectedSideText
+        });
+
+        window.location.href = `thank_you.html?${params.toString()}`;
     });
 </script>
+
 </body>
 </html>
