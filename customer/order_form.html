@@ -92,6 +92,14 @@
             border-radius: 12px;
             display: inline-block;
         }
+        .preview-parents {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #4b5563;
+            margin-top: 6px;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
         .preview-names {
             font-family: 'Georgia', serif;
             font-size: 1.35rem;
@@ -128,7 +136,7 @@
         <p class="text-muted">Sila isi maklumat tempahan anda dengan teliti untuk proses rekaan & cetakan.</p>
     </div>
 
-    <form id="orderForm" action="thank_you.html" method="GET" class="needs-validation" novalidate>
+    <form id="orderForm" action="../api/customer_submit.php" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
         <div class="row g-4">
             
             <!-- Left Column: Form Fields -->
@@ -256,12 +264,12 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="namaBapa" class="form-label">NAMA BAPA PENGANTIN <span class="required-asterisk">*</span></label>
-                                <input type="text" class="form-control" id="namaBapa" name="father_name" placeholder="Nama penuh bapa pengantin" required>
+                                <input type="text" class="form-control" id="namaBapa" name="father_name" placeholder="Nama penuh bapa pengantin" oninput="updateLivePreview()" required>
                                 <div class="invalid-feedback">Sila masukkan nama bapa pengantin.</div>
                             </div>
                             <div class="col-md-6">
                                 <label for="namaIbu" class="form-label">NAMA IBU PENGANTIN</label>
-                                <input type="text" class="form-control" id="namaIbu" name="mother_name" placeholder="Nama penuh ibu pengantin">
+                                <input type="text" class="form-control" id="namaIbu" name="mother_name" placeholder="Nama penuh ibu pengantin" oninput="updateLivePreview()">
                             </div>
                         </div>
                     </div>
@@ -449,7 +457,7 @@
                         <div class="row g-3">
                             <div class="col-md-12">
                                 <label for="resitDeposit" class="form-label">UPLOAD RESIT DEPOSIT BUKTI PEMBAYARAN <span class="required-asterisk">*</span></label>
-                                <input type="file" class="form-control" id="resitDeposit" accept="image/*,.pdf" required>
+                                <input type="file" class="form-control" id="resitDeposit" name="payment_receipt" accept="image/*,.pdf" required>
                                 <div class="invalid-feedback">Sila upload bukti pembayaran deposit.</div>
                             </div>
                         </div>
@@ -510,6 +518,8 @@
                                 <div class="preview-event-title" id="prevEventTitle">WALIMATULURUS</div>
                                 
                                 <div>
+                                    <!-- Parent Names Display in Live Preview -->
+                                    <div class="preview-parents" id="prevParentsDisplay">Nama Bapa & Nama Ibu</div>
                                     <div class="preview-names" id="prevCoupleNames">Syafiq & Awanis</div>
                                     <p class="text-muted small mb-0" id="prevDateText">Tarikh Majlis</p>
                                 </div>
@@ -560,6 +570,16 @@
 <script>
     let currentCardNum = 1;
     let currentSideView = 'front';
+
+    // Helper to format ISO YYYY-MM-DD date to dd/mm/yyyy
+    function formatDateToDDMMYYYY(dateString) {
+        if (!dateString) return "";
+        const parts = dateString.split('-');
+        if (parts.length === 3) {
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+        return dateString;
+    }
 
     // Handle package changes: Show extra couple input and card switcher controls
     function handlePackageChange() {
@@ -632,16 +652,30 @@
 
     // Real-time Card Preview update logic
     function updateLivePreview() {
+        const fatherName = document.getElementById('namaBapa').value.trim();
+        const motherName = document.getElementById('namaIbu').value.trim();
         const groomShort = document.getElementById('singkatanLelaki').value.trim() || "Groom";
         const brideShort = document.getElementById('singkatanPerempuan').value.trim() || "Bride";
         const extraCoupleShort = document.getElementById('singkatanPasanganTambahan').value.trim() || "Extra Couple";
         const eventTitle = document.getElementById('tajukMajlis').value || "WALIMATULURUS";
         const designCode = document.getElementById('kodDesign').value.trim() || "CKP-001";
         const eventDay = document.getElementById('hariMajlis').value || "";
-        const eventDate = document.getElementById('tarikhMajlis').value || "";
+        const rawDate = document.getElementById('tarikhMajlis').value || "";
+        const formattedDate = formatDateToDDMMYYYY(rawDate);
         const pkgType = document.getElementById('pakejChoice').value;
         const timeVal = document.getElementById('masaJamuan').value.trim() || "11.00 AM - 4.00 PM";
         const addrVal = document.getElementById('alamatMajlis').value.trim() || "Alamat Majlis Perkahwinan";
+
+        // Display Parents' Names
+        let parentsText = "Nama Bapa & Nama Ibu";
+        if (fatherName && motherName) {
+            parentsText = `${fatherName} & ${motherName}`;
+        } else if (fatherName) {
+            parentsText = fatherName;
+        } else if (motherName) {
+            parentsText = motherName;
+        }
+        document.getElementById('prevParentsDisplay').innerText = parentsText;
 
         // Display Couple Names based on active card tab
         let displayCouple = `${groomShort} & ${brideShort}`;
@@ -652,9 +686,9 @@
         document.getElementById('prevCoupleNames').innerHTML = displayCouple;
         document.getElementById('prevEventTitle').innerText = eventTitle.toUpperCase();
 
-        // Date Display
-        if (eventDate) {
-            document.getElementById('prevDateText').innerText = `${eventDay ? eventDay + ', ' : ''}${eventDate}`;
+        // Date Display with dd/mm/yyyy format
+        if (formattedDate) {
+            document.getElementById('prevDateText').innerText = `${eventDay ? eventDay + ', ' : ''}${formattedDate}`;
         } else {
             document.getElementById('prevDateText').innerText = "Tarikh Majlis";
         }

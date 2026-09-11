@@ -1,4 +1,6 @@
 <?php
+// api/update_order.php
+
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/database.php';
 
@@ -22,29 +24,60 @@ try {
     $db = Database::getConnection();
     $db->beginTransaction();
 
-    // 1. Update order status if provided
-    if ($orderStatus) {
-        $stmtStatus = $db->prepare("UPDATE orders SET order_status = :status WHERE order_id = :order_id");
-        $stmtStatus->execute([':status' => $orderStatus, ':order_id' => $orderId]);
+    // 1. Update main order status & primary contact details if provided
+    $customerName  = $data['customer_name'] ?? null;
+    $customerPhone = $data['customer_phone'] ?? null;
+    $customerEmail = $data['customer_email'] ?? null;
+
+    $updateOrderSql = "UPDATE orders SET ";
+    $orderUpdates = [];
+    $orderParams = [':order_id' => $orderId];
+
+    if ($orderStatus !== null) {
+        $orderUpdates[] = "order_status = :order_status";
+        $orderParams[':order_status'] = $orderStatus;
+    }
+    if ($customerName !== null) {
+        $orderUpdates[] = "customer_name = :customer_name";
+        $orderParams[':customer_name'] = $customerName;
+    }
+    if ($customerPhone !== null) {
+        $orderUpdates[] = "customer_phone = :customer_phone";
+        $orderParams[':customer_phone'] = $customerPhone;
+    }
+    if ($customerEmail !== null) {
+        $orderUpdates[] = "customer_email = :customer_email";
+        $orderParams[':customer_email'] = $customerEmail;
     }
 
-    // 2. Update editable customer details
+    if (!empty($orderUpdates)) {
+        $updateOrderSql .= implode(", ", $orderUpdates) . " WHERE order_id = :order_id";
+        $stmtOrder = $db->prepare($updateOrderSql);
+        $stmtOrder->execute($orderParams);
+    }
+
+    // 2. Upsert customer details (groom, bride, venue, shipping details)
     $stmtDetails = $db->prepare("
-        UPDATE customer_details SET
-            groom_name = :groom_name,
-            bride_name = :bride_name,
-            groom_event_date = :groom_event_date,
-            groom_venue = :groom_venue,
-            shipping_recipient = :shipping_recipient,
-            shipping_phone = :shipping_phone,
-            shipping_address = :shipping_address
-        WHERE order_id = :order_id
+        INSERT INTO customer_details (
+            order_id, groom_name, bride_name, groom_event_date, groom_venue, 
+            shipping_recipient, shipping_phone, shipping_address
+        ) VALUES (
+            :order_id, :groom_name, :bride_name, :groom_event_date, :groom_venue, 
+            :shipping_recipient, :shipping_phone, :shipping_address
+        ) ON DUPLICATE KEY UPDATE
+            groom_name = VALUES(groom_name),
+            bride_name = VALUES(bride_name),
+            groom_event_date = VALUES(groom_event_date),
+            groom_venue = VALUES(groom_venue),
+            shipping_recipient = VALUES(shipping_recipient),
+            shipping_phone = VALUES(shipping_phone),
+            shipping_address = VALUES(shipping_address)
     ");
 
     $stmtDetails->execute([
         ':order_id'           => $orderId,
-        ':groom_name'         => $data['groom_name'] ?? 'N/A',
-        ':bride_name'         => $data['bride_name'] ?? 'N/A',
+        ':groom_name'         => $data['groom_name'] ?? null,
+        ':bride_name'         => $data['bride_name'] ?? null,
         ':groom_event_date'   => $data['groom_event_date'] ?? null,
         ':groom_venue'        => $data['groom_venue'] ?? null,
         ':shipping_recipient' => $data['shipping_recipient'] ?? null,
