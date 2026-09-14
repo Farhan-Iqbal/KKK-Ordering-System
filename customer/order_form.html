@@ -7,10 +7,15 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    
     <style>
         body {
             background-color: #f4f6f9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             color: #333;
         }
         .form-card {
@@ -25,6 +30,13 @@
             padding-bottom: 10px;
             margin-bottom: 20px;
             color: #4f46e5;
+            font-weight: 700;
+        }
+        .majlis-header {
+            border-left: 4px solid #4f46e5;
+            padding-left: 12px;
+            margin-bottom: 20px;
+            color: #1e1b4b;
             font-weight: 700;
         }
         .form-label {
@@ -64,21 +76,192 @@
         /* 4x6 Aspect Ratio Card Container */
         .card-preview-wrapper {
             width: 100%;
-            max-width: 320px;
-            aspect-ratio: 4 / 6;
+            max-width: 330px;
+            min-height: 520px;
             margin: 0 auto;
-            background: linear-gradient(135deg, #ffffff 0%, #fdfbf7 100%);
-            border: 2px dashed #c7d2fe;
-            border-radius: 16px;
-            padding: 20px;
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
             text-align: center;
-            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             position: relative;
-            transition: all 0.3s ease;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* FRONT CARD DESIGN */
+        .card-front-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 10px;
+            background: linear-gradient(180deg, #faf9f6 0%, #ffffff 100%);
+        }
+        .front-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            color: #9333ea;
+            margin-bottom: 20px;
+        }
+        .front-names {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.8rem;
+            color: #9333ea;
+            line-height: 1.1;
+            margin: 20px 0;
+        }
+        .front-ampersand {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            color: #d8b4fe;
+            display: block;
+            margin: -5px 0;
+        }
+        .front-date-box {
+            color: #9333ea;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .front-date-box i {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* BACK CARD DESIGN */
+        .card-back-container {
+            width: 100%;
+            height: 100%;
+            border: 1.5px solid #1e293b;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            color: #0f172a;
+        }
+        .back-arabic-header {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+        }
+        .back-intro-text {
+            font-size: 0.62rem;
+            line-height: 1.2;
+            color: #334155;
+        }
+        .back-parents-names {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin: 4px 0;
+        }
+        .back-guest-box {
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            height: 18px;
+            margin: 4px auto;
+            width: 85%;
+        }
+        .back-couple-names {
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin: 4px 0;
+            line-height: 1.2;
+        }
+        
+        .back-three-col {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr;
+            border-top: 1.5px solid #0f172a;
+            border-bottom: 1.5px solid #0f172a;
+            margin: 6px 0;
+            padding: 6px 0;
+        }
+        .back-col {
+            padding: 0 2px;
+        }
+        .back-col:not(:last-child) {
+            border-right: 1.5px solid #0f172a;
+        }
+        .col-title {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+        .col-day-big {
+            font-size: 1.8rem;
+            font-weight: 900;
+            line-height: 0.9;
+            margin: 2px 0;
+        }
+        .col-subtext {
+            font-size: 0.58rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+        .col-contact-item {
+            font-size: 0.55rem;
+            line-height: 1.1;
+            margin-bottom: 2px;
+        }
+        .col-contact-item strong {
+            display: block;
+            font-size: 0.58rem;
+        }
+
+        .back-qr-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 4px 0;
+        }
+        .qr-box-img {
+            width: 65px;
+            height: 65px;
+            border: 1px solid #0f172a;
+            padding: 2px;
+        }
+        .location-details {
+            text-align: left;
+            max-width: 170px;
+        }
+        .location-title {
+            font-size: 0.62rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+        .location-text {
+            font-size: 0.55rem;
+            line-height: 1.1;
+            text-transform: uppercase;
+            color: #334155;
+        }
+        .back-footer-text {
+            font-size: 0.55rem;
+            font-style: italic;
+            color: #475569;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 4px;
         }
 
         .preview-title-badge {
@@ -90,29 +273,6 @@
             letter-spacing: 1px;
             padding: 4px 12px;
             border-radius: 12px;
-            display: inline-block;
-        }
-        .preview-parents {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #4b5563;
-            margin-top: 6px;
-            line-height: 1.2;
-            text-transform: uppercase;
-        }
-        .preview-names {
-            font-family: 'Georgia', serif;
-            font-size: 1.35rem;
-            font-weight: bold;
-            color: #1f2937;
-            margin: 8px 0;
-            line-height: 1.3;
-        }
-        .preview-event-title {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #6b7280;
         }
         .qr-placeholder {
             width: 140px;
@@ -130,7 +290,6 @@
 <body>
 
 <div class="container my-4">
-    <!-- Header -->
     <div class="text-center mb-4">
         <h2 class="fw-bold text-dark">BORANG TEMPAHAN KAD KAHWIN</h2>
         <p class="text-muted">Sila isi maklumat tempahan anda dengan teliti untuk proses rekaan & cetakan.</p>
@@ -140,7 +299,7 @@
         <div class="row g-4">
             
             <!-- Left Column: Form Fields -->
-            <div class="col-lg-8">
+            <div class="col-lg-7">
                 <div class="form-card">
                     
                     <!-- SECTION 1: MAKLUMAT PELANGGAN -->
@@ -192,14 +351,13 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="kodDesign" class="form-label">KOD DESIGN <span class="required-asterisk">*</span></label>
-                                <input type="text" class="form-control" id="kodDesign" name="design_code" placeholder="Contoh: CKP-001" oninput="updateLivePreview()" required>
+                                <input type="text" class="form-control" id="kodDesign" name="design_code" placeholder="Contoh: CKP-001" required>
                                 <div class="invalid-feedback">Sila masukkan kod design.</div>
                             </div>
                             <div class="col-md-6">
                                 <label for="tajukMajlis" class="form-label">TAJUK MAJLIS <span class="required-asterisk">*</span></label>
-                                <select class="form-select" id="tajukMajlis" name="event_title" onchange="updateLivePreview()" required>
-                                    <option value="" disabled selected>Choose tajuk majlis...</option>
-                                    <option value="Walimatulurus">Walimatulurus</option>
+                                <select class="form-select" id="tajukMajlis" name="event_title" required>
+                                    <option value="Walimatul Urus" selected>Walimatul Urus</option>
                                     <option value="Majlis Kesyukuran">Majlis Kesyukuran</option>
                                     <option value="Majlis Sambut Menantu">Majlis Sambut Menantu</option>
                                     <option value="Majlis Perkahwinan">Majlis Perkahwinan</option>
@@ -225,7 +383,7 @@
                             </div>
                             <div class="col-md-5">
                                 <label for="singkatanLelaki" class="form-label">SINGKATAN NAMA LELAKI <span class="required-asterisk">*</span></label>
-                                <input type="text" class="form-control" id="singkatanLelaki" name="groom_short" placeholder="Contoh: Syafiq" oninput="updateLivePreview()" required>
+                                <input type="text" class="form-control" id="singkatanLelaki" name="groom_short" placeholder="Contoh: Syafiq" required>
                                 <div class="invalid-feedback">Sila masukkan nama singkatan pengantin lelaki.</div>
                             </div>
 
@@ -236,134 +394,323 @@
                             </div>
                             <div class="col-md-5">
                                 <label for="singkatanPerempuan" class="form-label">SINGKATAN NAMA PEREMPUAN <span class="required-asterisk">*</span></label>
-                                <input type="text" class="form-control" id="singkatanPerempuan" name="bride_short" placeholder="Contoh: Awanis" oninput="updateLivePreview()" required>
+                                <input type="text" class="form-control" id="singkatanPerempuan" name="bride_short" placeholder="Contoh: Awanis" required>
                                 <div class="invalid-feedback">Sila masukkan nama singkatan pengantin perempuan.</div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Dynamic Extra Couple (For Kedua-dua Pihak) -->
-                        <div id="extraCoupleSection" class="border rounded p-3 mt-3 bg-light d-none">
-                            <h6 class="fw-bold text-dark mb-2"><i class="bi bi-people-fill me-2 text-primary"></i>PASANGAN TAMBAHAN / MAJLIS KEDUA</h6>
-                            <p class="sub-text mb-3">Isi maklumat bagi pasangan kedua atau maklumat majlis sebelah lagi.</p>
+                    <!-- ================= SINGLE PARTY DETAILS CONTAINER ================= -->
+                    <div id="singlePartyContainer">
+                        <!-- SECTION 4: MAKLUMAT IBU BAPA -->
+                        <div class="mb-5">
+                            <h5 class="section-header"><i class="bi bi-people-fill me-2"></i>4. MAKLUMAT IBU BAPA</h5>
                             <div class="row g-3">
-                                <div class="col-md-7">
-                                    <label for="namaPasanganTambahan" class="form-label">NAMA PENUH PASANGAN TAMBAHAN</label>
-                                    <input type="text" class="form-control" id="namaPasanganTambahan" name="extra_couple_full" placeholder="Contoh: MUHAMMAD FAUZI & NURUL SYAFIQAH">
+                                <div class="col-md-6">
+                                    <label for="namaBapa" class="form-label">NAMA BAPA PENGANTIN <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control single-req" id="namaBapa" name="father_name" placeholder="Nama penuh bapa pengantin" required>
+                                    <div class="invalid-feedback">Sila masukkan nama bapa pengantin.</div>
                                 </div>
-                                <div class="col-md-5">
-                                    <label for="singkatanPasanganTambahan" class="form-label">SINGKATAN NAMA PASANGAN TAMBAHAN</label>
-                                    <input type="text" class="form-control" id="singkatanPasanganTambahan" name="extra_couple_short" placeholder="Contoh: FAUZI & SYAFIQAH" oninput="updateLivePreview()">
+                                <div class="col-md-6">
+                                    <label for="namaIbu" class="form-label">NAMA IBU PENGANTIN</label>
+                                    <input type="text" class="form-control" id="namaIbu" name="mother_name" placeholder="Nama penuh ibu pengantin">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 5: MAKLUMAT MAJLIS -->
+                        <div class="mb-5">
+                            <h5 class="section-header"><i class="bi bi-calendar-event-fill me-2"></i>5. MAKLUMAT MAJLIS</h5>
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label for="hariMajlis" class="form-label">HARI MAJLIS <span class="required-asterisk">*</span></label>
+                                    <select class="form-select single-req" id="hariMajlis" name="event_day" required>
+                                        <option value="SABTU" selected>SABTU</option>
+                                        <option value="AHAD">AHAD</option>
+                                        <option value="JUMAAT">JUMAAT</option>
+                                        <option value="ISNIN">ISNIN</option>
+                                        <option value="LAIN-LAIN">LAIN-LAIN</option>
+                                    </select>
+                                    <div class="invalid-feedback">Sila pilih hari majlis.</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="tarikhMajlis" class="form-label">TARIKH MAJLIS <span class="required-asterisk">*</span></label>
+                                    <input type="date" class="form-control single-req" id="tarikhMajlis" name="event_date" required>
+                                    <div class="invalid-feedback">Sila pilih tarikh majlis.</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="tarikhHijrah" class="form-label">TARIKH HIJRAH <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control single-req" id="tarikhHijrah" name="hijri_date" placeholder="Contoh: 4 ZULHIJAH 1446H" required>
+                                    <div class="invalid-feedback">Sila masukkan tarikh hijrah.</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="masaJamuan" class="form-label">MASA MAJLIS (JAMUAN) <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control single-req" id="masaJamuan" name="event_time" placeholder="Contoh: 11:30 AM - 3:30 PM" required>
+                                    <div class="invalid-feedback">Sila masukkan masa majlis.</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="masaBersanding" class="form-label">MASA BERSANDING <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control single-req" id="masaBersanding" name="sanding_time" placeholder="Contoh: 12:30 PM" required>
+                                    <div class="invalid-feedback">Sila masukkan masa bersanding.</div>
+                                </div>
+                                <div class="col-md-8">
+                                    <label for="alamatMajlis" class="form-label">ALAMAT MAJLIS PERKAHWINAN <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control single-req" id="alamatMajlis" name="event_address" placeholder="Sila isi alamat lengkap majlis" required>
+                                    <div class="invalid-feedback">Sila masukkan alamat lengkap majlis.</div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="linkLokasi" class="form-label">LINK LOKASI MAJLIS (GOOGLE MAPS / WAZE) <span class="required-asterisk">*</span></label>
+                                    <input type="url" class="form-control single-req" id="linkLokasi" name="location_url" placeholder="Contoh: https://maps.app.goo.gl/..." required>
+                                    <div class="sub-text">Sila berikan link dengan tepat bagi mengelakkan kesalahan lokasi dalam kad anda.</div>
+                                    <div class="invalid-feedback">Sila berikan URL link lokasi.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 6: NO. TELEFON UNTUK DIHUBUNGI -->
+                        <div class="mb-5">
+                            <h5 class="section-header"><i class="bi bi-telephone-fill me-2"></i>6. NO. TELEFON UNTUK DIHUBUNGI</h5>
+                            <p class="sub-text mb-3">Akan diletakkan di dalam kad kahwin & alivecard (jika ada).</p>
+                            
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-6">
+                                    <label for="namaHubungi1" class="form-label">NAMA UNTUK DIHUBUNGI 1 <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control single-req" id="namaHubungi1" name="contact1_name" placeholder="Contoh: AHLI 1" required>
+                                    <div class="invalid-feedback">Sila masukkan nama rujukan 1.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="noHubungi1" class="form-label">NO TELEFON UNTUK DIHUBUNGI 1 <span class="required-asterisk">*</span></label>
+                                    <input type="tel" class="form-control single-req" id="noHubungi1" name="contact1_phone" placeholder="Contoh: 017-2345678" required>
+                                    <div class="invalid-feedback">Sila masukkan no telefon 1.</div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-6">
+                                    <label for="namaHubungi2" class="form-label">NAMA UNTUK DIHUBUNGI 2 <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control single-req" id="namaHubungi2" name="contact2_name" placeholder="Contoh: AHLI 2" required>
+                                    <div class="invalid-feedback">Sila masukkan nama rujukan 2.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="noHubungi2" class="form-label">NO TELEFON UNTUK DIHUBUNGI 2 <span class="required-asterisk">*</span></label>
+                                    <input type="tel" class="form-control single-req" id="noHubungi2" name="contact2_phone" placeholder="Contoh: 017-2345678" required>
+                                    <div class="invalid-feedback">Sila masukkan no telefon 2.</div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="namaHubungi3" class="form-label">NAMA UNTUK DIHUBUNGI 3</label>
+                                    <input type="text" class="form-control" id="namaHubungi3" name="contact3_name" placeholder="Contoh: AHLI 3">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="noHubungi3" class="form-label">NO TELEFON UNTUK DIHUBUNGI 3</label>
+                                    <input type="tel" class="form-control" id="noHubungi3" name="contact3_phone" placeholder="Contoh: 017-2345678">
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- SECTION 4: MAKLUMAT IBU BAPA -->
-                    <div class="mb-5">
-                        <h5 class="section-header"><i class="bi bi-people-fill me-2"></i>4. MAKLUMAT IBU BAPA</h5>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="namaBapa" class="form-label">NAMA BAPA PENGANTIN <span class="required-asterisk">*</span></label>
-                                <input type="text" class="form-control" id="namaBapa" name="father_name" placeholder="Nama penuh bapa pengantin" oninput="updateLivePreview()" required>
-                                <div class="invalid-feedback">Sila masukkan nama bapa pengantin.</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="namaIbu" class="form-label">NAMA IBU PENGANTIN</label>
-                                <input type="text" class="form-control" id="namaIbu" name="mother_name" placeholder="Nama penuh ibu pengantin" oninput="updateLivePreview()">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- SECTION 5: MAKLUMAT MAJLIS -->
-                    <div class="mb-5">
-                        <h5 class="section-header"><i class="bi bi-calendar-event-fill me-2"></i>5. MAKLUMAT MAJLIS</h5>
-                        <div class="row g-3">
-                            <div class="col-md-3">
-                                <label for="hariMajlis" class="form-label">HARI MAJLIS <span class="required-asterisk">*</span></label>
-                                <select class="form-select" id="hariMajlis" name="event_day" onchange="updateLivePreview()" required>
-                                    <option value="" disabled selected>Pilih Hari...</option>
-                                    <option value="Sabtu">Sabtu</option>
-                                    <option value="Ahad">Ahad</option>
-                                    <option value="Jumaat">Jumaat</option>
-                                    <option value="Isnin">Isnin</option>
-                                    <option value="Lain-lain">Lain-lain</option>
-                                </select>
-                                <div class="invalid-feedback">Sila pilih hari majlis.</div>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="tarikhMajlis" class="form-label">TARIKH MAJLIS <span class="required-asterisk">*</span></label>
-                                <input type="date" class="form-control" id="tarikhMajlis" name="event_date" onchange="updateLivePreview()" required>
-                                <div class="invalid-feedback">Sila pilih tarikh majlis.</div>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="tarikhHijrah" class="form-label">TARIKH HIJRAH <span class="required-asterisk">*</span></label>
-                                <input type="text" class="form-control" id="tarikhHijrah" name="hijri_date" placeholder="Contoh: 15 SAFAR 1448H" required>
-                                <div class="invalid-feedback">Sila masukkan tarikh hijrah.</div>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="masaJamuan" class="form-label">MASA MAJLIS (JAMUAN) <span class="required-asterisk">*</span></label>
-                                <input type="text" class="form-control" id="masaJamuan" name="event_time" placeholder="Contoh: 11.00 AM - 4.00 PM" oninput="updateLivePreview()" required>
-                                <div class="invalid-feedback">Sila masukkan masa majlis.</div>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="masaBersanding" class="form-label">MASA BERSANDING <span class="required-asterisk">*</span></label>
-                                <input type="text" class="form-control" id="masaBersanding" name="sanding_time" placeholder="Contoh: 12.30 PM" required>
-                                <div class="invalid-feedback">Sila masukkan masa bersanding.</div>
-                            </div>
-                            <div class="col-md-8">
-                                <label for="alamatMajlis" class="form-label">ALAMAT MAJLIS PERKAHWINAN <span class="required-asterisk">*</span></label>
-                                <input type="text" class="form-control" id="alamatMajlis" name="event_address" placeholder="Sila isi alamat lengkap majlis" oninput="updateLivePreview()" required>
-                                <div class="invalid-feedback">Sila masukkan alamat lengkap majlis.</div>
-                            </div>
-                            <div class="col-md-12">
-                                <label for="linkLokasi" class="form-label">LINK LOKASI MAJLIS (GOOGLE MAPS / WAZE) <span class="required-asterisk">*</span></label>
-                                <input type="url" class="form-control" id="linkLokasi" name="location_url" placeholder="Contoh: https://maps.app.goo.gl/..." required>
-                                <div class="sub-text">Sila berikan link dengan tepat bagi mengelakkan kesalahan lokasi dalam kad anda.</div>
-                                <div class="invalid-feedback">Sila berikan URL link lokasi.</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- SECTION 6: NO. TELEFON UNTUK DIHUBUNGI -->
-                    <div class="mb-5">
-                        <h5 class="section-header"><i class="bi bi-telephone-fill me-2"></i>6. NO. TELEFON UNTUK DIHUBUNGI</h5>
-                        <p class="sub-text mb-3">Akan diletakkan di dalam kad kahwin & alivecard (jika ada).</p>
+                    <!-- ================= DUAL PARTY DETAILS CONTAINER (MAJLIS PERTAMA & MAJLIS KEDUA) ================= -->
+                    <div id="dualPartyContainer" class="d-none">
                         
-                        <div class="row g-3 mb-2">
-                            <div class="col-md-6">
-                                <label for="namaHubungi1" class="form-label">NAMA UNTUK DIHUBUNGI 1 <span class="required-asterisk">*</span></label>
-                                <input type="text" class="form-control" id="namaHubungi1" name="contact1_name" placeholder="Contoh: Ayah / Abang" required>
-                                <div class="invalid-feedback">Sila masukkan nama rujukan 1.</div>
+                        <!-- MAJLIS PERTAMA SECTION -->
+                        <div class="border rounded-4 p-4 mb-5 bg-light">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4 class="majlis-header mb-0"><i class="bi bi-1-circle-fill me-2 text-primary"></i>MAJLIS PERTAMA</h4>
+                                <div class="col-md-5">
+                                    <label class="form-label text-muted small mb-1">Pihak Bagi Majlis Pertama:</label>
+                                    <select class="form-select form-select-sm fw-bold" id="majlis1Side" name="majlis1_side" onchange="handleSideSwap()">
+                                        <option value="Pihak Lelaki" selected>Pihak Lelaki (Nama Lelaki di Atas)</option>
+                                        <option value="Pihak Perempuan">Pihak Perempuan (Nama Perempuan di Atas)</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="noHubungi1" class="form-label">NO TELEFON UNTUK DIHUBUNGI 1 <span class="required-asterisk">*</span></label>
-                                <input type="tel" class="form-control" id="noHubungi1" name="contact1_phone" placeholder="Contoh: 0123456789" required>
-                                <div class="invalid-feedback">Sila masukkan no telefon 1.</div>
+
+                            <!-- Ibu Bapa Majlis 1 -->
+                            <h6 class="fw-bold text-dark mt-4 mb-3"><i class="bi bi-people-fill me-2"></i>Maklumat Ibu Bapa (Majlis Pertama)</h6>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label for="namaBapa1" class="form-label">NAMA BAPA PENGANTIN <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control dual-req" id="namaBapa1" name="m1_father_name" placeholder="Nama penuh bapa pengantin">
+                                    <div class="invalid-feedback">Sila masukkan nama bapa majlis pertama.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="namaIbu1" class="form-label">NAMA IBU PENGANTIN</label>
+                                    <input type="text" class="form-control" id="namaIbu1" name="m1_mother_name" placeholder="Nama penuh ibu pengantin">
+                                </div>
                             </div>
+
+                            <!-- Maklumat Majlis 1 -->
+                            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-calendar-event-fill me-2"></i>Maklumat Majlis (Majlis Pertama)</h6>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-3">
+                                    <label for="hariMajlis1" class="form-label">HARI MAJLIS <span class="required-asterisk">*</span></label>
+                                    <select class="form-select dual-req" id="hariMajlis1" name="m1_event_day">
+                                        <option value="SABTU" selected>SABTU</option>
+                                        <option value="AHAD">AHAD</option>
+                                        <option value="JUMAAT">JUMAAT</option>
+                                        <option value="ISNIN">ISNIN</option>
+                                        <option value="LAIN-LAIN">LAIN-LAIN</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="tarikhMajlis1" class="form-label">TARIKH MAJLIS <span class="required-asterisk">*</span></label>
+                                    <input type="date" class="form-control dual-req" id="tarikhMajlis1" name="m1_event_date">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="tarikhHijrah1" class="form-label">TARIKH HIJRAH <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control dual-req" id="tarikhHijrah1" name="m1_hijri_date" placeholder="Contoh: 4 ZULHIJAH 1446H">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="masaJamuan1" class="form-label">MASA JAMUAN <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control dual-req" id="masaJamuan1" name="m1_event_time" placeholder="Contoh: 11:30 AM - 3:30 PM">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="masaBersanding1" class="form-label">MASA BERSANDING <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control dual-req" id="masaBersanding1" name="m1_sanding_time" placeholder="Contoh: 12:30 PM">
+                                </div>
+                                <div class="col-md-8">
+                                    <label for="alamatMajlis1" class="form-label">ALAMAT MAJLIS <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control dual-req" id="alamatMajlis1" name="m1_event_address" placeholder="Sila isi alamat lengkap majlis pertama">
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="linkLokasi1" class="form-label">LINK LOKASI MAJLIS (GOOGLE MAPS / WAZE) <span class="required-asterisk">*</span></label>
+                                    <input type="url" class="form-control dual-req" id="linkLokasi1" name="m1_location_url" placeholder="Contoh: https://maps.app.goo.gl/...">
+                                </div>
+                            </div>
+
+                            <!-- Contacts Majlis 1 -->
+                            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-telephone-fill me-2"></i>No. Telefon Untuk Dihubungi (Majlis Pertama)</h6>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-6">
+                                    <label for="namaHubungi1_m1" class="form-label">NAMA UNTUK DIHUBUNGI 1 <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control dual-req" id="namaHubungi1_m1" name="m1_contact1_name" placeholder="Contoh: AHLI 1">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="noHubungi1_m1" class="form-label">NO TELEFON 1 <span class="required-asterisk">*</span></label>
+                                    <input type="tel" class="form-control dual-req" id="noHubungi1_m1" name="m1_contact1_phone" placeholder="Contoh: 017-2345678">
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-6">
+                                    <label for="namaHubungi2_m1" class="form-label">NAMA UNTUK DIHUBUNGI 2 <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control dual-req" id="namaHubungi2_m1" name="m1_contact2_name" placeholder="Contoh: AHLI 2">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="noHubungi2_m1" class="form-label">NO TELEFON 2 <span class="required-asterisk">*</span></label>
+                                    <input type="tel" class="form-control dual-req" id="noHubungi2_m1" name="m1_contact2_phone" placeholder="Contoh: 017-2345678">
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="namaHubungi3_m1" class="form-label">NAMA UNTUK DIHUBUNGI 3</label>
+                                    <input type="text" class="form-control" id="namaHubungi3_m1" name="m1_contact3_name" placeholder="Contoh: AHLI 3">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="noHubungi3_m1" class="form-label">NO TELEFON 3</label>
+                                    <input type="tel" class="form-control" id="noHubungi3_m1" name="m1_contact3_phone" placeholder="Contoh: 017-2345678">
+                                </div>
+                            </div>
+
                         </div>
 
-                        <div class="row g-3 mb-2">
-                            <div class="col-md-6">
-                                <label for="namaHubungi2" class="form-label">NAMA UNTUK DIHUBUNGI 2 <span class="required-asterisk">*</span></label>
-                                <input type="text" class="form-control" id="namaHubungi2" name="contact2_name" placeholder="Contoh: Ibu" required>
-                                <div class="invalid-feedback">Sila masukkan nama rujukan 2.</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="noHubungi2" class="form-label">NO TELEFON UNTUK DIHUBUNGI 2 <span class="required-asterisk">*</span></label>
-                                <input type="tel" class="form-control" id="noHubungi2" name="contact2_phone" placeholder="Contoh: 0114332928" required>
-                                <div class="invalid-feedback">Sila masukkan no telefon 2.</div>
-                            </div>
-                        </div>
 
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="namaHubungi3" class="form-label">NAMA UNTUK DIHUBUNGI 3</label>
-                                <input type="text" class="form-control" id="namaHubungi3" name="contact3_name" placeholder="Contoh: Abang / Kakak">
+                        <!-- MAJLIS KEDUA SECTION -->
+                        <div class="border rounded-4 p-4 mb-5 bg-light">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4 class="majlis-header mb-0"><i class="bi bi-2-circle-fill me-2 text-primary"></i>MAJLIS KEDUA</h4>
+                                <div>
+                                    <span class="badge bg-secondary p-2" id="majlis2SideLabel">Pihak Bagi Majlis Kedua: Pihak Perempuan</span>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="noHubungi3" class="form-label">NO TELEFON UNTUK DIHUBUNGI 3</label>
-                                <input type="tel" class="form-control" id="noHubungi3" name="contact3_phone" placeholder="Contoh: 0198765432">
+
+                            <!-- Ibu Bapa Majlis 2 -->
+                            <h6 class="fw-bold text-dark mt-4 mb-3"><i class="bi bi-people-fill me-2"></i>Maklumat Ibu Bapa (Majlis Kedua)</h6>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label for="namaBapa2" class="form-label">NAMA BAPA PENGANTIN <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control dual-req" id="namaBapa2" name="m2_father_name" placeholder="Nama penuh bapa pengantin">
+                                    <div class="invalid-feedback">Sila masukkan nama bapa majlis kedua.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="namaIbu2" class="form-label">NAMA IBU PENGANTIN</label>
+                                    <input type="text" class="form-control" id="namaIbu2" name="m2_mother_name" placeholder="Nama penuh ibu pengantin">
+                                </div>
                             </div>
+
+                            <!-- Maklumat Majlis 2 -->
+                            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-calendar-event-fill me-2"></i>Maklumat Majlis (Majlis Kedua)</h6>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-3">
+                                    <label for="hariMajlis2" class="form-label">HARI MAJLIS <span class="required-asterisk">*</span></label>
+                                    <select class="form-select dual-req" id="hariMajlis2" name="m2_event_day">
+                                        <option value="SABTU" selected>SABTU</option>
+                                        <option value="AHAD">AHAD</option>
+                                        <option value="JUMAAT">JUMAAT</option>
+                                        <option value="ISNIN">ISNIN</option>
+                                        <option value="LAIN-LAIN">LAIN-LAIN</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="tarikhMajlis2" class="form-label">TARIKH MAJLIS <span class="required-asterisk">*</span></label>
+                                    <input type="date" class="form-control dual-req" id="tarikhMajlis2" name="m2_event_date">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="tarikhHijrah2" class="form-label">TARIKH HIJRAH <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control dual-req" id="tarikhHijrah2" name="m2_hijri_date" placeholder="Contoh: 4 ZULHIJAH 1446H">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="masaJamuan2" class="form-label">MASA JAMUAN <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control dual-req" id="masaJamuan2" name="m2_event_time" placeholder="Contoh: 11:30 AM - 3:30 PM">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="masaBersanding2" class="form-label">MASA BERSANDING <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control dual-req" id="masaBersanding2" name="m2_sanding_time" placeholder="Contoh: 12:30 PM">
+                                </div>
+                                <div class="col-md-8">
+                                    <label for="alamatMajlis2" class="form-label">ALAMAT MAJLIS <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control dual-req" id="alamatMajlis2" name="m2_event_address" placeholder="Sila isi alamat lengkap majlis kedua">
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="linkLokasi2" class="form-label">LINK LOKASI MAJLIS (GOOGLE MAPS / WAZE) <span class="required-asterisk">*</span></label>
+                                    <input type="url" class="form-control dual-req" id="linkLokasi2" name="m2_location_url" placeholder="Contoh: https://maps.app.goo.gl/...">
+                                </div>
+                            </div>
+
+                            <!-- Contacts Majlis 2 -->
+                            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-telephone-fill me-2"></i>No. Telefon Untuk Dihubungi (Majlis Kedua)</h6>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-6">
+                                    <label for="namaHubungi1_m2" class="form-label">NAMA UNTUK DIHUBUNGI 1 <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control dual-req" id="namaHubungi1_m2" name="m2_contact1_name" placeholder="Contoh: AHLI 1">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="noHubungi1_m2" class="form-label">NO TELEFON 1 <span class="required-asterisk">*</span></label>
+                                    <input type="tel" class="form-control dual-req" id="noHubungi1_m2" name="m2_contact1_phone" placeholder="Contoh: 017-2345678">
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-6">
+                                    <label for="namaHubungi2_m2" class="form-label">NAMA UNTUK DIHUBUNGI 2 <span class="required-asterisk">*</span></label>
+                                    <input type="text" class="form-control dual-req" id="namaHubungi2_m2" name="m2_contact2_name" placeholder="Contoh: AHLI 2">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="noHubungi2_m2" class="form-label">NO TELEFON 2 <span class="required-asterisk">*</span></label>
+                                    <input type="tel" class="form-control dual-req" id="noHubungi2_m2" name="m2_contact2_phone" placeholder="Contoh: 017-2345678">
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="namaHubungi3_m2" class="form-label">NAMA UNTUK DIHUBUNGI 3</label>
+                                    <input type="text" class="form-control" id="namaHubungi3_m2" name="m2_contact3_name" placeholder="Contoh: AHLI 3">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="noHubungi3_m2" class="form-label">NO TELEFON 3</label>
+                                    <input type="tel" class="form-control" id="noHubungi3_m2" name="m2_contact3_phone" placeholder="Contoh: 017-2345678">
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
@@ -384,7 +731,6 @@
                             </label>
                         </div>
 
-                        <!-- Dynamic Shipping Information Section -->
                         <div id="shippingAddressSection" class="border rounded p-3 mt-3 bg-light">
                             <h6 class="fw-bold text-dark mb-3"><i class="bi bi-geo-alt-fill me-2 text-primary"></i>ALAMAT PENGHANTARAN (SHIPPING ADDRESS)</h6>
                             <div class="row g-3">
@@ -434,7 +780,6 @@
                     <div class="mb-4">
                         <h5 class="section-header"><i class="bi bi-receipt me-2"></i>8. RESIT DEPOSIT & PENGESAHAN</h5>
                         
-                        <!-- Deposit Payment Reminder Box & QR -->
                         <div class="alert alert-warning border-warning d-flex align-items-start mb-4" role="alert">
                             <i class="bi bi-exclamation-triangle-fill fs-4 me-3 text-warning"></i>
                             <div>
@@ -445,7 +790,6 @@
                             </div>
                         </div>
 
-                        <!-- QR Code Container -->
                         <div class="card border-0 bg-light p-3 text-center mb-4">
                             <h6 class="fw-bold mb-2">IMBAS QR UNTUK BAYARAN DEPOSIT (RM50)</h6>
                             <div class="qr-placeholder my-2">
@@ -462,7 +806,6 @@
                             </div>
                         </div>
 
-                        <!-- Customer Acknowledgement & Terms Checkboxes -->
                         <div class="border-top pt-3 mt-4">
                             <div class="form-check mb-3">
                                 <input class="form-check-input" type="checkbox" id="checkConfirmAccuracy" required>
@@ -482,12 +825,9 @@
                         </div>
                     </div>
 
-                    <!-- Hidden Auto Generated Order Reference -->
                     <input type="hidden" id="orderIdInput" name="order_id" value="">
-                    <input type="hidden" id="coupleSummaryInput" name="couple" value="">
                     <input type="hidden" id="sideInput" name="side" value="Pihak Lelaki">
 
-                    <!-- Submit Button -->
                     <div class="d-grid gap-2 mt-5">
                         <button type="submit" class="btn btn-custom-primary btn-lg shadow-sm">
                             <i class="bi bi-send-fill me-2"></i> SUBMIT TEMPAHAN KAD KAHWIN
@@ -497,59 +837,122 @@
                 </div>
             </div>
 
-            <!-- Right Column: Sticky 4x6 Live Card Preview -->
-            <div class="col-lg-4">
+            <!-- Right Column: Live Card Preview -->
+            <div class="col-lg-5">
                 <div class="preview-sticky">
                     <div class="card p-3 border-0 shadow-sm rounded-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="preview-title-badge"><i class="bi bi-eye-fill me-1"></i> Live Card Preview</span>
-                            <!-- Card Switcher Arrows (for Dual Packages) -->
                             <div id="cardSwitchControls" class="btn-group btn-group-sm d-none" role="group">
-                                <button type="button" class="btn btn-outline-primary active" id="btnCard1" onclick="switchCard(1)">Card 1</button>
-                                <button type="button" class="btn btn-outline-primary" id="btnCard2" onclick="switchCard(2)">Card 2</button>
+                                <button type="button" class="btn btn-outline-primary active" id="btnCard1" onclick="switchCard(1)">Majlis 1</button>
+                                <button type="button" class="btn btn-outline-primary" id="btnCard2" onclick="switchCard(2)">Majlis 2</button>
                             </div>
                         </div>
 
-                        <!-- 4:6 Aspect Ratio Preview Card -->
+                        <!-- LIVE CARD PREVIEW WRAPPER -->
                         <div class="card-preview-wrapper" id="cardContainer">
                             
-                            <!-- FRONT VIEW CONTENT -->
-                            <div id="cardFrontView" class="w-100 h-100 d-flex flex-column justify-content-between">
-                                <div class="preview-event-title" id="prevEventTitle">WALIMATULURUS</div>
+                            <!-- FRONT VIEW -->
+                            <div id="cardFrontView" class="card-front-container w-100">
+                                <div class="front-title" id="prevFrontTitle">Walimatul Urus</div>
                                 
-                                <div>
-                                    <!-- Parent Names Display in Live Preview -->
-                                    <div class="preview-parents" id="prevParentsDisplay">Nama Bapa & Nama Ibu</div>
-                                    <div class="preview-names" id="prevCoupleNames">Syafiq & Awanis</div>
-                                    <p class="text-muted small mb-0" id="prevDateText">Tarikh Majlis</p>
-                                </div>
-
-                                <div class="text-muted small border-top pt-2 mt-2" style="font-size: 0.72rem;">
-                                    <div><strong>Kod:</strong> <span id="prevCodeDisplay">CKP-001</span></div>
-                                    <div><strong>Pihak:</strong> <span id="prevSideDisplay">Pihak Lelaki</span></div>
-                                </div>
-                            </div>
-
-                            <!-- BACK VIEW CONTENT -->
-                            <div id="cardBackView" class="w-100 h-100 flex-column justify-content-between d-none">
-                                <div class="preview-event-title">MAKLUMAT MAJLIS</div>
-                                
-                                <div class="my-auto text-center px-1">
-                                    <div class="fw-bold mb-1 text-dark" style="font-size: 0.85rem;" id="prevBackTime">Masa Jamuan</div>
-                                    <div class="text-muted small mb-2" style="font-size: 0.75rem;" id="prevBackAddress">Alamat Majlis Perkahwinan</div>
-                                    <div class="badge bg-light text-primary border border-primary font-monospace" style="font-size: 0.7rem;">
-                                        <i class="bi bi-geo-alt-fill me-1"></i> Location Map Ready
+                                <div class="my-auto">
+                                    <div class="front-names" id="prevFrontNames">
+                                        <div>Syafiq</div>
+                                        <span class="front-ampersand">&</span>
+                                        <div>Awanis</div>
                                     </div>
                                 </div>
 
-                                <div class="text-muted small border-top pt-2 w-100" style="font-size: 0.7rem;">
-                                    <i class="bi bi-heart-fill text-danger me-1"></i> Terima Kasih
+                                <div class="front-date-box">
+                                    <i class="bi bi-calendar-event"></i>
+                                    <span id="prevFrontDayDate">SABTU<br>16 SEPTEMBER 2026</span>
+                                </div>
+                            </div>
+
+                            <!-- BACK VIEW -->
+                            <div id="cardBackView" class="card-back-container d-none">
+                                <div class="back-arabic-header">
+                                    وليمة العروس
+                                </div>
+                                
+                                <div class="back-intro-text">
+                                    Syukur ke hadrat-Nya kerana dengan limpah keredhaan & keizinanNya, kami
+                                </div>
+
+                                <div class="back-parents-names" id="prevBackParents">
+                                    NAMA BAPA<br>&<br>NAMA IBU
+                                </div>
+
+                                <div class="back-intro-text">
+                                    dengan segala hormatnya ingin menjemput Dato'/Datin/Tuan/Puan/Encik/Cik
+                                </div>
+
+                                <div class="back-guest-box"></div>
+
+                                <div class="back-intro-text">
+                                    sekeluarga ke majlis perkahwinan anakanda kami
+                                </div>
+
+                                <div class="back-couple-names" id="prevBackFullCouple">
+                                    NAMA PENGANTIN<br><span class="fw-normal text-muted" style="font-size:0.6rem">dengan pasangannya</span><br>NAMA PENGANTIN
+                                </div>
+
+                                <div class="back-intro-text mb-1">
+                                    seperti ketetapan berikut :-
+                                </div>
+
+                                <!-- 3-Column Info Box -->
+                                <div class="back-three-col">
+                                    <!-- Column 1: Date -->
+                                    <div class="back-col">
+                                        <div class="col-title" id="prevColDay">SABTU</div>
+                                        <div class="col-day-big" id="prevColNum">31</div>
+                                        <div class="col-subtext" id="prevColMonthYear">MEI 2025</div>
+                                        <div class="col-subtext text-muted" style="font-size:0.48rem;" id="prevColHijri">4 ZULHIJAH 1446H</div>
+                                    </div>
+
+                                    <!-- Column 2: Aturcara -->
+                                    <div class="back-col">
+                                        <div class="col-title">ATURCARA<br>MAJLIS</div>
+                                        <div class="col-subtext mt-1">JAMUAN MAKAN</div>
+                                        <div class="col-subtext text-muted" style="font-size:0.5rem;" id="prevColTimeJamuan">11:30 AM - 3:30 PM</div>
+                                        <div class="col-subtext mt-1">BERSANDING</div>
+                                        <div class="col-subtext text-muted" style="font-size:0.5rem;" id="prevColTimeSanding">12:30 PM</div>
+                                    </div>
+
+                                    <!-- Column 3: Hubungi -->
+                                    <div class="back-col">
+                                        <div class="col-title mb-1">HUBUNGI</div>
+                                        <div id="prevColContacts">
+                                            <div class="col-contact-item"><strong>AHLI 1</strong>017-2345678</div>
+                                            <div class="col-contact-item"><strong>AHLI 2</strong>017-2345678</div>
+                                            <div class="col-contact-item"><strong>AHLI 3</strong>017-2345678</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- QR Code & Location -->
+                                <div class="back-qr-section">
+                                    <svg class="qr-box-img" viewBox="0 0 100 100">
+                                        <rect width="100" height="100" fill="#ffffff" />
+                                        <path d="M10 10h30v30h-30z M15 15v20h20v-20z M20 20h10v10h-10z M60 10h30v30h-30z M65 15v20h20v-20z M70 20h10v10h-10z M10 60h30v30h-30z M15 65v20h20v-20z M20 70h10v10h-10z M50 50h10v10h-10z M70 50h20v10h-20z M50 70h20v20h-20z M80 80h10v10h-10z" fill="#000000"/>
+                                    </svg>
+                                    <div class="location-details">
+                                        <div class="location-title">SILA SCAN QR CODE<br><span style="font-size:0.5rem; font-weight:normal;">UNTUK LOKASI MAJLIS PERKAHWINAN</span></div>
+                                        <div class="location-title mt-1" style="font-size:0.52rem;">LOKASI MAJLIS PERKAHWINAN :-</div>
+                                        <div class="location-text" id="prevBackLocation">NO. 87, LALUAN TAMAN MERU 8, TAMAN MERU 2B, 30020 IPOH PERAK</div>
+                                    </div>
+                                </div>
+
+                                <div class="back-footer-text">
+                                    Semoga dengan kehadiran para hadirin akan memeriahkan lagi majlis ini dan diberkati oleh-Nya..
                                 </div>
                             </div>
 
                         </div>
 
-                        <!-- Front / Back Switch Buttons -->
+                        <!-- Controls -->
                         <div class="btn-group w-100 mt-3" role="group">
                             <button type="button" class="btn btn-sm btn-primary" id="btnFront" onclick="switchView('front')">
                                 <i class="bi bi-card-heading me-1"></i> Front View
@@ -566,44 +969,66 @@
     </form>
 </div>
 
-<!-- JS Script -->
 <script>
-    let currentCardNum = 1;
-    let currentSideView = 'front';
+    var currentCardNum = 1;
+    var currentSideView = 'front';
+    const monthNames = ["JANUARI", "FEBRUARI", "MAC", "APRIL", "MEI", "JUN", "JULAI", "OGOS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DISEMBER"];
 
-    // Helper to format ISO YYYY-MM-DD date to dd/mm/yyyy
-    function formatDateToDDMMYYYY(dateString) {
-        if (!dateString) return "";
-        const parts = dateString.split('-');
-        if (parts.length === 3) {
-            return `${parts[2]}/${parts[1]}/${parts[0]}`;
-        }
-        return dateString;
-    }
-
-    // Handle package changes: Show extra couple input and card switcher controls
     function handlePackageChange() {
-        const pkg = document.getElementById('pakejChoice').value;
-        const extraSection = document.getElementById('extraCoupleSection');
+        const pkgEl = document.getElementById('pakejChoice');
+        const pkg = pkgEl ? pkgEl.value : "";
+        
+        const singleContainer = document.getElementById('singlePartyContainer');
+        const dualContainer = document.getElementById('dualPartyContainer');
         const switchControls = document.getElementById('cardSwitchControls');
         const sideHidden = document.getElementById('sideInput');
 
-        if (pkg.includes('Kedua-dua Pihak')) {
-            extraSection.classList.remove('d-none');
-            switchControls.classList.remove('d-none');
-            sideHidden.value = "Kedua-dua Pihak";
+        const isDual = pkg.includes('Kedua-dua Pihak');
+
+        if (isDual) {
+            singleContainer.classList.add('d-none');
+            dualContainer.classList.remove('d-none');
+            if (switchControls) switchControls.classList.remove('d-none');
+            if (sideHidden) sideHidden.value = "Kedua-dua Pihak";
+
+            // Toggle HTML5 validation attributes
+            document.querySelectorAll('.single-req').forEach(el => el.removeAttribute('required'));
+            document.querySelectorAll('.dual-req').forEach(el => el.setAttribute('required', 'required'));
         } else {
-            extraSection.classList.add('d-none');
-            switchControls.classList.add('d-none');
-            sideHidden.value = pkg;
+            singleContainer.classList.remove('d-none');
+            dualContainer.classList.add('d-none');
+            if (switchControls) switchControls.classList.add('d-none');
+            if (sideHidden) sideHidden.value = pkg;
+
+            // Toggle HTML5 validation attributes
+            document.querySelectorAll('.dual-req').forEach(el => el.removeAttribute('required'));
+            document.querySelectorAll('.single-req').forEach(el => el.setAttribute('required', 'required'));
+        }
+        
+        handleSideSwap();
+        updateLivePreview();
+    }
+
+    function handleSideSwap() {
+        const m1Side = document.getElementById('majlis1Side')?.value || "Pihak Lelaki";
+        const m2Label = document.getElementById('majlis2SideLabel');
+        if (m2Label) {
+            if (m1Side === "Pihak Lelaki") {
+                m2Label.innerText = "Pihak Bagi Majlis Kedua: Pihak Perempuan";
+            } else {
+                m2Label.innerText = "Pihak Bagi Majlis Kedua: Pihak Lelaki";
+            }
         }
         updateLivePreview();
     }
 
-    // Toggle Shipping Info visibility based on Delivery Method
     function toggleShippingSection() {
-        const isPos = document.getElementById('deliveryPos').checked;
+        const deliveryPos = document.getElementById('deliveryPos');
+        if (!deliveryPos) return;
+        const isPos = deliveryPos.checked;
         const shippingSection = document.getElementById('shippingAddressSection');
+        if (!shippingSection) return;
+        
         const shippingInputs = shippingSection.querySelectorAll('input, select, textarea');
 
         if (isPos) {
@@ -615,7 +1040,6 @@
         }
     }
 
-    // Switch Front / Back Card Views
     function switchView(view) {
         currentSideView = view;
         const frontElem = document.getElementById('cardFrontView');
@@ -623,112 +1047,245 @@
         const btnFront = document.getElementById('btnFront');
         const btnBack = document.getElementById('btnBack');
 
+        if (!frontElem || !backElem) return;
+
         if (view === 'front') {
             frontElem.classList.remove('d-none');
             frontElem.classList.add('d-flex');
             backElem.classList.add('d-none');
             backElem.classList.remove('d-flex');
             
-            btnFront.className = 'btn btn-sm btn-primary';
-            btnBack.className = 'btn btn-sm btn-outline-primary';
+            if (btnFront) btnFront.className = 'btn btn-sm btn-primary';
+            if (btnBack) btnBack.className = 'btn btn-sm btn-outline-primary';
         } else {
             backElem.classList.remove('d-none');
             backElem.classList.add('d-flex');
             frontElem.classList.add('d-none');
             frontElem.classList.remove('d-flex');
 
-            btnBack.className = 'btn btn-sm btn-primary';
-            btnFront.className = 'btn btn-sm btn-outline-primary';
+            if (btnBack) btnBack.className = 'btn btn-sm btn-primary';
+            if (btnFront) btnFront.className = 'btn btn-sm btn-outline-primary';
         }
     }
 
-    // Switch between Card 1 and Card 2 (For Dual Packages)
     function switchCard(cardNum) {
         currentCardNum = cardNum;
-        document.getElementById('btnCard1').classList.toggle('active', cardNum === 1);
-        document.getElementById('btnCard2').classList.toggle('active', cardNum === 2);
+        const btn1 = document.getElementById('btnCard1');
+        const btn2 = document.getElementById('btnCard2');
+        if (btn1) btn1.classList.toggle('active', cardNum === 1);
+        if (btn2) btn2.classList.toggle('active', cardNum === 2);
         updateLivePreview();
     }
 
-    // Real-time Card Preview update logic
     function updateLivePreview() {
-        const fatherName = document.getElementById('namaBapa').value.trim();
-        const motherName = document.getElementById('namaIbu').value.trim();
-        const groomShort = document.getElementById('singkatanLelaki').value.trim() || "Groom";
-        const brideShort = document.getElementById('singkatanPerempuan').value.trim() || "Bride";
-        const extraCoupleShort = document.getElementById('singkatanPasanganTambahan').value.trim() || "Extra Couple";
-        const eventTitle = document.getElementById('tajukMajlis').value || "WALIMATULURUS";
-        const designCode = document.getElementById('kodDesign').value.trim() || "CKP-001";
-        const eventDay = document.getElementById('hariMajlis').value || "";
-        const rawDate = document.getElementById('tarikhMajlis').value || "";
-        const formattedDate = formatDateToDDMMYYYY(rawDate);
-        const pkgType = document.getElementById('pakejChoice').value;
-        const timeVal = document.getElementById('masaJamuan').value.trim() || "11.00 AM - 4.00 PM";
-        const addrVal = document.getElementById('alamatMajlis').value.trim() || "Alamat Majlis Perkahwinan";
+        try {
+            const pkgType = document.getElementById('pakejChoice')?.value || "Pihak Lelaki";
+            const isDual = pkgType.includes('Kedua-dua Pihak');
 
-        // Display Parents' Names
-        let parentsText = "Nama Bapa & Nama Ibu";
-        if (fatherName && motherName) {
-            parentsText = `${fatherName} & ${motherName}`;
-        } else if (fatherName) {
-            parentsText = fatherName;
-        } else if (motherName) {
-            parentsText = motherName;
-        }
-        document.getElementById('prevParentsDisplay').innerText = parentsText;
+            // Bride and Groom Names
+            const groomFull = document.getElementById('namaLelaki')?.value.trim() || "NAMA PENGANTIN LELAKI";
+            const brideFull = document.getElementById('namaPerempuan')?.value.trim() || "NAMA PENGANTIN PEREMPUAN";
+            const groomShort = document.getElementById('singkatanLelaki')?.value.trim() || "Syafiq";
+            const brideShort = document.getElementById('singkatanPerempuan')?.value.trim() || "Awanis";
 
-        // Display Couple Names based on active card tab
-        let displayCouple = `${groomShort} & ${brideShort}`;
-        if (pkgType.includes('Kedua-dua Pihak') && currentCardNum === 2) {
-            displayCouple = extraCoupleShort;
-        }
+            let topNameFull = groomFull;
+            let bottomNameFull = brideFull;
+            let topNameShort = groomShort;
+            let bottomNameShort = brideShort;
 
-        document.getElementById('prevCoupleNames').innerHTML = displayCouple;
-        document.getElementById('prevEventTitle').innerText = eventTitle.toUpperCase();
-
-        // Date Display with dd/mm/yyyy format
-        if (formattedDate) {
-            document.getElementById('prevDateText').innerText = `${eventDay ? eventDay + ', ' : ''}${formattedDate}`;
-        } else {
-            document.getElementById('prevDateText').innerText = "Tarikh Majlis";
-        }
-
-        // Code & Side
-        document.getElementById('prevCodeDisplay').innerText = designCode;
-        document.getElementById('prevSideDisplay').innerText = pkgType.includes('Kedua-dua Pihak') ? `Card ${currentCardNum}` : pkgType;
-
-        // Back View Info
-        document.getElementById('prevBackTime').innerText = timeVal;
-        document.getElementById('prevBackAddress').innerText = addrVal;
-    }
-
-    // Auto-generate Order ID (e.g., KKK-5928)
-    function generateOrderId() {
-        return `KKK-${Math.floor(1000 + Math.random() * 9000)}`;
-    }
-
-    // Form submission & Bootstrap validation handler
-    (function () {
-        'use strict'
-        const form = document.getElementById('orderForm');
-
-        form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            } else {
-                // Auto-generate Order ID
-                document.getElementById('orderIdInput').value = generateOrderId();
-                
-                // Construct Couple summary for URL parameter passed to thank_you.html
-                const groomShort = document.getElementById('singkatanLelaki').value;
-                const brideShort = document.getElementById('singkatanPerempuan').value;
-                document.getElementById('coupleSummaryInput').value = `${groomShort} & ${brideShort}`;
+            if (isDual) {
+                const m1Side = document.getElementById('majlis1Side')?.value || "Pihak Lelaki";
+                if ((m1Side === "Pihak Lelaki" && currentCardNum === 1) || (m1Side === "Pihak Perempuan" && currentCardNum === 2)) {
+                    topNameFull = groomFull;
+                    bottomNameFull = brideFull;
+                    topNameShort = groomShort;
+                    bottomNameShort = brideShort;
+                } else {
+                    topNameFull = brideFull;
+                    bottomNameFull = groomFull;
+                    topNameShort = brideShort;
+                    bottomNameShort = groomShort;
+                }
+            } else if (pkgType.includes("Pihak Perempuan")) {
+                topNameFull = brideFull;
+                bottomNameFull = groomFull;
+                topNameShort = brideShort;
+                bottomNameShort = groomShort;
             }
 
-            form.classList.add('was-validated');
-        }, false);
-    })();
+            // 1. FRONT VIEW UPDATE
+            const eventTitle = document.getElementById('tajukMajlis')?.value || "Walimatul Urus";
+            const fontTitleElem = document.getElementById('prevFrontTitle');
+            if (fontTitleElem) fontTitleElem.innerText = eventTitle;
+
+            const frontNamesElem = document.getElementById('prevFrontNames');
+            if (frontNamesElem) {
+                frontNamesElem.innerHTML = `<div>${topNameShort}</div><span class="front-ampersand">&</span><div>${bottomNameShort}</div>`;
+            }
+
+            // Dynamic Inputs based on Dual vs Single
+            let fatherName, motherName, eventDay, rawDate, hijriVal, jamuanVal, sandingVal, addressVal;
+            let c1Name, c1Phone, c2Name, c2Phone, c3Name, c3Phone;
+
+            if (isDual && currentCardNum === 2) {
+                fatherName = document.getElementById('namaBapa2')?.value.trim() || "NAMA BAPA";
+                motherName = document.getElementById('namaIbu2')?.value.trim() || "NAMA IBU";
+                eventDay = (document.getElementById('hariMajlis2')?.value || "SABTU").toUpperCase();
+                rawDate = document.getElementById('tarikhMajlis2')?.value;
+                hijriVal = document.getElementById('tarikhHijrah2')?.value.trim() || "4 ZULHIJAH 1446H";
+                jamuanVal = document.getElementById('masaJamuan2')?.value.trim() || "11:30 AM - 3:30 PM";
+                sandingVal = document.getElementById('masaBersanding2')?.value.trim() || "12:30 PM";
+                addressVal = document.getElementById('alamatMajlis2')?.value.trim() || "ALAMAT MAJLIS KEDUA";
+
+                c1Name = document.getElementById('namaHubungi1_m2')?.value.trim() || "AHLI 1";
+                c1Phone = document.getElementById('noHubungi1_m2')?.value.trim() || "017-2345678";
+                c2Name = document.getElementById('namaHubungi2_m2')?.value.trim() || "";
+                c2Phone = document.getElementById('noHubungi2_m2')?.value.trim() || "";
+                c3Name = document.getElementById('namaHubungi3_m2')?.value.trim() || "";
+                c3Phone = document.getElementById('noHubungi3_m2')?.value.trim() || "";
+            } else if (isDual && currentCardNum === 1) {
+                fatherName = document.getElementById('namaBapa1')?.value.trim() || "NAMA BAPA";
+                motherName = document.getElementById('namaIbu1')?.value.trim() || "NAMA IBU";
+                eventDay = (document.getElementById('hariMajlis1')?.value || "SABTU").toUpperCase();
+                rawDate = document.getElementById('tarikhMajlis1')?.value;
+                hijriVal = document.getElementById('tarikhHijrah1')?.value.trim() || "4 ZULHIJAH 1446H";
+                jamuanVal = document.getElementById('masaJamuan1')?.value.trim() || "11:30 AM - 3:30 PM";
+                sandingVal = document.getElementById('masaBersanding1')?.value.trim() || "12:30 PM";
+                addressVal = document.getElementById('alamatMajlis1')?.value.trim() || "ALAMAT MAJLIS PERTAMA";
+
+                c1Name = document.getElementById('namaHubungi1_m1')?.value.trim() || "AHLI 1";
+                c1Phone = document.getElementById('noHubungi1_m1')?.value.trim() || "017-2345678";
+                c2Name = document.getElementById('namaHubungi2_m1')?.value.trim() || "";
+                c2Phone = document.getElementById('noHubungi2_m1')?.value.trim() || "";
+                c3Name = document.getElementById('namaHubungi3_m1')?.value.trim() || "";
+                c3Phone = document.getElementById('noHubungi3_m1')?.value.trim() || "";
+            } else {
+                fatherName = document.getElementById('namaBapa')?.value.trim() || "NAMA BAPA";
+                motherName = document.getElementById('namaIbu')?.value.trim() || "NAMA IBU";
+                eventDay = (document.getElementById('hariMajlis')?.value || "SABTU").toUpperCase();
+                rawDate = document.getElementById('tarikhMajlis')?.value;
+                hijriVal = document.getElementById('tarikhHijrah')?.value.trim() || "4 ZULHIJAH 1446H";
+                jamuanVal = document.getElementById('masaJamuan')?.value.trim() || "11:30 AM - 3:30 PM";
+                sandingVal = document.getElementById('masaBersanding')?.value.trim() || "12:30 PM";
+                addressVal = document.getElementById('alamatMajlis')?.value.trim() || "ALAMAT MAJLIS PERKAHWINAN";
+
+                c1Name = document.getElementById('namaHubungi1')?.value.trim() || "AHLI 1";
+                c1Phone = document.getElementById('noHubungi1')?.value.trim() || "017-2345678";
+                c2Name = document.getElementById('namaHubungi2')?.value.trim() || "";
+                c2Phone = document.getElementById('noHubungi2')?.value.trim() || "";
+                c3Name = document.getElementById('namaHubungi3')?.value.trim() || "";
+                c3Phone = document.getElementById('noHubungi3')?.value.trim() || "";
+            }
+
+            // 2. BACK VIEW - PARENTS NAME UPDATE
+            const parentsElem = document.getElementById('prevBackParents');
+            if (parentsElem) {
+                if (fatherName && motherName) {
+                    parentsElem.innerHTML = `${fatherName}<br>&<br>${motherName}`;
+                } else if (fatherName) {
+                    parentsElem.innerText = fatherName;
+                } else if (motherName) {
+                    parentsElem.innerText = motherName;
+                } else {
+                    parentsElem.innerHTML = `NAMA BAPA<br>&<br>NAMA IBU`;
+                }
+            }
+
+            // 3. BACK VIEW - COUPLE NAMES UPDATE
+            const fullCoupleElem = document.getElementById('prevBackFullCouple');
+            if (fullCoupleElem) {
+                fullCoupleElem.innerHTML = `${topNameFull}<br><span class="fw-normal text-muted" style="font-size:0.6rem">dengan pasangannya</span><br>${bottomNameFull}`;
+            }
+
+            // 4. DATE AND TIME UPDATE
+            let dayNum = "31";
+            let monthYearStr = "MEI 2025";
+            let fullDateStr = "16 SEPTEMBER 2026";
+
+            if (rawDate) {
+                const dateParts = rawDate.split('-');
+                if (dateParts.length === 3) {
+                    dayNum = dateParts[2];
+                    const monthIdx = parseInt(dateParts[1], 10) - 1;
+                    const yearNum = dateParts[0];
+                    const monthStr = monthNames[monthIdx] || "";
+                    monthYearStr = `${monthStr} ${yearNum}`;
+                    fullDateStr = `${dayNum} ${monthStr} ${yearNum}`;
+                }
+            }
+
+            const frontDateElem = document.getElementById('prevFrontDayDate');
+            if (frontDateElem) frontDateElem.innerHTML = `${eventDay}<br>${fullDateStr}`;
+
+            const colDayElem = document.getElementById('prevColDay');
+            if (colDayElem) colDayElem.innerText = eventDay;
+
+            const colNumElem = document.getElementById('prevColNum');
+            if (colNumElem) colNumElem.innerText = dayNum;
+
+            const colMonthElem = document.getElementById('prevColMonthYear');
+            if (colMonthElem) colMonthElem.innerText = monthYearStr;
+
+            const colHijriElem = document.getElementById('prevColHijri');
+            if (colHijriElem) colHijriElem.innerText = hijriVal;
+
+            const jamuanElem = document.getElementById('prevColTimeJamuan');
+            if (jamuanElem) jamuanElem.innerText = jamuanVal;
+
+            const sandingElem = document.getElementById('prevColTimeSanding');
+            if (sandingElem) sandingElem.innerText = sandingVal;
+
+            // 5. CONTACTS UPDATE
+            let contactsHTML = `<div class="col-contact-item"><strong>${c1Name}</strong>${c1Phone}</div>`;
+            if (c2Name) contactsHTML += `<div class="col-contact-item"><strong>${c2Name}</strong>${c2Phone}</div>`;
+            if (c3Name) contactsHTML += `<div class="col-contact-item"><strong>${c3Name}</strong>${c3Phone}</div>`;
+
+            const contactsContainer = document.getElementById('prevColContacts');
+            if (contactsContainer) contactsContainer.innerHTML = contactsHTML;
+
+            // 6. LOCATION UPDATE
+            const locationElem = document.getElementById('prevBackLocation');
+            if (locationElem) locationElem.innerText = addressVal;
+        } catch (err) {
+            console.error("Live preview error:", err);
+        }
+    }
+
+    // Attach listener to all inputs
+    document.addEventListener('DOMContentLoaded', function() {
+        const allInputs = document.querySelectorAll('input, select, textarea');
+        allInputs.forEach(input => {
+            input.addEventListener('input', updateLivePreview);
+            input.addEventListener('keyup', updateLivePreview);
+            input.addEventListener('change', updateLivePreview);
+        });
+
+        const form = document.getElementById('orderForm');
+        if (form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const firstInvalid = form.querySelector(':invalid');
+                    if (firstInvalid) {
+                        firstInvalid.focus();
+                        firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    form.classList.add('was-validated');
+                    return;
+                }
+
+                form.classList.add('was-validated');
+            });
+        }
+
+        handlePackageChange();
+    });
+
+    window.onload = function() {
+        updateLivePreview();
+    };
 </script>
 
 </body>
