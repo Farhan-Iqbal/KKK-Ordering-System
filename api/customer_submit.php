@@ -48,17 +48,17 @@ try {
         
         // Sanitize package_type to strictly match ENUM('1-package', '2-package')
         $rawPackage = strtolower(trim($data['package_type'] ?? ''));
-        if (in_array($rawPackage, ['2-package', '2', '2_package', 'double', '2package'])) {
+        if (in_array($rawPackage, ['2-package', '2', '2_package', 'double', '2package']) || strpos($rawPackage, 'kedua-dua') !== false) {
             $packageType = '2-package';
         } else {
             $packageType = '1-package';
         }
 
         // Sanitize side_type to strictly match ENUM('lelaki', 'perempuan', 'both')
-        $rawSide = strtolower(trim($data['side_type'] ?? ''));
-        if (in_array($rawSide, ['perempuan', 'p', 'female', 'bride'])) {
+        $rawSide = strtolower(trim($data['side_type'] ?? $data['side'] ?? ''));
+        if (in_array($rawSide, ['perempuan', 'p', 'female', 'bride']) || strpos($rawSide, 'perempuan') !== false) {
             $sideType = 'perempuan';
-        } else if (in_array($rawSide, ['both', 'dua_dua', 'dua-dua', 'dua'])) {
+        } else if (in_array($rawSide, ['both', 'dua_dua', 'dua-dua', 'dua', 'kedua-dua pihak']) || strpos($rawSide, 'kedua-dua') !== false) {
             $sideType = 'both';
         } else {
             $sideType = 'lelaki';
@@ -95,50 +95,85 @@ try {
         $fullShippingAddress = implode(', ', $addrParts);
     }
 
-    // Pack contact persons into array
+    // Pack contact persons into array (Single / Majlis 1)
     $groomContacts = [];
-    if (!empty($data['contact1_name']) && !empty($data['contact1_phone'])) {
-        $groomContacts[] = ['name' => $data['contact1_name'], 'phone' => $data['contact1_phone']];
+    $c1Name = $data['contact1_name'] ?? $data['m1_contact1_name'] ?? null;
+    $c1Phone = $data['contact1_phone'] ?? $data['m1_contact1_phone'] ?? null;
+    if (!empty($c1Name) && !empty($c1Phone)) {
+        $groomContacts[] = ['name' => $c1Name, 'phone' => $c1Phone];
     }
-    if (!empty($data['contact2_name']) && !empty($data['contact2_phone'])) {
-        $groomContacts[] = ['name' => $data['contact2_name'], 'phone' => $data['contact2_phone']];
+
+    $c2Name = $data['contact2_name'] ?? $data['m1_contact2_name'] ?? null;
+    $c2Phone = $data['contact2_phone'] ?? $data['m1_contact2_phone'] ?? null;
+    if (!empty($c2Name) && !empty($c2Phone)) {
+        $groomContacts[] = ['name' => $c2Name, 'phone' => $c2Phone];
     }
-    if (!empty($data['contact3_name']) && !empty($data['contact3_phone'])) {
-        $groomContacts[] = ['name' => $data['contact3_name'], 'phone' => $data['contact3_phone']];
+
+    $c3Name = $data['contact3_name'] ?? $data['m1_contact3_name'] ?? null;
+    $c3Phone = $data['contact3_phone'] ?? $data['m1_contact3_phone'] ?? null;
+    if (!empty($c3Name) && !empty($c3Phone)) {
+        $groomContacts[] = ['name' => $c3Name, 'phone' => $c3Phone];
+    }
+
+    // Pack contact persons into array (Majlis 2)
+    $brideContacts = [];
+    if (!empty($data['m2_contact1_name']) && !empty($data['m2_contact1_phone'])) {
+        $brideContacts[] = ['name' => $data['m2_contact1_name'], 'phone' => $data['m2_contact1_phone']];
+    }
+    if (!empty($data['m2_contact2_name']) && !empty($data['m2_contact2_phone'])) {
+        $brideContacts[] = ['name' => $data['m2_contact2_name'], 'phone' => $data['m2_contact2_phone']];
+    }
+    if (!empty($data['m2_contact3_name']) && !empty($data['m2_contact3_phone'])) {
+        $brideContacts[] = ['name' => $data['m2_contact3_name'], 'phone' => $data['m2_contact3_phone']];
     }
 
     $groomContactsList = !empty($groomContacts) ? $groomContacts : ($data['groom_contacts'] ?? []);
-    $brideContactsList = $data['bride_contacts'] ?? [];
+    $brideContactsList = !empty($brideContacts) ? $brideContacts : ($data['bride_contacts'] ?? []);
 
-    // 3. Map customer form fields safely
+    // Sanitize dates to convert empty strings '' into null
+    $groomDateRaw = $data['event_date'] ?? $data['m1_event_date'] ?? $data['groom_event_date'] ?? null;
+    $groomEventDate = (!empty($groomDateRaw) && trim($groomDateRaw) !== '') ? trim($groomDateRaw) : null;
+
+    $brideDateRaw = $data['m2_event_date'] ?? $data['bride_event_date'] ?? null;
+    $brideEventDate = (!empty($brideDateRaw) && trim($brideDateRaw) !== '') ? trim($brideDateRaw) : null;
+
+    // 3. Map customer form fields safely (with fallback aliases)
     $details = [
-        'design_code_groom'  => $data['design_code'] ?? $data['design_code_groom'] ?? null,
-        'design_code_bride'  => $data['design_code_bride'] ?? null,
-        'card_title_groom'   => $data['event_title'] ?? $data['card_title_groom'] ?? null,
-        'card_title_bride'   => $data['card_title_bride'] ?? null,
-        'groom_name'         => $data['groom_name'] ?? null,
-        'groom_abbrev'       => $data['groom_short'] ?? $data['groom_abbrev'] ?? null,
-        'bride_name'         => $data['bride_name'] ?? null,
-        'bride_abbrev'       => $data['bride_short'] ?? $data['bride_abbrev'] ?? null,
+        'design_code_groom'  => $data['design_code'] ?? $data['design_code_groom'] ?? $data['m1_design_code'] ?? null,
+        'design_code_bride'  => $data['design_code_bride'] ?? $data['m2_design_code'] ?? $data['design_code'] ?? null,
+        'card_title_groom'   => $data['event_title'] ?? $data['card_title_groom'] ?? $data['m1_event_title'] ?? null,
+        'card_title_bride'   => $data['card_title_bride'] ?? $data['m2_event_title'] ?? $data['event_title'] ?? null,
+        
+        'groom_name'         => $data['groom_name'] ?? $data['m1_groom_name'] ?? $data['full_name_groom'] ?? null,
+        'groom_abbrev'       => $data['groom_short'] ?? $data['groom_abbrev'] ?? $data['m1_groom_short'] ?? null,
+        'bride_name'         => $data['bride_name'] ?? $data['m2_bride_name'] ?? $data['full_name_bride'] ?? null,
+        'bride_abbrev'       => $data['bride_short'] ?? $data['bride_abbrev'] ?? $data['m2_bride_short'] ?? null,
         'second_couple_notes'=> $data['extra_couple_full'] ?? $data['second_couple_notes'] ?? null,
-        'groom_father'       => $data['father_name'] ?? $data['groom_father'] ?? null,
-        'groom_mother'       => $data['mother_name'] ?? $data['groom_mother'] ?? null,
-        'groom_event_date'   => $data['event_date'] ?? $data['groom_event_date'] ?? null,
-        'groom_hijri_date'   => $data['hijri_date'] ?? $data['groom_hijri_date'] ?? null,
-        'groom_event_time'   => $data['event_time'] ?? $data['groom_event_time'] ?? null,
-        'groom_venue'        => $data['event_address'] ?? $data['groom_venue'] ?? null,
-        'groom_address'      => $data['event_address'] ?? $data['groom_address'] ?? null,
-        'groom_maps_url'     => $data['location_url'] ?? $data['groom_maps_url'] ?? null,
+        
+        // Father & Mother: check generic, m1, groom, and bride fallbacks
+        'groom_father'       => $data['father_name'] ?? $data['m1_father_name'] ?? $data['groom_father'] ?? $data['bride_father'] ?? null,
+        'groom_mother'       => $data['mother_name'] ?? $data['m1_mother_name'] ?? $data['groom_mother'] ?? $data['bride_mother'] ?? null,
+        
+        // Event Date & Time details
+        'groom_event_date'   => $groomEventDate ?? $brideEventDate ?? null,
+        'groom_hijri_date'   => $data['hijri_date'] ?? $data['m1_hijri_date'] ?? $data['groom_hijri_date'] ?? $data['bride_hijri_date'] ?? null,
+        'groom_event_time'   => $data['event_time'] ?? $data['m1_event_time'] ?? $data['groom_event_time'] ?? $data['bride_event_time'] ?? null,
+        'groom_venue'        => $data['event_address'] ?? $data['m1_event_address'] ?? $data['groom_venue'] ?? $data['bride_venue'] ?? null,
+        'groom_address'      => $data['event_address'] ?? $data['m1_event_address'] ?? $data['groom_address'] ?? $data['bride_address'] ?? null,
+        'groom_maps_url'     => $data['location_url'] ?? $data['m1_location_url'] ?? $data['groom_maps_url'] ?? $data['bride_maps_url'] ?? null,
         'groom_contacts'     => $groomContactsList,
-        'bride_father'       => $data['bride_father'] ?? null,
-        'bride_mother'       => $data['bride_mother'] ?? null,
-        'bride_event_date'   => $data['bride_event_date'] ?? null,
-        'bride_hijri_date'   => $data['bride_hijri_date'] ?? null,
-        'bride_event_time'   => $data['bride_event_time'] ?? null,
-        'bride_venue'        => $data['bride_venue'] ?? null,
-        'bride_address'      => $data['bride_address'] ?? null,
-        'bride_maps_url'     => $data['bride_maps_url'] ?? null,
+        
+        // Bride side details (for 2-package or explicit bride side)
+        'bride_father'       => $data['m2_father_name'] ?? $data['bride_father'] ?? $data['father_name'] ?? null,
+        'bride_mother'       => $data['m2_mother_name'] ?? $data['bride_mother'] ?? $data['mother_name'] ?? null,
+        'bride_event_date'   => $brideEventDate,
+        'bride_hijri_date'   => $data['m2_hijri_date'] ?? $data['bride_hijri_date'] ?? null,
+        'bride_event_time'   => $data['m2_event_time'] ?? $data['bride_event_time'] ?? null,
+        'bride_venue'        => $data['m2_event_address'] ?? $data['bride_venue'] ?? null,
+        'bride_address'      => $data['m2_event_address'] ?? $data['bride_address'] ?? null,
+        'bride_maps_url'     => $data['m2_location_url'] ?? $data['bride_maps_url'] ?? null,
         'bride_contacts'     => $brideContactsList,
+        
         'fulfillment_method' => $data['delivery_method'] ?? $data['fulfillment_method'] ?? 'courier',
         'shipping_recipient' => $data['name'] ?? $data['shipping_recipient'] ?? null,
         'shipping_phone'     => $data['phone'] ?? $data['shipping_phone'] ?? null,
@@ -161,6 +196,7 @@ try {
     ) ON DUPLICATE KEY UPDATE 
         groom_name=VALUES(groom_name), bride_name=VALUES(bride_name),
         groom_event_date=VALUES(groom_event_date), groom_venue=VALUES(groom_venue),
+        bride_event_date=VALUES(bride_event_date), bride_venue=VALUES(bride_venue),
         shipping_recipient=VALUES(shipping_recipient), shipping_phone=VALUES(shipping_phone), shipping_address=VALUES(shipping_address),
         is_confirmed_by_customer=1, confirmed_at=NOW()";
 
