@@ -1,4 +1,6 @@
 <?php
+// api/get_order_details.php
+
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/database.php';
 
@@ -12,28 +14,35 @@ if (!$orderId) {
 try {
     $db = Database::getConnection();
 
-    $stmt = $db->prepare("
-        SELECT 
-            o.order_id, o.customer_name, o.customer_email, o.customer_phone, o.order_status, o.created_at,
-            cd.*
-        FROM orders o
-        LEFT JOIN customer_details cd ON o.order_id = cd.order_id
-        WHERE o.order_id = :order_id
-        LIMIT 1
-    ");
-    $stmt->execute([':order_id' => $orderId]);
-    $order = $stmt->fetch(PDO::FETCH_ASSOC);
+    // 1. Fetch main order record
+    $stmtOrder = $db->prepare("SELECT * FROM orders WHERE order_id = :order_id LIMIT 1");
+    $stmtOrder->execute([':order_id' => $orderId]);
+    $order = $stmtOrder->fetch(PDO::FETCH_ASSOC);
 
     if (!$order) {
         echo json_encode(['success' => false, 'message' => 'Order not found']);
         exit();
     }
 
-    // Decode JSON contact lists safely
-    $order['groom_contacts'] = json_decode($order['groom_contacts'] ?? '[]', true);
-    $order['bride_contacts'] = json_decode($order['bride_contacts'] ?? '[]', true);
+    // 2. Fetch customer details record
+    $stmtDetails = $db->prepare("SELECT * FROM customer_details WHERE order_id = :order_id LIMIT 1");
+    $stmtDetails->execute([':order_id' => $orderId]);
+    $details = $stmtDetails->fetch(PDO::FETCH_ASSOC) ?: [];
 
-    echo json_encode(['success' => true, 'order' => $order]);
+    // Decode JSON contacts safely
+    if (!empty($details['m1_contacts'])) {
+        $details['m1_contacts'] = json_decode($details['m1_contacts'], true);
+    }
+    if (!empty($details['m2_contacts'])) {
+        $details['m2_contacts'] = json_decode($details['m2_contacts'], true);
+    }
+
+    // Return separated structures matching thank_you.html script expectations
+    echo json_encode([
+        'success' => true,
+        'order'   => $order,
+        'details' => $details
+    ]);
 
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);

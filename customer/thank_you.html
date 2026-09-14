@@ -103,15 +103,15 @@
             <h6 class="fw-bold text-dark mb-3"><i class="bi bi-file-earmark-text me-2 text-primary"></i>Order Summary</h6>
             <div class="summary-item">
                 <span class="text-muted">Customer Name:</span>
-                <span class="fw-semibold text-dark text-end ms-2" id="summaryName">N/A</span>
+                <span class="fw-semibold text-dark text-end ms-2" id="summaryName">Loading...</span>
             </div>
             <div class="summary-item">
                 <span class="text-muted">Couple Name:</span>
-                <span class="fw-semibold text-dark text-end ms-2" id="summaryCouple">N/A</span>
+                <span class="fw-semibold text-dark text-end ms-2" id="summaryCouple">Loading...</span>
             </div>
             <div class="summary-item">
                 <span class="text-muted">Pakej / Side Option:</span>
-                <span class="fw-semibold text-dark text-end ms-2" id="summarySide">N/A</span>
+                <span class="fw-semibold text-dark text-end ms-2" id="summarySide">Loading...</span>
             </div>
         </div>
 
@@ -131,36 +131,69 @@
 </div>
 
 <script>
-    // Config: Staff WhatsApp number (Malaysian format without leading +)
     const STAFF_WHATSAPP_NUMBER = "60186684036";
 
     // Extract Order Parameters from URL
     const urlParams = new URLSearchParams(window.location.search);
     const orderId = urlParams.get('order_id') || "N/A";
-    const customerName = urlParams.get('name') || "N/A";
-    const coupleName = urlParams.get('couple') || "N/A";
-    const orderSide = urlParams.get('side') || "N/A";
+    let customerName = urlParams.get('name');
+    let coupleName = urlParams.get('couple');
+    let orderSide = urlParams.get('side');
 
-    // Populate UI elements
     document.getElementById('orderRefDisplay').innerText = `Order Reference: ${orderId}`;
-    document.getElementById('summaryName').innerText = customerName;
-    document.getElementById('summaryCouple').innerText = coupleName;
-    document.getElementById('summarySide').innerText = orderSide;
 
-    // Build dynamic WhatsApp pre-filled message
-    const waText = 
+    function updateUI(name, couple, side) {
+        document.getElementById('summaryName').innerText = name || "N/A";
+        document.getElementById('summaryCouple').innerText = couple || "N/A";
+        document.getElementById('summarySide').innerText = side || "N/A";
+
+        // Build dynamic WhatsApp pre-filled message
+        const waText = 
 `Hello KingKadKahwin Team, I have submitted my wedding card order details and deposit receipt.
 
 📌 *ORDER DETAILS*
 • *Order ID:* ${orderId}
-• *Name:* ${customerName}
-• *Couple:* ${coupleName}
-• *Package:* ${orderSide}
+• *Name:* ${name || 'N/A'}
+• *Couple:* ${couple || 'N/A'}
+• *Package / Side:* ${side || 'N/A'}
 
 Please review my order. Thank you!`;
 
-    const encodedMessage = encodeURIComponent(waText);
-    document.getElementById('whatsappBtn').href = `https://wa.me/${STAFF_WHATSAPP_NUMBER}?text=${encodedMessage}`;
+        const encodedMessage = encodeURIComponent(waText);
+        document.getElementById('whatsappBtn').href = `https://wa.me/${STAFF_WHATSAPP_NUMBER}?text=${encodedMessage}`;
+    }
+
+    // Check if parameters are missing from URL, fetch from API endpoint
+    if ((!customerName || !coupleName || !orderSide) && orderId !== "N/A") {
+        fetch(`../api/get_order_details.php?order_id=${encodeURIComponent(orderId)}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const cName = data.order.customer_name;
+                    
+                    // Format Couple Name (e.g. Groom & Bride)
+                    let cCouple = "";
+                    if (data.details.groom_name && data.details.bride_name) {
+                        cCouple = `${data.details.groom_name} & ${data.details.bride_name}`;
+                    } else {
+                        cCouple = data.details.groom_name || data.details.bride_name || "N/A";
+                    }
+
+                    // Format Side / Package Option
+                    const cSide = `${data.order.package_type || ''} (${data.order.side_type || ''})`.trim();
+
+                    updateUI(cName, cCouple, cSide);
+                } else {
+                    updateUI(customerName, coupleName, orderSide);
+                }
+            })
+            .catch(err => {
+                console.error("Failed to fetch order details:", err);
+                updateUI(customerName, coupleName, orderSide);
+            });
+    } else {
+        updateUI(customerName, coupleName, orderSide);
+    }
 </script>
 
 </body>
