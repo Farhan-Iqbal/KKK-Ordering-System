@@ -4,7 +4,6 @@
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/database.php';
 
-// Helper function to generate unique order ID
 function generateOrderId($db) {
     do {
         $orderId = 'KKK-' . strtoupper(substr(uniqid(), -10));
@@ -17,7 +16,6 @@ function generateOrderId($db) {
 try {
     $db = Database::getConnection();
 
-    // Check if payload is standard POST form or JSON
     $rawInput = file_get_contents('php://input');
     $jsonInput = json_decode($rawInput, true);
     $data = $jsonInput ?? $_POST;
@@ -27,40 +25,45 @@ try {
         exit();
     }
 
-    // 1. Generate Order ID
     $orderId = generateOrderId($db);
 
-    // 2. File Upload Handling
-    $bridePhotoPath = null;
+    // Setup upload directories
+    $receiptDir = __DIR__ . '/../uploads/receipts/';
+    $photoDir   = __DIR__ . '/../uploads/bride_photos/';
+
+    if (!is_dir($receiptDir)) mkdir($receiptDir, 0755, true);
+    if (!is_dir($photoDir))   mkdir($photoDir, 0755, true);
+
+    // 1. Upload Payment Receipt
     $paymentReceiptPath = null;
-    $uploadDir = __DIR__ . '/../uploads/receipts/';
-
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
-    }
-
     if (isset($_FILES['payment_receipt']) && $_FILES['payment_receipt']['error'] === UPLOAD_ERR_OK) {
         $ext = pathinfo($_FILES['payment_receipt']['name'], PATHINFO_EXTENSION);
-        $fileName = $orderId . '_' . time() . '.' . $ext;
-        if (move_uploaded_file($_FILES['payment_receipt']['tmp_name'], $uploadDir . $fileName)) {
+        $fileName = $orderId . '_receipt_' . time() . '.' . $ext;
+        if (move_uploaded_file($_FILES['payment_receipt']['tmp_name'], $receiptDir . $fileName)) {
             $paymentReceiptPath = 'uploads/receipts/' . $fileName;
         }
     }
 
-    // 3. Process Base Order Data
-    $customerName   = $data['name'] ?? '';
-    $customerPhone  = $data['phone'] ?? '';
-    $customerEmail  = $data['email'] ?? null;
-    
-    // Normalize package_type
-    $rawPackage = $data['package_type'] ?? '';
-    if (strpos($rawPackage, '2') !== false || strpos($rawPackage, 'Kedua') !== false) {
-        $packageType = '2-package';
-    } else {
-        $packageType = '1-package';
+    // 2. Upload Bride Photo
+    $bridePhotoPath = null;
+    if (isset($_FILES['bride_photo']) && $_FILES['bride_photo']['error'] === UPLOAD_ERR_OK) {
+        $ext = pathinfo($_FILES['bride_photo']['name'], PATHINFO_EXTENSION);
+        $fileName = $orderId . '_photo_' . time() . '.' . $ext;
+        if (move_uploaded_file($_FILES['bride_photo']['tmp_name'], $photoDir . $fileName)) {
+            $bridePhotoPath = 'uploads/bride_photos/' . $fileName;
+        }
     }
 
-    // Normalize side_type to match database ENUM ('lelaki', 'perempuan', 'both')
+    // 3. Prepare Orders Data
+    $customerName  = $data['name'] ?? '';
+    $customerPhone = $data['phone'] ?? '';
+    $customerEmail = $data['email'] ?? '';
+    $designCode    = $data['design_code'] ?? '';
+    $theme         = $data['theme'] ?? null;
+
+    $rawPackage  = $data['package_type'] ?? '';
+    $packageType = (strpos($rawPackage, '2') !== false || strpos($rawPackage, 'Kedua') !== false) ? '2-package' : '1-package';
+
     $rawSide = strtolower($data['side'] ?? $data['side_type'] ?? '');
     if (strpos($rawSide, 'lelaki') !== false && strpos($rawSide, 'perempuan') !== false) {
         $sideType = 'both';
@@ -74,18 +77,15 @@ try {
         $sideType = !empty($rawSide) ? $rawSide : 'lelaki';
     }
 
-    $designCode     = $data['design_code'] ?? '';
-    $theme          = $data['theme'] ?? null;
-
-    // Insert into 'orders' table
+    // Insert into orders table
     $stmtOrder = $db->prepare("
         INSERT INTO orders (
             order_id, customer_name, customer_email, customer_phone,
-            package_type, side_type, design_code, theme,
+            package_type, theme, side_type, design_code,
             order_status, payment_receipt_path, created_at, updated_at
         ) VALUES (
             :order_id, :customer_name, :customer_email, :customer_phone,
-            :package_type, :side_type, :design_code, :theme,
+            :package_type, :theme, :side_type, :design_code,
             'DETAILS_CONFIRMED', :payment_receipt_path, NOW(), NOW()
         )
     ");
@@ -96,33 +96,44 @@ try {
         ':customer_email'       => $customerEmail,
         ':customer_phone'       => $customerPhone,
         ':package_type'         => $packageType,
+        ':theme'                => $theme,
         ':side_type'            => $sideType,
         ':design_code'          => $designCode,
-        ':theme'                => $theme,
         ':payment_receipt_path' => $paymentReceiptPath
     ]);
 
-    // 4. Process Customer Details & Contacts
+    // 4. Prepare Customer & Shipping Details
+    $groomName  = $data['groom_name'] ?? null;
+    $groomShort = $data['groom_short'] ?? null;
+    $brideName  = $data['bride_name'] ?? null;
+    $brideShort = $data['bride_short'] ?? null;
+
+    $deliveryMethod = $data['delivery_method'] ?? 'courier';
+    $recipientName  = $customerName;
+    $shippingPhone  = $customerPhone;
+    
+    // Combine full address lines into single text column
+    $fullAddress = implode(', ', array_filter([
+        $data['shipping_address'] ?? '',
+        $data['shipping_postcode'] ?? '',
+        $data['shipping_city'] ?? '',
+        $data['shipping_state'] ?? ''
+    ]));
+
     $isDual = ($packageType === '2-package');
 
     if ($isDual) {
-        // --- MAJLIS PERTAMA ---
         $m1Contacts = [];
         for ($i = 1; $i <= 3; $i++) {
-            $cName = $data["m1_contact{$i}_name"] ?? null;
-            $cPhone = $data["m1_contact{$i}_phone"] ?? null;
-            if (!empty($cName) && !empty($cPhone)) {
-                $m1Contacts[] = ['name' => $cName, 'phone' => $cPhone];
+            if (!empty($data["m1_contact{$i}_name"]) && !empty($data["m1_contact{$i}_phone"])) {
+                $m1Contacts[] = ['name' => $data["m1_contact{$i}_name"], 'phone' => $data["m1_contact{$i}_phone"]];
             }
         }
 
-        // --- MAJLIS KEDUA ---
         $m2Contacts = [];
         for ($i = 1; $i <= 3; $i++) {
-            $cName = $data["m2_contact{$i}_name"] ?? null;
-            $cPhone = $data["m2_contact{$i}_phone"] ?? null;
-            if (!empty($cName) && !empty($cPhone)) {
-                $m2Contacts[] = ['name' => $cName, 'phone' => $cPhone];
+            if (!empty($data["m2_contact{$i}_name"]) && !empty($data["m2_contact{$i}_phone"])) {
+                $m2Contacts[] = ['name' => $data["m2_contact{$i}_name"], 'phone' => $data["m2_contact{$i}_phone"]];
             }
         }
 
@@ -132,61 +143,68 @@ try {
 
         $stmtDetails = $db->prepare("
             INSERT INTO customer_details (
-                order_id,
+                order_id, groom_name, groom_abbrev, bride_name, bride_abbrev, bride_photo_path,
                 m1_host_side, m1_card_title, m1_father_name, m1_mother_name,
                 m1_event_date, m1_hijri_date, m1_event_time, m1_sanding_time,
                 m1_venue, m1_address, m1_maps_url, m1_contacts,
                 m2_host_side, m2_card_title, m2_father_name, m2_mother_name,
                 m2_event_date, m2_hijri_date, m2_event_time, m2_sanding_time,
-                m2_venue, m2_address, m2_maps_url, m2_contacts
+                m2_venue, m2_address, m2_maps_url, m2_contacts,
+                fulfillment_method, shipping_recipient, shipping_phone, shipping_address, created_at
             ) VALUES (
-                :order_id,
+                :order_id, :groom_name, :groom_abbrev, :bride_name, :bride_abbrev, :bride_photo_path,
                 :m1_host_side, :m1_card_title, :m1_father_name, :m1_mother_name,
                 :m1_event_date, :m1_hijri_date, :m1_event_time, :m1_sanding_time,
                 :m1_venue, :m1_address, :m1_maps_url, :m1_contacts,
                 :m2_host_side, :m2_card_title, :m2_father_name, :m2_mother_name,
                 :m2_event_date, :m2_hijri_date, :m2_event_time, :m2_sanding_time,
-                :m2_venue, :m2_address, :m2_maps_url, :m2_contacts
+                :m2_venue, :m2_address, :m2_maps_url, :m2_contacts,
+                :fulfillment_method, :shipping_recipient_name, :shipping_phone, :shipping_address, NOW()
             )
         ");
 
         $stmtDetails->execute([
-            ':order_id'       => $orderId,
-            ':m1_host_side'   => $m1Side,
-            ':m1_card_title'  => $eventTitle,
-            ':m1_father_name' => $data['m1_father_name'] ?? null,
-            ':m1_mother_name' => $data['m1_mother_name'] ?? null,
-            ':m1_event_date'  => !empty($data['m1_event_date']) ? $data['m1_event_date'] : null,
-            ':m1_hijri_date'  => $data['m1_hijri_date'] ?? null,
-            ':m1_event_time'  => $data['m1_event_time'] ?? null,
-            ':m1_sanding_time'=> $data['m1_sanding_time'] ?? null,
-            ':m1_venue'       => $data['m1_event_address'] ?? null,
-            ':m1_address'     => $data['m1_event_address'] ?? null,
-            ':m1_maps_url'    => $data['m1_location_url'] ?? null,
-            ':m1_contacts'    => json_encode($m1Contacts),
-
-            ':m2_host_side'   => $m2Side,
-            ':m2_card_title'  => $eventTitle,
-            ':m2_father_name' => $data['m2_father_name'] ?? null,
-            ':m2_mother_name' => $data['m2_mother_name'] ?? null,
-            ':m2_event_date'  => !empty($data['m2_event_date']) ? $data['m2_event_date'] : null,
-            ':m2_hijri_date'  => $data['m2_hijri_date'] ?? null,
-            ':m2_event_time'  => $data['m2_event_time'] ?? null,
-            ':m2_sanding_time'=> $data['m2_sanding_time'] ?? null,
-            ':m2_venue'       => $data['m2_event_address'] ?? null,
-            ':m2_address'     => $data['m2_event_address'] ?? null,
-            ':m2_maps_url'    => $data['m2_location_url'] ?? null,
-            ':m2_contacts'    => json_encode($m2Contacts)
+            ':order_id'                 => $orderId,
+            ':groom_name'               => $groomName,
+            ':groom_abbrev'             => $groomShort,
+            ':bride_name'               => $brideName,
+            ':bride_abbrev'             => $brideShort,
+            ':bride_photo_path'         => $bridePhotoPath,
+            ':m1_host_side'             => $m1Side,
+            ':m1_card_title'            => $eventTitle,
+            ':m1_father_name'           => $data['m1_father_name'] ?? null,
+            ':m1_mother_name'           => $data['m1_mother_name'] ?? null,
+            ':m1_event_date'            => !empty($data['m1_event_date']) ? $data['m1_event_date'] : null,
+            ':m1_hijri_date'            => $data['m1_hijri_date'] ?? null,
+            ':m1_event_time'            => $data['m1_event_time'] ?? null,
+            ':m1_sanding_time'          => $data['m1_sanding_time'] ?? null,
+            ':m1_venue'                 => $data['m1_event_address'] ?? null,
+            ':m1_address'               => $data['m1_event_address'] ?? null,
+            ':m1_maps_url'              => $data['m1_location_url'] ?? null,
+            ':m1_contacts'              => json_encode($m1Contacts),
+            ':m2_host_side'             => $m2Side,
+            ':m2_card_title'            => $eventTitle,
+            ':m2_father_name'           => $data['m2_father_name'] ?? null,
+            ':m2_mother_name'           => $data['m2_mother_name'] ?? null,
+            ':m2_event_date'            => !empty($data['m2_event_date']) ? $data['m2_event_date'] : null,
+            ':m2_hijri_date'            => $data['m2_hijri_date'] ?? null,
+            ':m2_event_time'            => $data['m2_event_time'] ?? null,
+            ':m2_sanding_time'          => $data['m2_sanding_time'] ?? null,
+            ':m2_venue'                 => $data['m2_event_address'] ?? null,
+            ':m2_address'               => $data['m2_event_address'] ?? null,
+            ':m2_maps_url'              => $data['m2_location_url'] ?? null,
+            ':m2_contacts'              => json_encode($m2Contacts),
+            ':fulfillment_method'       => $deliveryMethod,
+            ':shipping_recipient_name'  => $recipientName,
+            ':shipping_phone'           => $shippingPhone,
+            ':shipping_address'         => $fullAddress
         ]);
 
     } else {
-        // --- SINGLE PARTY ---
         $singleContacts = [];
         for ($i = 1; $i <= 3; $i++) {
-            $cName = $data["contact{$i}_name"] ?? null;
-            $cPhone = $data["contact{$i}_phone"] ?? null;
-            if (!empty($cName) && !empty($cPhone)) {
-                $singleContacts[] = ['name' => $cName, 'phone' => $cPhone];
+            if (!empty($data["contact{$i}_name"]) && !empty($data["contact{$i}_phone"])) {
+                $singleContacts[] = ['name' => $data["contact{$i}_name"], 'phone' => $data["contact{$i}_phone"]];
             }
         }
 
@@ -194,47 +212,52 @@ try {
 
         $stmtDetails = $db->prepare("
             INSERT INTO customer_details (
-                order_id,
+                order_id, groom_name, groom_abbrev, bride_name, bride_abbrev, bride_photo_path,
                 m1_host_side, m1_card_title, m1_father_name, m1_mother_name,
                 m1_event_date, m1_hijri_date, m1_event_time, m1_sanding_time,
-                m1_venue, m1_address, m1_maps_url, m1_contacts
+                m1_venue, m1_address, m1_maps_url, m1_contacts,
+                fulfillment_method, shipping_recipient, shipping_phone, shipping_address, created_at
             ) VALUES (
-                :order_id,
+                :order_id, :groom_name, :groom_abbrev, :bride_name, :bride_abbrev, :bride_photo_path,
                 :m1_host_side, :m1_card_title, :m1_father_name, :m1_mother_name,
                 :m1_event_date, :m1_hijri_date, :m1_event_time, :m1_sanding_time,
-                :m1_venue, :m1_address, :m1_maps_url, :m1_contacts
+                :m1_venue, :m1_address, :m1_maps_url, :m1_contacts,
+                :fulfillment_method, :shipping_recipient_name, :shipping_phone, :shipping_address, NOW()
             )
         ");
 
         $stmtDetails->execute([
-            ':order_id'       => $orderId,
-            ':m1_host_side'   => $sideType,
-            ':m1_card_title'  => $eventTitle,
-            ':m1_father_name' => $data['father_name'] ?? null,
-            ':m1_mother_name' => $data['mother_name'] ?? null,
-            ':m1_event_date'  => !empty($data['event_date']) ? $data['event_date'] : null,
-            ':m1_hijri_date'  => $data['hijri_date'] ?? null,
-            ':m1_event_time'  => $data['event_time'] ?? null,
-            ':m1_sanding_time'=> $data['sanding_time'] ?? null,
-            ':m1_venue'       => $data['event_address'] ?? null,
-            ':m1_address'     => $data['event_address'] ?? null,
-            ':m1_maps_url'    => $data['location_url'] ?? null,
-            ':m1_contacts'    => json_encode($singleContacts)
+            ':order_id'                 => $orderId,
+            ':groom_name'               => $groomName,
+            ':groom_abbrev'             => $groomShort,
+            ':bride_name'               => $brideName,
+            ':bride_abbrev'             => $brideShort,
+            ':bride_photo_path'         => $bridePhotoPath,
+            ':m1_host_side'             => $sideType,
+            ':m1_card_title'            => $eventTitle,
+            ':m1_father_name'           => $data['father_name'] ?? null,
+            ':m1_mother_name'           => $data['mother_name'] ?? null,
+            ':m1_event_date'            => !empty($data['event_date']) ? $data['event_date'] : null,
+            ':m1_hijri_date'            => $data['hijri_date'] ?? null,
+            ':m1_event_time'            => $data['event_time'] ?? null,
+            ':m1_sanding_time'          => $data['sanding_time'] ?? null,
+            ':m1_venue'                 => $data['event_address'] ?? null,
+            ':m1_address'               => $data['event_address'] ?? null,
+            ':m1_maps_url'              => $data['location_url'] ?? null,
+            ':m1_contacts'              => json_encode($singleContacts),
+            ':fulfillment_method'       => $deliveryMethod,
+            ':shipping_recipient_name'  => $recipientName,
+            ':shipping_phone'           => $shippingPhone,
+            ':shipping_address'         => $fullAddress
         ]);
     }
 
-    // Standard redirect for traditional form submit
     if (empty($jsonInput) && !empty($_POST)) {
         header("Location: ../customer/thank_you.html?order_id=" . urlencode($orderId));
         exit();
     }
 
-    // JSON response for AJAX submit
-    echo json_encode([
-        'success'  => true,
-        'message'  => 'Order submitted successfully',
-        'order_id' => $orderId
-    ]);
+    echo json_encode(['success' => true, 'message' => 'Order submitted successfully', 'order_id' => $orderId]);
 
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);

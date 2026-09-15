@@ -77,6 +77,18 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(37, 211, 102, 0.3);
         }
+        .btn-track {
+            background-color: #4f46e5;
+            color: #ffffff;
+            border: none;
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-track:hover, .btn-track:focus {
+            background-color: #4338ca;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(79, 70, 229, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -117,13 +129,18 @@
 
         <!-- Action Buttons -->
         <div class="d-grid gap-2 col-11 mx-auto">
+            <!-- Track Order Progress Button -->
+            <a href="track.html" id="trackBtn" class="btn btn-track btn-lg fw-semibold shadow-sm py-3">
+                <i class="bi bi-clock-history me-2 fs-5"></i> Track Order Progress
+            </a>
+
             <!-- WhatsApp Notification Button -->
-            <a href="#" id="whatsappBtn" target="_blank" class="btn btn-whatsapp btn-lg fw-semibold shadow-sm py-3">
+            <a href="#" id="whatsappBtn" target="_blank" class="btn btn-whatsapp btn-lg fw-semibold shadow-sm py-2.5">
                 <i class="bi bi-whatsapp me-2 fs-5"></i> Notify Staff on WhatsApp
             </a>
 
             <!-- Submit Another Order Button -->
-            <a href="order_form.html" class="btn btn-outline-primary btn-lg fw-semibold mt-2 py-2">
+            <a href="order_form.html" class="btn btn-outline-secondary btn-md fw-semibold mt-1 py-2">
                 <i class="bi bi-plus-circle me-2"></i> Submit Another Order
             </a>
         </div>
@@ -141,6 +158,11 @@
     let orderSide = urlParams.get('side');
 
     document.getElementById('orderRefDisplay').innerText = `Order Reference: ${orderId}`;
+    
+    // Pass order_id dynamically to tracking page button
+    if (orderId !== "N/A") {
+        document.getElementById('trackBtn').href = `track.html?order_id=${encodeURIComponent(orderId)}`;
+    }
 
     function updateUI(name, couple, side) {
         document.getElementById('summaryName').innerText = name || "N/A";
@@ -163,24 +185,46 @@ Please review my order. Thank you!`;
         document.getElementById('whatsappBtn').href = `https://wa.me/${STAFF_WHATSAPP_NUMBER}?text=${encodedMessage}`;
     }
 
-    // Check if parameters are missing from URL, fetch from API endpoint
+    // Fetch order details if parameters are missing from URL
     if ((!customerName || !coupleName || !orderSide) && orderId !== "N/A") {
         fetch(`../api/get_order_details.php?order_id=${encodeURIComponent(orderId)}`)
             .then(res => res.json())
             .then(data => {
-                if (data.success) {
-                    const cName = data.order.customer_name;
-                    
-                    // Format Couple Name (e.g. Groom & Bride)
-                    let cCouple = "";
-                    if (data.details.groom_name && data.details.bride_name) {
-                        cCouple = `${data.details.groom_name} & ${data.details.bride_name}`;
+                if (data.success && data.order) {
+                    const cName = data.order.customer_name || customerName;
+                    let cCouple = "N/A";
+
+                    if (data.details) {
+                        // Extract short names using groom_abbrev and bride_abbrev (with fallback to full names)
+                        const groom = data.details.groom_abbrev || data.details.groom_name;
+                        const bride = data.details.bride_abbrev || data.details.bride_name;
+
+                        // Identify host side to determine name sequence
+                        const hostSide = (data.details.m1_host_side || data.order.side_type || '').toLowerCase();
+
+                        if (groom && bride) {
+                            if (hostSide.includes('perempuan')) {
+                                // Bride short name first if Pihak Perempuan is hosting
+                                cCouple = `${bride} & ${groom}`;
+                            } else {
+                                // Groom short name first if Pihak Lelaki is hosting or default
+                                cCouple = `${groom} & ${bride}`;
+                            }
+                        } else if (groom) {
+                            cCouple = groom;
+                        } else if (bride) {
+                            cCouple = bride;
+                        } else {
+                            cCouple = cName || "N/A";
+                        }
                     } else {
-                        cCouple = data.details.groom_name || data.details.bride_name || "N/A";
+                        cCouple = cName || "N/A";
                     }
 
                     // Format Side / Package Option
-                    const cSide = `${data.order.package_type || ''} (${data.order.side_type || ''})`.trim();
+                    const pkg = data.order.package_type || '';
+                    const sideType = data.order.side_type || '';
+                    const cSide = pkg ? `${pkg} (${sideType})`.trim() : (sideType || orderSide || "N/A");
 
                     updateUI(cName, cCouple, cSide);
                 } else {

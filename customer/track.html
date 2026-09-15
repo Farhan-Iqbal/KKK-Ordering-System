@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semak Status Pesanan | KingKadKahwin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen p-4 flex flex-col justify-center items-center">
+
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-6 border border-slate-100">
+        <h2 class="text-2xl font-bold text-center text-slate-800 mb-1">Semak Progress Kad</h2>
+        <p class="text-xs text-center text-slate-500 mb-6">Masukkan ID Pesanan anda untuk melihat perkembangan draf.</p>
+
+        <!-- Search Input Form -->
+        <div class="flex gap-2 mb-6">
+            <input type="text" id="orderInput" placeholder="Contoh: KKK-7ADB666F27" 
+                   class="flex-1 border border-slate-300 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase font-mono">
+            <button onclick="fetchStatus()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm px-5 py-2 rounded-xl transition shadow-md shadow-indigo-100">
+                Semak
+            </button>
+        </div>
+
+        <!-- Result Container -->
+        <div id="statusResult" class="hidden">
+            <div class="border-t border-slate-100 pt-4 mb-5">
+                <div class="flex justify-between items-center mb-1.5">
+                    <span class="text-xs text-slate-400">ID Pesanan:</span>
+                    <span id="resOrderId" class="font-mono text-sm font-bold text-indigo-600"></span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xs text-slate-400">Pelanggan:</span>
+                    <span id="resName" class="text-xs font-semibold text-slate-700"></span>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mb-6">
+                <div class="flex justify-between text-xs text-slate-500 mb-1">
+                    <span>Kemajuan:</span>
+                    <span id="percentText" class="font-bold text-indigo-600">0%</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                    <div id="progressBar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Timeline Steps -->
+            <div id="stepsList" class="space-y-3 text-xs"></div>
+        </div>
+
+        <!-- Error Alert -->
+        <div id="errorMessage" class="hidden text-center text-red-500 bg-red-50 p-3 rounded-xl text-xs font-semibold mt-4 border border-red-100"></div>
+    </div>
+
+    <p class="text-center text-xs text-slate-400 mt-6">&copy; KingKadKahwin. Hak Cipta Terpelihara.</p>
+
+<script>
+// Auto-fetch if order_id parameter exists in URL
+window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('order_id');
+    if (orderId) {
+        document.getElementById('orderInput').value = orderId;
+        fetchStatus();
+    }
+});
+
+async function fetchStatus() {
+    const orderId = document.getElementById('orderInput').value.trim();
+    const resultDiv = document.getElementById('statusResult');
+    const errDiv = document.getElementById('errorMessage');
+    
+    if (!orderId) return;
+
+    errDiv.classList.add('hidden');
+    resultDiv.classList.add('hidden');
+
+    try {
+        const res = await fetch(`../api/track_order.php?order_id=${encodeURIComponent(orderId)}`);
+        const data = await res.json();
+
+        if (!data.success) {
+            errDiv.innerText = data.message;
+            errDiv.classList.remove('hidden');
+            return;
+        }
+
+        document.getElementById('resOrderId').innerText = data.order_id;
+        document.getElementById('resName').innerText = data.customer_name;
+        document.getElementById('percentText').innerText = `${data.progress_percent}%`;
+        document.getElementById('progressBar').style.width = `${data.progress_percent}%`;
+
+        const stepsList = document.getElementById('stepsList');
+        stepsList.innerHTML = '';
+
+        let passedCurrent = false;
+        Object.keys(data.steps).forEach((key) => {
+            const step = data.steps[key];
+            const isCurrent = (key === data.current_status);
+            
+            let badgeStyle = 'bg-slate-50 text-slate-400 border border-slate-100';
+            let statusIcon = '⚪';
+
+            if (isCurrent) {
+                badgeStyle = 'bg-indigo-50 border border-indigo-200 text-indigo-900 font-bold shadow-sm';
+                statusIcon = '🔄';
+            } else if (!passedCurrent) {
+                badgeStyle = 'bg-emerald-50 text-emerald-800 border border-emerald-100 font-semibold';
+                statusIcon = '✅';
+            }
+
+            stepsList.innerHTML += `
+                <div class="p-3 rounded-xl ${badgeStyle} transition flex items-start gap-3">
+                    <span class="text-sm">${statusIcon}</span>
+                    <div>
+                        <div class="font-medium text-xs mb-0.5">${step.title}</div>
+                        <div class="opacity-75 text-[11px] leading-relaxed">${step.desc}</div>
+                    </div>
+                </div>
+            `;
+
+            if (isCurrent) passedCurrent = true;
+        });
+
+        resultDiv.classList.remove('hidden');
+
+    } catch (e) {
+        errDiv.innerText = 'Gagal memuatkan status. Sila semak sambungan internet anda.';
+        errDiv.classList.remove('hidden');
+    }
+}
+</script>
+</body>
+</html>
