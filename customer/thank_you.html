@@ -4,92 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Submitted | KingKadKahwin</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <style>
-        body {
-            background-color: #f4f6f9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px 0;
-        }
-        .thank-you-card {
-            max-width: 580px;
-            width: 100%;
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 40px 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            text-align: center;
-        }
-        .success-icon {
-            width: 70px;
-            height: 70px;
-            background-color: #10b981;
-            color: white;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2rem;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-        .order-badge {
-            background-color: #eef2ff;
-            color: #4f46e5;
-            font-weight: 600;
-            padding: 8px 18px;
-            border-radius: 20px;
-            display: inline-block;
-            font-size: 0.95rem;
-            border: 1px solid #c7d2fe;
-        }
-        .summary-card {
-            background-color: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 12px;
-            padding: 18px;
-            text-align: left;
-        }
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            font-size: 0.92rem;
-            border-bottom: 1px dashed #dee2e6;
-        }
-        .summary-item:last-child {
-            border-bottom: none;
-        }
-        .btn-whatsapp {
-            background-color: #25d366;
-            color: #ffffff;
-            border: none;
-            transition: all 0.2s ease-in-out;
-        }
-        .btn-whatsapp:hover, .btn-whatsapp:focus {
-            background-color: #1eb956;
-            color: #ffffff;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.3);
-        }
-        .btn-track {
-            background-color: #4f46e5;
-            color: #ffffff;
-            border: none;
-            transition: all 0.2s ease-in-out;
-        }
-        .btn-track:hover, .btn-track:focus {
-            background-color: #4338ca;
-            color: #ffffff;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(79, 70, 229, 0.3);
-        }
-    </style>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/thank_you.css">
 </head>
 <body>
 
@@ -147,98 +67,8 @@
     </div>
 </div>
 
-<script>
-    const STAFF_WHATSAPP_NUMBER = "60186684036";
-
-    // Extract Order Parameters from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const orderId = urlParams.get('order_id') || "N/A";
-    let customerName = urlParams.get('name');
-    let coupleName = urlParams.get('couple');
-    let orderSide = urlParams.get('side');
-
-    document.getElementById('orderRefDisplay').innerText = `Order Reference: ${orderId}`;
-    
-    // Pass order_id dynamically to tracking page button
-    if (orderId !== "N/A") {
-        document.getElementById('trackBtn').href = `track.html?order_id=${encodeURIComponent(orderId)}`;
-    }
-
-    function updateUI(name, couple, side) {
-        document.getElementById('summaryName').innerText = name || "N/A";
-        document.getElementById('summaryCouple').innerText = couple || "N/A";
-        document.getElementById('summarySide').innerText = side || "N/A";
-
-        // Build dynamic WhatsApp pre-filled message
-        const waText = 
-`Hello KingKadKahwin Team, I have submitted my wedding card order details and deposit receipt.
-
-*ORDER DETAILS*
-• *Order ID:* ${orderId}
-• *Name:* ${name || 'N/A'}
-• *Couple:* ${couple || 'N/A'}
-• *Package / Side:* ${side || 'N/A'}
-
-Please review my order. Thank you!`;
-
-        const encodedMessage = encodeURIComponent(waText);
-        document.getElementById('whatsappBtn').href = `https://wa.me/${STAFF_WHATSAPP_NUMBER}?text=${encodedMessage}`;
-    }
-
-    // Fetch order details if parameters are missing from URL
-    if ((!customerName || !coupleName || !orderSide) && orderId !== "N/A") {
-        fetch(`../api/get_order_details.php?order_id=${encodeURIComponent(orderId)}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.success && data.order) {
-                    const cName = data.order.customer_name || customerName;
-                    let cCouple = "N/A";
-
-                    if (data.details) {
-                        // Extract short names using groom_abbrev and bride_abbrev (with fallback to full names)
-                        const groom = data.details.groom_abbrev || data.details.groom_name;
-                        const bride = data.details.bride_abbrev || data.details.bride_name;
-
-                        // Identify host side to determine name sequence
-                        const hostSide = (data.details.m1_host_side || data.order.side_type || '').toLowerCase();
-
-                        if (groom && bride) {
-                            if (hostSide.includes('perempuan')) {
-                                // Bride short name first if Pihak Perempuan is hosting
-                                cCouple = `${bride} & ${groom}`;
-                            } else {
-                                // Groom short name first if Pihak Lelaki is hosting or default
-                                cCouple = `${groom} & ${bride}`;
-                            }
-                        } else if (groom) {
-                            cCouple = groom;
-                        } else if (bride) {
-                            cCouple = bride;
-                        } else {
-                            cCouple = cName || "N/A";
-                        }
-                    } else {
-                        cCouple = cName || "N/A";
-                    }
-
-                    // Format Side / Package Option
-                    const pkg = data.order.package_type || '';
-                    const sideType = data.order.side_type || '';
-                    const cSide = pkg ? `${pkg} (${sideType})`.trim() : (sideType || orderSide || "N/A");
-
-                    updateUI(cName, cCouple, cSide);
-                } else {
-                    updateUI(customerName, coupleName, orderSide);
-                }
-            })
-            .catch(err => {
-                console.error("Failed to fetch order details:", err);
-                updateUI(customerName, coupleName, orderSide);
-            });
-    } else {
-        updateUI(customerName, coupleName, orderSide);
-    }
-</script>
+<!-- Custom JavaScript -->
+<script src="../js/thank_you.js"></script>
 
 </body>
 </html>

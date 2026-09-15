@@ -1,0 +1,397 @@
+body {
+    background-color: #f4f6f9;
+    font-family: 'Montserrat', sans-serif;
+    color: #333;
+}
+.form-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    padding: 35px;
+    margin-bottom: 50px;
+}
+.section-header {
+    border-bottom: 2px solid #eef2ff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    color: #4f46e5;
+    font-weight: 700;
+}
+.majlis-header {
+    border-left: 4px solid #4f46e5;
+    padding-left: 12px;
+    margin-bottom: 20px;
+    color: #1e1b4b;
+    font-weight: 700;
+}
+.form-label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.92rem;
+}
+.sub-text {
+    font-size: 0.82rem;
+    color: #6c757d;
+}
+.btn-custom-primary {
+    background-color: #4f46e5;
+    border-color: #4f46e5;
+    color: #fff;
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+.btn-custom-primary:hover {
+    background-color: #4338ca;
+    border-color: #4338ca;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+.required-asterisk {
+    color: #ef4444;
+}
+
+/* Sticky Live Card Preview Sidebar */
+.preview-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 20px;
+}
+
+@media (max-width: 991.98px) {
+    .preview-sticky {
+        position: relative;
+        top: 0;
+        margin-bottom: 2rem;
+    }
+}
+
+.preview-title-badge {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #1f2937;
+}
+
+/* 4x6 Aspect Ratio Container Fix */
+.card-preview-wrapper {
+    width: 100%;
+    max-width: 340px;
+    aspect-ratio: 4 / 6;
+    margin: 0 auto;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ================= FRONT CARD DESIGN ================= */
+.card-front-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: #ffffff;
+}
+
+/* Pattern Left Border Simulation */
+.front-pattern-border {
+    width: 30%;
+    height: 100%;
+    background-color: #ffffff;
+    background-image: radial-gradient(#9333ea 0.75px, transparent 0.75px), radial-gradient(#9333ea 0.75px, #ffffff 0.75px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+    border-right: 1px solid #e9d5ff;
+    box-shadow: inset -3px 0 6px rgba(0,0,0,0.03);
+}
+
+.front-content-area {
+    width: 70%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px 10px;
+    text-align: center;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.front-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.8rem;
+    color: #9333ea;
+    margin-top: 10px;
+}
+
+.front-names-wrapper {
+    position: relative;
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 5px;
+}
+
+.front-name-text {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2rem;
+    color: #9333ea;
+    line-height: 1.1;
+    word-break: break-word;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.front-ampersand-overlap {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2rem;
+    color: #d8b4fe;
+    margin: -12px 0;
+    position: relative;
+    z-index: 0;
+}
+
+.front-date-box {
+    color: #9333ea;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.front-calendar-icon {
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.front-day-text {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.front-date-text {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* ================= BACK CARD DESIGN ================= */
+.card-back-container {
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    color: #000000;
+    text-align: center;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.back-outer-border {
+    border: 1.5px solid #000000;
+    height: 100%;
+    padding: 6px 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* Top Section (Header & Invitation Details) */
+.back-arabic-header {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: bold;
+    line-height: 1.1;
+    margin-bottom: 2px;
+}
+
+.back-intro-text {
+    font-size: 0.45rem;
+    line-height: 1.2;
+    color: #000000;
+    padding: 0 4px;
+}
+
+.back-parents-names {
+    font-size: 0.55rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin: 2px 0;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.back-guest-box {
+    border: 1px solid #000000;
+    border-radius: 10px;
+    height: 16px;
+    margin: 2px auto;
+    width: 80%;
+}
+
+.back-couple-names {
+    font-size: 0.55rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin: 2px 0;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.back-couple-sub {
+    font-weight: 400;
+    text-transform: lowercase;
+    font-size: 0.44rem;
+    display: block;
+    color: #000000;
+}
+
+/* Middle Section: 3-Column Info Grid */
+.back-three-col {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    border-top: 1.5px solid #000000;
+    border-bottom: 1.5px solid #000000;
+    margin: 2px 0;
+    padding: 4px 0;
+    align-items: stretch;
+}
+
+.back-col {
+    padding: 0 2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.back-col:not(:last-child) {
+    border-right: 1.5px solid #000000;
+}
+
+.col-title {
+    font-size: 0.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-bottom: 2px;
+}
+
+.col-day-big {
+    font-size: 1.6rem;
+    font-weight: 900;
+    line-height: 0.8;
+    margin: 2px 0;
+}
+
+.col-subtext {
+    font-size: 0.42rem;
+    text-transform: uppercase;
+    line-height: 1.1;
+    font-weight: 700;
+}
+
+#prevColContacts {
+    min-height: 24px;
+    width: 100%;
+}
+
+.col-contact-item {
+    font-size: 0.38rem;
+    line-height: 1.15;
+    margin-bottom: 2px;
+    word-break: break-all;
+}
+
+.col-contact-item strong {
+    display: block;
+    font-size: 0.4rem;
+    font-weight: 800;
+}
+
+/* Location & QR Code Section */
+.back-qr-section {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1.5px solid #000000;
+    padding: 4px 2px;
+    margin-bottom: 2px;
+    text-align: left;
+}
+
+.qr-box-img {
+    width: 100%;
+    max-width: 40px;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+    object-fit: contain;
+}
+
+.location-details {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.location-title {
+    font-size: 0.44rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-bottom: 2px;
+}
+
+.location-text {
+    font-size: 0.36rem;
+    line-height: 1.15;
+    text-transform: uppercase;
+    color: #000000;
+    font-weight: 600;
+    max-height: 2.4em;
+    overflow: hidden;
+}
+
+/* Bottom Footer Section */
+.back-footer-text {
+    font-size: 0.38rem;
+    font-style: italic;
+    color: #000000;
+    padding: 2px 0;
+    line-height: 1.1;
+}
+
+/* Social Tag Pillar Pill */
+.back-social-tag {
+    background-color: #fef08a;
+    border: 1px solid #ca8a04;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 0.42rem;
+    font-weight: 700;
+    margin: 3px auto 0 auto;
+    display: inline-block;
+    color: #000000;
+}

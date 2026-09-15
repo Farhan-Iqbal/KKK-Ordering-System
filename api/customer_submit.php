@@ -34,28 +34,36 @@ try {
     if (!is_dir($receiptDir)) mkdir($receiptDir, 0755, true);
     if (!is_dir($photoDir))   mkdir($photoDir, 0755, true);
 
-    // 1. Upload Payment Receipt
+    $allowedExts = ['jpg', 'jpeg', 'png', 'pdf'];
+
+    // 1. Upload Payment Receipt / Attachment (supporting HTML input name 'attachment' or 'payment_receipt')
     $paymentReceiptPath = null;
-    if (isset($_FILES['payment_receipt']) && $_FILES['payment_receipt']['error'] === UPLOAD_ERR_OK) {
-        $ext = pathinfo($_FILES['payment_receipt']['name'], PATHINFO_EXTENSION);
-        $fileName = $orderId . '_receipt_' . time() . '.' . $ext;
-        if (move_uploaded_file($_FILES['payment_receipt']['tmp_name'], $receiptDir . $fileName)) {
-            $paymentReceiptPath = 'uploads/receipts/' . $fileName;
+    $fileKey = isset($_FILES['attachment']) ? 'attachment' : (isset($_FILES['payment_receipt']) ? 'payment_receipt' : null);
+
+    if ($fileKey && $_FILES[$fileKey]['error'] === UPLOAD_ERR_OK) {
+        $ext = strtolower(pathinfo($_FILES[$fileKey]['name'], PATHINFO_EXTENSION));
+        if (in_array($ext, $allowedExts)) {
+            $fileName = $orderId . '_receipt_' . time() . '.' . $ext;
+            if (move_uploaded_file($_FILES[$fileKey]['tmp_name'], $receiptDir . $fileName)) {
+                $paymentReceiptPath = 'uploads/receipts/' . $fileName;
+            }
         }
     }
 
     // 2. Upload Bride Photo
     $bridePhotoPath = null;
     if (isset($_FILES['bride_photo']) && $_FILES['bride_photo']['error'] === UPLOAD_ERR_OK) {
-        $ext = pathinfo($_FILES['bride_photo']['name'], PATHINFO_EXTENSION);
-        $fileName = $orderId . '_photo_' . time() . '.' . $ext;
-        if (move_uploaded_file($_FILES['bride_photo']['tmp_name'], $photoDir . $fileName)) {
-            $bridePhotoPath = 'uploads/bride_photos/' . $fileName;
+        $ext = strtolower(pathinfo($_FILES['bride_photo']['name'], PATHINFO_EXTENSION));
+        if (in_array($ext, $allowedExts)) {
+            $fileName = $orderId . '_photo_' . time() . '.' . $ext;
+            if (move_uploaded_file($_FILES['bride_photo']['tmp_name'], $photoDir . $fileName)) {
+                $bridePhotoPath = 'uploads/bride_photos/' . $fileName;
+            }
         }
     }
 
-    // 3. Prepare Orders Data
-    $customerName  = $data['name'] ?? '';
+    // 3. Prepare Orders Data (handling both 'full_name' from HTML and 'name' from JSON)
+    $customerName  = $data['full_name'] ?? $data['name'] ?? '';
     $customerPhone = $data['phone'] ?? '';
     $customerEmail = $data['email'] ?? '';
     $designCode    = $data['design_code'] ?? '';
@@ -112,13 +120,15 @@ try {
     $recipientName  = $customerName;
     $shippingPhone  = $customerPhone;
     
-    // Combine full address lines into single text column
-    $fullAddress = implode(', ', array_filter([
+    // Combine full address lines into single text column (supporting single 'venue' field or multi-line address)
+    $addressParts = array_filter([
+        $data['venue'] ?? '',
         $data['shipping_address'] ?? '',
         $data['shipping_postcode'] ?? '',
         $data['shipping_city'] ?? '',
         $data['shipping_state'] ?? ''
-    ]));
+    ]);
+    $fullAddress = implode(', ', $addressParts);
 
     $isDual = ($packageType === '2-package');
 
@@ -209,6 +219,9 @@ try {
         }
 
         $eventTitle = $data['event_title'] ?? 'Walimatul Urus';
+        $eventVenue = $data['venue'] ?? $data['event_address'] ?? null;
+        $eventDate  = !empty($data['event_date']) ? $data['event_date'] : (!empty($data['m1_event_date']) ? $data['m1_event_date'] : null);
+        $eventTime  = $data['event_time'] ?? $data['m1_event_time'] ?? null;
 
         $stmtDetails = $db->prepare("
             INSERT INTO customer_details (
@@ -237,12 +250,12 @@ try {
             ':m1_card_title'            => $eventTitle,
             ':m1_father_name'           => $data['father_name'] ?? null,
             ':m1_mother_name'           => $data['mother_name'] ?? null,
-            ':m1_event_date'            => !empty($data['event_date']) ? $data['event_date'] : null,
+            ':m1_event_date'            => $eventDate,
             ':m1_hijri_date'            => $data['hijri_date'] ?? null,
-            ':m1_event_time'            => $data['event_time'] ?? null,
+            ':m1_event_time'            => $eventTime,
             ':m1_sanding_time'          => $data['sanding_time'] ?? null,
-            ':m1_venue'                 => $data['event_address'] ?? null,
-            ':m1_address'               => $data['event_address'] ?? null,
+            ':m1_venue'                 => $eventVenue,
+            ':m1_address'               => $eventVenue,
             ':m1_maps_url'              => $data['location_url'] ?? null,
             ':m1_contacts'              => json_encode($singleContacts),
             ':fulfillment_method'       => $deliveryMethod,
@@ -253,7 +266,7 @@ try {
     }
 
     if (empty($jsonInput) && !empty($_POST)) {
-        header("Location: ../customer/thank_you.html?order_id=" . urlencode($orderId));
+        header("Location: ../thank_you.html?order_id=" . urlencode($orderId));
         exit();
     }
 

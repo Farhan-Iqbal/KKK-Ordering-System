@@ -1,25 +1,27 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Auto-generate Order ID if empty
-    const orderIdInput = document.getElementById('orderId');
-    if (orderIdInput && !orderIdInput.value) {
-        // Generates an Order ID format like: ORD-1725868800
-        orderIdInput.value = 'ORD-' + Math.floor(Date.now() / 1000);
-    }
-
-    // 2. Display file name inside dropzone on file select
+document.addEventListener('DOMContentLoaded', function () {
     const fileInput = document.getElementById('attachment');
     const fileNameDisplay = document.getElementById('fileNameDisplay');
+    const form = document.getElementById('customerOrderForm');
 
+    // Display selected filename in upload box
     if (fileInput && fileNameDisplay) {
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                fileNameDisplay.textContent = 'Selected: ' + e.target.files[0].name;
-                fileNameDisplay.style.fontWeight = '600';
+        fileInput.addEventListener('change', function () {
+            if (this.files && this.files.length > 0) {
+                fileNameDisplay.textContent = `Selected File: ${this.files[0].name}`;
                 fileNameDisplay.style.color = '#4f46e5';
             } else {
                 fileNameDisplay.textContent = 'Click to upload or drag & drop files here';
-                fileNameDisplay.style.fontWeight = 'normal';
-                fileNameDisplay.style.color = '#0f172a';
+                fileNameDisplay.style.color = '';
+            }
+        });
+    }
+
+    // Reset file display text on form reset
+    if (form) {
+        form.addEventListener('reset', function () {
+            if (fileNameDisplay) {
+                fileNameDisplay.textContent = 'Click to upload or drag & drop files here';
+                fileNameDisplay.style.color = '';
             }
         });
     }

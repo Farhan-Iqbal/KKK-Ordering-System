@@ -1,0 +1,239 @@
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --text-light: #94a3b8;
+    --border-color: #f1f5f9;
+    --focus-ring: rgba(99, 102, 241, 0.2);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    min-height: 100vh;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Card Container */
+.track-card {
+    max-width: 28rem;
+    width: 100%;
+    background-color: var(--card-bg);
+    border-radius: 1rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+/* Typography */
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--text-main);
+    margin-bottom: 0.25rem;
+}
+
+.card-subtitle {
+    font-size: 0.75rem;
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+/* Search Input Form */
+.search-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.search-input {
+    flex: 1;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.75rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    text-transform: uppercase;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.btn-search {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.75rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
+}
+
+.btn-search:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Details Section */
+.details-header {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.detail-row:not(:last-child) {
+    margin-bottom: 0.375rem;
+}
+
+.detail-label {
+    font-size: 0.75rem;
+    color: var(--text-light);
+}
+
+.detail-id {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.detail-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+/* Progress Bar */
+.progress-container {
+    margin-bottom: 1.5rem;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.progress-percent {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.progress-track {
+    width: 100%;
+    background-color: var(--border-color);
+    border-radius: 9999px;
+    height: 0.625rem;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background-color: var(--primary-color);
+    height: 0.625rem;
+    border-radius: 9999px;
+    transition: width 0.5s ease;
+}
+
+/* Timeline Steps */
+.steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+}
+
+.step-card {
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.step-card.pending {
+    background-color: #f8fafc;
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+}
+
+.step-card.active {
+    background-color: #eef2ff;
+    border: 1px solid #c7d2fe;
+    color: #312e81;
+    font-weight: 700;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.step-card.completed {
+    background-color: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #d1fae5;
+    font-weight: 600;
+}
+
+.step-title {
+    font-weight: 500;
+    font-size: 0.75rem;
+    margin-bottom: 0.125rem;
+}
+
+.step-desc {
+    opacity: 0.75;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+/* Error Alert */
+.error-alert {
+    text-align: center;
+    color: #ef4444;
+    background-color: #fef2f2;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    border: 1px solid #fee2e2;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.footer-text {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 1.5rem;
+}

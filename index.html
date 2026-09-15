@@ -8,8 +8,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="design/admin.css">
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #0B0B0C;
+      color: #F5F5F7;
+    }
     .portal-container {
       min-height: 100vh;
       display: flex;
@@ -17,7 +26,6 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
-      background: #0B0B0C;
     }
     .portal-header {
       text-align: center;
@@ -95,13 +103,13 @@
     </div>
 
     <div class="portal-grid">
-      <a href="customer/customer.html" class="portal-card">
+      <a href="customer/order_form.html" class="portal-card">
         <div class="portal-icon"><i class="fa-solid fa-user"></i></div>
         <h3>Customer Portal</h3>
         <p>Access order progress, proof approvals, and shipment details.</p>
       </a>
 
-      <a href="staff/designer.html" class="portal-card">
+      <a href="staff/dashboard.html" class="portal-card">
         <div class="portal-icon"><i class="fa-solid fa-users"></i></div>
         <h3>Staff Portal</h3>
         <p>Workspace for Design, Production, and Office Management team.</p>
